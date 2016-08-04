@@ -9,7 +9,7 @@
 (require 'color-theme)
 (color-theme-initialize)
 
-(add-to-list 'load-path "~/.emacs.d/themes/color-theme-wombat.el")
+(add-to-list 'load-path "./themes/color-theme-wombat.el")
 
 (load-theme 'wombat t t)
 (enable-theme 'wombat)
