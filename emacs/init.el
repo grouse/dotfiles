@@ -3,14 +3,16 @@
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (package-initialize)
 
+(add-to-list 'load-path "~/.emacs.d/elisp")
+(add-to-list 'load-path "~/.emacs.d/themes")
+
 (require 'evil)
 (evil-mode 1)
 
 (require 'color-theme)
 (color-theme-initialize)
 
-(add-to-list 'load-path "./themes/color-theme-wombat.el")
-
+(require 'color-theme-wombat)
 (load-theme 'wombat t t)
 (enable-theme 'wombat)
 
@@ -22,18 +24,19 @@
 (global-linum-mode 1)
 (linum-relative-on)
 
+(require 'frame-restore)
+(progn (require 'desktop) (customize-set-variable 'desktop-enable t) (require 'frame-restore))
+
 ; behaviour settings
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
+(custom-set-variables '(inhibit-startup-screen t))
 
 (setq
  split-height-threshold nil
  split-width-threshold 0)
 
-(custom-set-variables '(inhibit-startup-screen t))
-(when window-system (set-frame-size (selected-frame) 82 100))
-
-
+; make creating a new split switch the cursor to the new split
 (defadvice split-window (after move-point-to-new-window activate)
   "Moves the cursor to the newly created window after splitting."
   (other-window 1))
