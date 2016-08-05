@@ -38,12 +38,6 @@
   "Moves the cursor to the newly created window after splitting."
   (other-window 1))
 
-
-
-; keybinds
-(global-set-key (kbd "C-s") 'split-window-horizontally)
-(global-set-key (kbd "C-S-s") 'split-window-vertically)
-
 ; evil mode keybinds
 ; give me back my escape key
 (define-key evil-normal-state-map [escape] 'keyboard-quit)
@@ -64,3 +58,16 @@
 (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+
+; evil/vim key overrides
+(eval-after-load "evil-maps" (dolist (
+	map '(evil-motion-state-map 
+		  evil-insert-state-map 
+		  evil-emacs-state-map))
+    (define-key (eval map) "\C-w" nil)
+	(global-set-key (kbd "C-w") 'other-window)))
+
+; general keybinds
+(global-set-key (kbd "C-s") 'split-window-horizontally)
+(global-set-key (kbd "C-S-s") 'split-window-vertically)
+
