@@ -11,3 +11,6 @@ function prepend {
 EMACS_LINES="; load root configuration from https://github.com/grouse/dotfiles"
 EMACS_LINES="$EMACS_LINES\n(load-file \"$DOTFILES_DIR/emacs/init.el\")\n\n"
 prepend "$EMACS_LINES" "$HOME/.emacs.d/init.el"
+
+# qtcreator installation
+ln "$DOTFILES_DIR/qtcreator/styles/wombat-style.xml" ~/.config/QtProject/qtcreator/styles/wombat-style.xml
