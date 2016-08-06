@@ -65,9 +65,17 @@
 ; evil/vim key overrides
 (eval-after-load "evil-maps" (dolist (
 	map '(evil-motion-state-map 
-		  evil-insert-state-map 
-		  evil-emacs-state-map))
-    (define-key (eval map) "\C-w" nil)
+	      evil-insert-state-map 
+	      evil-emacs-state-map))
+	(define-key (eval map) "\C-w" nil)
+	(define-key (eval map) "\C-f" nil)
+	(define-key (eval map) "\C-n" nil)
+	(define-key (eval map) "\C-p" nil)
+
+	(global-set-key (kbd "C-f") 'isearch-forward)
+	(define-key isearch-mode-map (kbd "C-n") 'isearch-repeat-forward)
+	(define-key isearch-mode-map (kbd "C-p") 'isearch-repeat-backward)
+
 	(global-set-key (kbd "C-w") 'other-window)))
 
 ; general keybinds
