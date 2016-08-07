@@ -7,6 +7,8 @@
 (add-to-list 'load-path "~/.emacs.d/themes")
 
 (require 'evil)
+(require 'compile)
+
 (evil-mode 1)
 
 (require 'color-theme)
@@ -27,6 +29,22 @@
 (require 'frame-restore)
 (progn (require 'desktop) (customize-set-variable 'desktop-enable t) (require 'frame-restore))
 
+; functions
+(defun open-project (directory)
+  (interactive (list (read-directory-name "project path:")))
+  (setq compile-command (concat directory "/build.sh")))
+
+(defun minibuffer-keyboard-quit ()
+  "Abort recursive edit.
+ In Delete Selection mode, if the mark is active, just deactivate it;
+ then it takes a second \\[keyboard-quit] to abort the minibuffer."
+  (interactive)
+  (if (and delete-selection-mode transient-mark-mode mark-active)
+      (setq deactivate-mark  t)
+    (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
+    (abort-recursive-edit)))
+
+
 ; behaviour settings
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -45,17 +63,6 @@
 ; give me back my escape key
 (define-key evil-normal-state-map [escape] 'keyboard-quit)
 (define-key evil-visual-state-map [escape] 'keyboard-quit)
-
-(defun minibuffer-keyboard-quit ()
-  "Abort recursive edit.
- In Delete Selection mode, if the mark is active, just deactivate it;
- then it takes a second \\[keyboard-quit] to abort the minibuffer."
-  (interactive)
-  (if (and delete-selection-mode transient-mark-mode mark-active)
-      (setq deactivate-mark  t)
-    (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
-    (abort-recursive-edit)))
-
 (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
@@ -64,21 +71,26 @@
 
 ; evil/vim key overrides
 (eval-after-load "evil-maps" (dolist (
-	map '(evil-motion-state-map 
+	map '(evil-motion-state-map
 	      evil-insert-state-map 
 	      evil-emacs-state-map))
-	(define-key (eval map) "\C-w" nil)
+
 	(define-key (eval map) "\C-f" nil)
+	(global-set-key (kbd "C-f") 'isearch-forward)
+
 	(define-key (eval map) "\C-n" nil)
 	(define-key (eval map) "\C-p" nil)
-
-	(global-set-key (kbd "C-f") 'isearch-forward)
 	(define-key isearch-mode-map (kbd "C-n") 'isearch-repeat-forward)
 	(define-key isearch-mode-map (kbd "C-p") 'isearch-repeat-backward)
 
+	(define-key (eval map) "\C-w" nil)
 	(global-set-key (kbd "C-w") 'other-window)))
 
 ; general keybinds
 (global-set-key (kbd "C-s") 'split-window-horizontally)
 (global-set-key (kbd "C-S-s") 'split-window-vertically)
+
+(global-set-key (kbd "<f5>") 'compile)
+(global-set-key (kbd "M-n") 'next-error)
+(global-set-key (kbd "M-p") 'previous-error)
 
