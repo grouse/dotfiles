@@ -6,11 +6,12 @@
 (add-to-list 'load-path "~/.emacs.d/elisp")
 (add-to-list 'load-path "~/.emacs.d/themes")
 
-(require 'evil)
 (require 'compile)
-(require 'nlinum-relative)
 
+(require 'evil)
 (evil-mode 1)
+
+(require 'nlinum-relative)
 (nlinum-relative-setup-evil)
 (add-hook 'prog-mode-hook 'nlinum-relative-mode)
 (setq nlinum-relative-redisplay-delay 0) 
@@ -27,7 +28,6 @@
 (require 'whitespace)
 (global-whitespace-mode t)
 (setq whitespace-style '(face empty tabs lines-tail trailing))
-
 
 (require 'frame-restore)
 (progn (require 'desktop) (customize-set-variable 'desktop-enable t) (require 'frame-restore))
