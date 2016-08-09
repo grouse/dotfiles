@@ -3,36 +3,43 @@
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (package-initialize)
 
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+(require 'use-package)
+
 (add-to-list 'load-path "~/.emacs.d/elisp")
 (add-to-list 'load-path "~/.emacs.d/themes")
 
+;; built-in packages
 (require 'compile)
+(require 'whitespace)
+(require 'frame-restore)
+(require 'color-theme)
+(require 'color-theme-wombat)
 
-(require 'evil)
+;; 3rd party packages
+(use-package evil                   :ensure evil                   :init)
+(use-package nlinum-relative        :ensure nlinum-relative        :init)
+(use-package highlight-current-line :ensure highlight-current-line :init)
+
 (evil-mode 1)
 
-(require 'nlinum-relative)
 (nlinum-relative-setup-evil)
 (add-hook 'prog-mode-hook 'nlinum-relative-mode)
-(setq nlinum-relative-redisplay-delay 0) 
-(setq nlinum-relative-current-symbol "") 
+(setq nlinum-relative-redisplay-delay 0)
+(setq nlinum-relative-current-symbol "")
 (setq nlinum-relative-offset 0)
 
-(require 'color-theme)
 (color-theme-initialize)
 
-(require 'color-theme-wombat)
 (load-theme 'wombat t t)
 (enable-theme 'wombat)
 
-(require 'whitespace)
 (global-whitespace-mode t)
 (setq whitespace-style '(face empty tabs lines-tail trailing))
 
-(require 'frame-restore)
-(progn (require 'desktop) (customize-set-variable 'desktop-enable t) (require 'frame-restore))
 
-(require 'highlight-current-line)
 (highlight-current-line-on t)
 (set-face-background 'highlight-current-line-face "#3a444d")
 (set-face-attribute 'region nil :background "#5d6e95")
