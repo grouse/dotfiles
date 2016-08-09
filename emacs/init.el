@@ -32,6 +32,10 @@
 (require 'frame-restore)
 (progn (require 'desktop) (customize-set-variable 'desktop-enable t) (require 'frame-restore))
 
+(require 'highlight-current-line)
+(highlight-current-line-on t)
+(set-face-background 'highlight-current-line-face "#3a444d")
+
 ; functions
 (defun open-project (directory)
   (interactive (list (read-directory-name "project path:")))
