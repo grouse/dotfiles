@@ -8,8 +8,14 @@
 
 (require 'evil)
 (require 'compile)
+(require 'nlinum-relative)
 
 (evil-mode 1)
+(nlinum-relative-setup-evil)
+(add-hook 'prog-mode-hook 'nlinum-relative-mode)
+(setq nlinum-relative-redisplay-delay 0) 
+(setq nlinum-relative-current-symbol "") 
+(setq nlinum-relative-offset 0)
 
 (require 'color-theme)
 (color-theme-initialize)
@@ -22,9 +28,6 @@
 (global-whitespace-mode t)
 (setq whitespace-style '(face empty tabs lines-tail trailing))
 
-(require 'linum-relative)
-(global-linum-mode 1)
-(linum-relative-on)
 
 (require 'frame-restore)
 (progn (require 'desktop) (customize-set-variable 'desktop-enable t) (require 'frame-restore))
