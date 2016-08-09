@@ -35,6 +35,7 @@
 (require 'highlight-current-line)
 (highlight-current-line-on t)
 (set-face-background 'highlight-current-line-face "#3a444d")
+(set-face-attribute 'region nil :background "#5d6e95")
 
 ; functions
 (defun open-project (directory)
