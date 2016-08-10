@@ -13,7 +13,6 @@
 
 ;; built-in packages
 (require 'compile)
-(require 'whitespace)
 (require 'frame-restore)
 (require 'color-theme)
 (require 'color-theme-wombat)
@@ -36,10 +35,6 @@
 
 (load-theme 'wombat t t)
 (enable-theme 'wombat)
-
-(global-whitespace-mode t)
-(setq whitespace-style '(face empty tabs lines-tail trailing))
-
 
 (highlight-current-line-on t)
 (set-face-background 'highlight-current-line-face "#3a444d")
