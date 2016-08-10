@@ -32,10 +32,17 @@
   "Moves the cursor to the newly created window after splitting."
   (other-window 1))
 
+(defun my-setup-highlights ()
+  (font-lock-add-keywords nil '(("\\<\\(FIXME\\):" 1 '(:foreground "#ff0000") t)))
+  (font-lock-add-keywords nil '(("\\<\\(TODO\\):" 1 '(:foreground "#00aa00") t))))
+(add-hook 'prog-mode-hook 'my-setup-highlights)
+
+
 ;; behaviour settings
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (custom-set-variables '(inhibit-startup-screen t))
+
 
 (setq
  split-height-threshold nil
@@ -92,8 +99,11 @@
   (progn
     (evil-mode 1)
 
+    (define-key evil-normal-state-map [escape] 'keyboard-quit)
+    (define-key evil-visual-state-map [escape] 'keyboard-quit)
+
     ;; incremental search keybinds
-    ;; TODO(grouse): look into converging vim and emacs style incremental search to free up
+    ;; TODO: look into converging vim and emacs style incremental search to free up
     ;; keybinds, I like the vim-style "/" keybind but I was having issues with getting emacs
     ;; to play nicely with this.
     (define-key evil-motion-state-map (kbd "C-f") 'isearch-forward)
