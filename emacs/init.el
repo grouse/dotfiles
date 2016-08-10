@@ -22,6 +22,7 @@
 (use-package evil                   :ensure evil                   :init)
 (use-package nlinum-relative        :ensure nlinum-relative        :init)
 (use-package highlight-current-line :ensure highlight-current-line :init)
+(use-package powerline              :ensure powerline              :init)
 
 (evil-mode 1)
 
@@ -43,6 +44,8 @@
 (highlight-current-line-on t)
 (set-face-background 'highlight-current-line-face "#3a444d")
 (set-face-attribute 'region nil :background "#5d6e95")
+
+(powerline-default-theme)
 
 ;; functions
 (defun open-project (directory)
