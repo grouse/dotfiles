@@ -11,37 +11,6 @@
 (add-to-list 'load-path "~/.emacs.d/elisp")
 (add-to-list 'load-path "~/.emacs.d/themes")
 
-;; built-in packages
-(require 'compile)
-(require 'frame-restore)
-(require 'color-theme)
-(require 'color-theme-wombat)
-
-;; 3rd party packages
-(use-package evil                   :ensure evil                   :init)
-(use-package nlinum-relative        :ensure nlinum-relative        :init)
-(use-package highlight-current-line :ensure highlight-current-line :init)
-(use-package powerline              :ensure powerline              :init)
-
-(evil-mode 1)
-
-(nlinum-relative-setup-evil)
-(add-hook 'prog-mode-hook 'nlinum-relative-mode)
-(setq nlinum-relative-redisplay-delay 0)
-(setq nlinum-relative-current-symbol "")
-(setq nlinum-relative-offset 0)
-
-(color-theme-initialize)
-
-(load-theme 'wombat t t)
-(enable-theme 'wombat)
-
-(highlight-current-line-on t)
-(set-face-background 'highlight-current-line-face "#3a444d")
-(set-face-attribute 'region nil :background "#5d6e95")
-
-(powerline-default-theme)
-
 ;; functions
 (defun open-project (directory)
   (interactive (list (read-directory-name "project path:")))
@@ -57,6 +26,11 @@
     (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
     (abort-recursive-edit)))
 
+;; hooks and extensions of functions
+;; make creating a new split switch the cursor to the new split
+(defadvice split-window (after move-point-to-new-window activate)
+  "Moves the cursor to the newly created window after splitting."
+  (other-window 1))
 
 ;; behaviour settings
 (tool-bar-mode -1)
@@ -67,44 +41,79 @@
  split-height-threshold nil
  split-width-threshold 0)
 
-;; make creating a new split switch the cursor to the new split
-(defadvice split-window (after move-point-to-new-window activate)
-  "Moves the cursor to the newly created window after splitting."
-  (other-window 1))
 
-;; evil mode keybinds
+;; general keybinds
+(global-set-key (kbd "C-s") 'split-window-horizontally)
+(global-set-key (kbd "C-S-s") 'split-window-vertically)
+
 ;; give me back my escape key
-(define-key evil-normal-state-map [escape] 'keyboard-quit)
-(define-key evil-visual-state-map [escape] 'keyboard-quit)
 (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 
-;; evil/vim key overrides
-(eval-after-load "evil-maps" (dolist (
-	map '(evil-motion-state-map
-	      evil-insert-state-map 
-	      evil-emacs-state-map))
+;; colour scheme settings
+(require 'color-theme)
+(require 'color-theme-wombat)
+(with-eval-after-load "color-theme"
+  (color-theme-initialize)
+  (load-theme 'wombat t t)
+  (enable-theme 'wombat))
 
-	(define-key (eval map) "\C-f" nil)
-	(global-set-key (kbd "C-f") 'isearch-forward)
+;; compilatation configuration
+(require 'compile)
+(with-eval-after-load "compile"
+    (global-set-key (kbd "<f5>") 'compile)
+    (global-set-key (kbd "M-n") 'next-error)
+    (global-set-key (kbd "M-p") 'previous-error))
 
-	(define-key (eval map) "\C-n" nil)
-	(define-key (eval map) "\C-p" nil)
-	(define-key isearch-mode-map (kbd "C-n") 'isearch-repeat-forward)
-	(define-key isearch-mode-map (kbd "C-p") 'isearch-repeat-backward)
+;; powerline configuration
+(use-package powerline
+  :ensure powerline
+  :init
+  (progn
+    (powerline-default-theme)))
 
-	(define-key (eval map) "\C-w" nil)
-	(global-set-key (kbd "C-w") 'other-window)))
+;; current line hightlighting configuration
+(use-package highlight-current-line
+  :ensure highlight-current-line
+  :init
+  (progn
+    (highlight-current-line-on t)
+    (set-face-background 'highlight-current-line-face "#3a444d")
+    (set-face-attribute 'region nil :background "#5d6e95")))
 
-;; general keybinds
-(global-set-key (kbd "C-s") 'split-window-horizontally)
-(global-set-key (kbd "C-S-s") 'split-window-vertically)
 
-;; compilation keybinds
-(global-set-key (kbd "<f5>") 'compile)
-(global-set-key (kbd "M-n") 'next-error)
-(global-set-key (kbd "M-p") 'previous-error)
+;; evil mode configuration
+(use-package evil
+  :ensure evil
+  :init
+  (progn
+    (evil-mode 1)
 
+    ;; incremental search keybinds
+    ;; TODO(grouse): look into converging vim and emacs style incremental search to free up
+    ;; keybinds, I like the vim-style "/" keybind but I was having issues with getting emacs
+    ;; to play nicely with this.
+    (define-key evil-motion-state-map (kbd "C-f") 'isearch-forward)
+    (define-key evil-insert-state-map (kbd "C-f") 'isearch-forward)
+
+    (define-key isearch-mode-map (kbd "C-n") 'isearch-repeat-forward)
+    (define-key isearch-mode-map (kbd "C-p") 'isearch-repeat-backward)
+
+    ;; window/buffer navigation keybinds
+    (define-key evil-motion-state-map (kbd "C-w") 'other-window)
+    (define-key evil-insert-state-map (kbd "C-w") 'other-window)))
+
+;; relative line numbers
+(use-package nlinum-relative
+  :ensure nlinum-relative
+  :init
+  (progn
+    (nlinum-relative-setup-evil) ; setup relative line numbers with evil
+    (add-hook 'prog-mode-hook 'nlinum-relative-mode)
+
+    (setq nlinum-relative-redisplay-delay 0
+	  nlinum-relative-current-symbol "" ; display absolute line number on current line
+	  nlinum-relative-offset 0)))
