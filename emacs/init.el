@@ -14,6 +14,8 @@
 ;; functions
 (defun open-project (directory)
   (interactive (list (read-directory-name "project path:")))
+
+  (cd directory)
   (setq compile-command (concat directory "/build.sh")))
 
 (defun minibuffer-keyboard-quit ()
@@ -25,29 +27,6 @@
       (setq deactivate-mark  t)
     (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
     (abort-recursive-edit)))
-
-;; hooks and extensions of functions
-;; make creating a new split switch the cursor to the new split
-(defadvice split-window (after move-point-to-new-window activate)
-  "Moves the cursor to the newly created window after splitting."
-  (other-window 1))
-
-(defun my-setup-highlights ()
-  (font-lock-add-keywords nil '(("\\<\\(FIXME\\):" 1 '(:foreground "#ff0000") t)))
-  (font-lock-add-keywords nil '(("\\<\\(TODO\\):" 1 '(:foreground "#00aa00") t))))
-(add-hook 'prog-mode-hook 'my-setup-highlights)
-
-
-;; behaviour settings
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-(custom-set-variables '(inhibit-startup-screen t))
-
-
-(setq
- split-height-threshold nil
- split-width-threshold 0)
-
 
 ;; general keybinds
 (global-set-key (kbd "C-s") 'split-window-horizontally)
@@ -67,6 +46,13 @@
   (color-theme-initialize)
   (load-theme 'wombat t t)
   (enable-theme 'wombat))
+
+;; custom faces
+(make-face 'font-lock-fixme-face)
+(make-face 'font-lock-todo-face)
+
+(modify-face 'font-lock-fixme-face "#ff0000" nil nil t nil t nil nil)
+(modify-face 'font-lock-todo-face  "#00aa00" nil nil t nil t nil nil)
 
 ;; compilatation configuration
 (require 'compile)
@@ -127,3 +113,27 @@
     (setq nlinum-relative-redisplay-delay 0
 	  nlinum-relative-current-symbol "" ; display absolute line number on current line
 	  nlinum-relative-offset 0)))
+
+
+;; behaviour settings
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(custom-set-variables '(inhibit-startup-screen t))
+
+;; default to creating horizontal splits
+(setq
+ split-height-threshold nil
+ split-width-threshold 0)
+
+;; add custom words to highlight
+(mapc (lambda (mode)
+	(font-lock-add-keywords
+	 mode
+	 '(("\\<\\(TODO\\):"  1 'font-lock-todo-face  t)
+	   ("\\<\\(FIXME\\):" 1 'font-lock-fixme-face t))))
+      '(c++-mode c-mode emacs-lisp-mode))
+
+;; make creating a new split switch the cursor to the new split
+(defadvice split-window (after move-point-to-new-window activate)
+  "Moves the cursor to the newly created window after splitting."
+  (other-window 1))
