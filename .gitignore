@@ -15,12 +15,13 @@ tags
 # -*- mode: gitignore; -*-
 *~
 \#*\#
-/.emacs.desktop
-/.emacs.desktop.lock
+emacs/.emacs.desktop
+emacs/.emacs.desktop.lock
 *.elc
 auto-save-list
 tramp
 .\#*
+emacs/elpa
 
 # Org-mode
 .org-id-locations
