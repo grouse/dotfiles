@@ -28,24 +28,6 @@
     (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
     (abort-recursive-edit)))
 
-;; general keybinds
-(global-set-key (kbd "C-s") 'split-window-horizontally)
-(global-set-key (kbd "C-S-s") 'split-window-vertically)
-
-;; give me back my escape key
-(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
-(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
-
-;; vim-like keybindings for the packages menu
-(define-key package-menu-mode-map (kbd "j") 'next-line)
-(define-key package-menu-mode-map (kbd "k") 'previous-line)
-(define-key package-menu-mode-map (kbd ":") 'evil-ex)
-(define-key package-menu-mode-map (kbd "C-w") 'other-window)
-(define-key package-menu-mode-map (kbd "C-f") 'isearch-forward)
-
 ;; colour scheme settings
 (require 'color-theme)
 (require 'color-theme-wombat)
@@ -53,13 +35,6 @@
   (color-theme-initialize)
   (load-theme 'wombat t t)
   (enable-theme 'wombat))
-
-;; custom faces
-(make-face 'font-lock-fixme-face)
-(make-face 'font-lock-todo-face)
-
-(modify-face 'font-lock-fixme-face "#ff0000" nil nil t nil t nil nil)
-(modify-face 'font-lock-todo-face  "#00aa00" nil nil t nil t nil nil)
 
 ;; compilatation configuration
 (require 'compile)
@@ -120,6 +95,31 @@
     (setq nlinum-relative-redisplay-delay 0
 	  nlinum-relative-current-symbol "" ; display absolute line number on current line
 	  nlinum-relative-offset 0)))
+
+;; general keybinds
+(global-set-key (kbd "C-s") 'split-window-horizontally)
+(global-set-key (kbd "C-S-s") 'split-window-vertically)
+
+;; give me back my escape key
+(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+
+;; vim-like keybindings for the packages menu
+(define-key package-menu-mode-map (kbd "j") 'next-line)
+(define-key package-menu-mode-map (kbd "k") 'previous-line)
+(define-key package-menu-mode-map (kbd ":") 'evil-ex)
+(define-key package-menu-mode-map (kbd "C-w") 'other-window)
+(define-key package-menu-mode-map (kbd "C-f") 'isearch-forward)
+
+;; custom faces
+(make-face 'font-lock-fixme-face)
+(make-face 'font-lock-todo-face)
+
+(modify-face 'font-lock-fixme-face "#ff0000" nil nil t nil t nil nil)
+(modify-face 'font-lock-todo-face  "#00aa00" nil nil t nil t nil nil)
 
 
 ;; behaviour settings
