@@ -39,6 +39,13 @@
 (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
 
+;; vim-like keybindings for the packages menu
+(define-key package-menu-mode-map (kbd "j") 'next-line)
+(define-key package-menu-mode-map (kbd "k") 'previous-line)
+(define-key package-menu-mode-map (kbd ":") 'evil-ex)
+(define-key package-menu-mode-map (kbd "C-w") 'other-window)
+(define-key package-menu-mode-map (kbd "C-f") 'isearch-forward)
+
 ;; colour scheme settings
 (require 'color-theme)
 (require 'color-theme-wombat)
