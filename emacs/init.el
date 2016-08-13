@@ -43,22 +43,11 @@
     (global-set-key (kbd "M-n") 'next-error)
     (global-set-key (kbd "M-p") 'previous-error))
 
-;; powerline configuration
-(use-package powerline
-  :ensure powerline
-  :init
-  (progn
-    (powerline-default-theme)))
-
-;; current line hightlighting configuration
-(use-package highlight-current-line
-  :ensure highlight-current-line
-  :init
-  (progn
-    (highlight-current-line-on t)
-    (set-face-background 'highlight-current-line-face "#3a444d")
-    (set-face-attribute 'region nil :background "#5d6e95")))
-
+;; current line highlighting configuration
+(require 'highlight-current-line)
+(highlight-current-line-on t)
+(set-face-background 'highlight-current-line-face "#3a444d")
+(set-face-attribute 'region nil :background "#5d6a95")
 
 ;; evil mode configuration
 (use-package evil
@@ -83,18 +72,6 @@
     ;; window/buffer navigation keybinds
     (define-key evil-motion-state-map (kbd "C-w") 'other-window)
     (define-key evil-insert-state-map (kbd "C-w") 'other-window)))
-
-;; relative line numbers
-(use-package nlinum-relative
-  :ensure nlinum-relative
-  :init
-  (progn
-    (nlinum-relative-setup-evil) ; setup relative line numbers with evil
-    (add-hook 'prog-mode-hook 'nlinum-relative-mode)
-
-    (setq nlinum-relative-redisplay-delay 0
-	  nlinum-relative-current-symbol "" ; display absolute line number on current line
-	  nlinum-relative-offset 0)))
 
 ;; general keybinds
 (global-set-key (kbd "C-s") 'split-window-horizontally)
