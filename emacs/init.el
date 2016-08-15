@@ -12,11 +12,17 @@
 (add-to-list 'load-path "~/.emacs.d/themes")
 
 ;; functions
-(defun open-project (directory)
-  (interactive (list (read-directory-name "project path:")))
+(defun projectile-get-project-root ()
+  (interactive)
+  (loop for file in projectile-project-root-files
+        when (locate-dominating-file default-directory file)
+        do (return it)))
 
-  (cd directory)
-  (setq compile-command (concat directory "/build.sh")))
+(defun open-project ()
+  (interactive)
+  (projectile-switch-project)
+  (let ((project-root (projectile-get-project-root)))
+	(setq compile-command (concat project-root "build.sh"))))
 
 (defun minibuffer-keyboard-quit ()
   "Abort recursive edit.
@@ -65,6 +71,29 @@
   :init
   (progn
     (smart-tabs-insinuate 'c 'c++)))
+
+(use-package flx-ido
+  :ensure flx-ido
+  :init
+  (progn
+	(ido-mode 1)
+	(ido-everywhere 1)
+	(flx-ido-mode 1)
+
+	(setq ido-enable-flex-matching t)
+	(setq ido-use-faces nil)))
+
+(use-package projectile
+  :ensure projectile
+  :init
+  (progn
+	(projectile-global-mode)
+	(setq projectile-tags-command "ctags-exuberant --extra=+q -Re -f \"%s\" %s")
+
+	(global-set-key (kbd "C-l") 'projectile-find-file)
+	(global-set-key (kbd "<f2>") 'projectile-find-tag)))
+	
+	
 
 ;; evil mode configuration
 (use-package evil
@@ -134,6 +163,8 @@
 ;; default to creating horizontal splits
  split-height-threshold nil
  split-width-threshold 0
+
+ scroll-step 1
 
  mouse-wheel-scroll-amount '(2 ((shift) . 2) ((control) . nil))
  mouse-wheel-progressive-speed nil
