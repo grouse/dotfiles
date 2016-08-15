@@ -28,6 +28,9 @@
     (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
     (abort-recursive-edit)))
 
+(defun ff-get-other-file-other-window ()
+  (ff-get-other-file 'other-window))
+
 ;; colour scheme settings
 (require 'color-theme)
 (require 'color-theme-wombat)
@@ -48,6 +51,19 @@
 (highlight-current-line-on t)
 (set-face-background 'highlight-current-line-face "#3a444d")
 (set-face-attribute 'region nil :background "#5d6a95")
+
+;; powerline configuration
+(use-package powerline
+  :ensure powerline
+  :init
+  (progn
+    (powerline-default-theme)))
+
+(use-package smart-tabs-mode
+  :ensure smart-tabs-mode
+  :init
+  (progn
+    (smart-tabs-insinuate 'c 'c++)))
 
 ;; evil mode configuration
 (use-package evil
@@ -77,6 +93,9 @@
 (global-set-key (kbd "C-s") 'split-window-horizontally)
 (global-set-key (kbd "C-S-s") 'split-window-vertically)
 
+(global-set-key (kbd "<f4>") 'ff-get-other-file)
+(global-set-key (kbd "S-<f4>") 'ff-get-other-file-other-window) 
+
 ;; give me back my escape key
 (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
 (define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
@@ -98,16 +117,32 @@
 (modify-face 'font-lock-fixme-face "#ff0000" nil nil t nil t nil nil)
 (modify-face 'font-lock-todo-face  "#00aa00" nil nil t nil t nil nil)
 
-
 ;; behaviour settings
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (custom-set-variables '(inhibit-startup-screen t))
 
+(defvar cpp-other-file-alist
+  '(("\\.cpp\\'" (".hpp" ".h")) 
+    ("\\.c\\'" (".h"))
+    ("\\.h\\'" (".c" ".cpp"))))
+
+(setq-default
 ;; default to creating horizontal splits
-(setq
  split-height-threshold nil
- split-width-threshold 0)
+ split-width-threshold 0
+
+ scroll-step 1
+ scroll-conservatively 10000
+
+ ff-other-file-alist 'cpp-other-file-alist
+
+ mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil))
+ mouse-wheel-progressive-speed nil
+
+ tab-width 4
+ c-default-style "linux"
+ c-basic-offset 4)
 
 ;; add custom words to highlight
 (mapc (lambda (mode)
