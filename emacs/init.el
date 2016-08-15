@@ -59,6 +59,7 @@
   (progn
     (powerline-default-theme)))
 
+;; smart tabs configuration - indents with tab, aligns with spaces
 (use-package smart-tabs-mode
   :ensure smart-tabs-mode
   :init
@@ -118,8 +119,10 @@
 (modify-face 'font-lock-todo-face  "#00aa00" nil nil t nil t nil nil)
 
 ;; behaviour settings
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
+(tool-bar-mode 0)
+(menu-bar-mode 0)
+(scroll-bar-mode 0)
+
 (custom-set-variables '(inhibit-startup-screen t))
 
 (defvar cpp-other-file-alist
@@ -132,13 +135,10 @@
  split-height-threshold nil
  split-width-threshold 0
 
- scroll-step 1
- scroll-conservatively 10000
+ mouse-wheel-scroll-amount '(2 ((shift) . 2) ((control) . nil))
+ mouse-wheel-progressive-speed nil
 
  ff-other-file-alist 'cpp-other-file-alist
-
- mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil))
- mouse-wheel-progressive-speed nil
 
  tab-width 4
  c-default-style "linux"
