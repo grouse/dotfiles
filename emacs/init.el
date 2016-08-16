@@ -12,18 +12,28 @@
 (add-to-list 'load-path "~/.emacs.d/themes")
 
 ;; functions
-(defun projectile-get-project-root ()
-  (interactive)
-  (loop for file in projectile-project-root-files
-        when (locate-dominating-file default-directory file)
-        do (return it)))
-
 (defun open-project ()
   (interactive)
   (projectile-switch-project)
-  (let ((project-root (projectile-get-project-root)))
+  (let ((project-root (projectile-project-root)))
 	(setq compile-command (concat project-root "build.sh"))))
 
+(defun my-compile ()
+  (interactive)
+
+  (let ((project-root (projectile-project-root)))
+	(setq compile-command (concat project-root "build.sh")))
+
+  (if (not (get-buffer-window "*compilation*"))
+	  (progn
+		(split-window-vertically -10)
+
+		(switch-to-buffer "*compilation*")
+		(call-interactively 'compile)
+		(other-window -1))
+	(progn
+	  (call-interactively 'recompile))))
+		
 (defun minibuffer-keyboard-quit ()
   "Abort recursive edit.
  In Delete Selection mode, if the mark is active, just deactivate it;
@@ -48,9 +58,9 @@
 ;; compilatation configuration
 (require 'compile)
 (with-eval-after-load "compile"
-    (global-set-key (kbd "<f5>") 'compile)
-    (global-set-key (kbd "M-n") 'next-error)
-    (global-set-key (kbd "M-p") 'previous-error))
+  (global-set-key (kbd "<f5>") 'my-compile)
+  (global-set-key (kbd "M-n") 'next-error)
+  (global-set-key (kbd "M-p") 'previous-error))
 
 ;; current line highlighting configuration
 (require 'highlight-current-line)
@@ -160,10 +170,6 @@
     ("\\.h\\'" (".c" ".cpp"))))
 
 (setq-default
-;; default to creating horizontal splits
- split-height-threshold nil
- split-width-threshold 0
-
  scroll-step 1
 
  mouse-wheel-scroll-amount '(2 ((shift) . 2) ((control) . nil))
