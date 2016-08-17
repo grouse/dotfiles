@@ -62,12 +62,6 @@
   (global-set-key (kbd "M-n") 'next-error)
   (global-set-key (kbd "M-p") 'previous-error))
 
-;; current line highlighting configuration
-(require 'highlight-current-line)
-(highlight-current-line-on t)
-(set-face-background 'highlight-current-line-face "#3a444d")
-(set-face-attribute 'region nil :background "#5d6a95")
-
 ;; powerline configuration
 (use-package powerline
   :ensure powerline
@@ -102,7 +96,12 @@
 
 	(global-set-key (kbd "C-l") 'projectile-find-file)
 	(global-set-key (kbd "<f2>") 'projectile-find-tag)))
-	
+
+(use-package smooth-scrolling
+  :ensure smooth-scrolling
+  :init
+  (progn
+    (smooth-scrolling-mode 1)))
 	
 
 ;; evil mode configuration
@@ -150,12 +149,14 @@
 (define-key package-menu-mode-map (kbd "C-w") 'other-window)
 (define-key package-menu-mode-map (kbd "C-f") 'isearch-forward)
 
-;; custom faces
+;; custom faces and colours
 (make-face 'font-lock-fixme-face)
-(make-face 'font-lock-todo-face)
-
 (modify-face 'font-lock-fixme-face "#ff0000" nil nil t nil t nil nil)
+
+(make-face 'font-lock-todo-face)
 (modify-face 'font-lock-todo-face  "#00aa00" nil nil t nil t nil nil)
+
+(set-face-attribute 'region nil :background "#3a444d")
 
 ;; behaviour settings
 (tool-bar-mode 0)
@@ -169,7 +170,7 @@
     ("\\.c\\'" (".h"))
     ("\\.h\\'" (".c" ".cpp"))))
 
-(setq-default
+(setq
  scroll-step 1
 
  mouse-wheel-scroll-amount '(2 ((shift) . 2) ((control) . nil))
