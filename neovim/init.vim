@@ -1,6 +1,7 @@
 call plug#begin("~/.config/nvim/plugged")
 
 Plug 'vim-scripts/Smart-Tabs'
+Plug 'airblade/vim-gitgutter'
 
 call plug#end()
 
@@ -23,7 +24,6 @@ set tabstop=4
 set cindent
 set cinoptions=(0,u0,U0
 
-
 set ruler
 
 " scrolling configuration
@@ -37,6 +37,11 @@ set gdefault
 
 colorscheme wombat256
 
+" git-gutter configuration
+let g:gitgutter_enabled = 0
+let g:gitgutter_highlight_lines = 1
+noremap <F1> :GitGutterToggle <CR>
+
 " window navigation keybinds
 " vertical and horizontal split keybinds
 map <C-s> :vsplit <CR> :wincmd l <CR>
@@ -47,5 +52,4 @@ map <C-h> :wincmd h <CR>
 map <C-j> :wincmd j <CR>
 map <C-k> :wincmd k <CR>
 map <C-l> :wincmd l <CR>
-
 
