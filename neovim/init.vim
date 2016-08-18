@@ -1,9 +1,28 @@
+call plug#begin("~/.config/nvim/plugged")
+
+Plug 'vim-scripts/Smart-Tabs'
+
+call plug#end()
+
 " relative line numbering for victory
 set relativenumber
 
+" set text width to (100-1) to automatically word wrap at 100 columns, stumbled upon this
+" awesomeness by accident
+set tw=99
+
 " tab configuration
-set tabstop=4
+" All of this together with smart tabs plugin results in automatic indent with
+" tabs and align with spaces.
+set noexpandtab
+set copyindent
+set preserveindent
+set softtabstop=0
 set shiftwidth=4
+set tabstop=4
+set cindent
+set cinoptions=(0,u0,U0
+
 
 set ruler
 
@@ -17,8 +36,6 @@ set smartcase
 set gdefault
 
 colorscheme wombat256
-
-set listchars=tab:>-
 
 " window navigation keybinds
 " vertical and horizontal split keybinds
