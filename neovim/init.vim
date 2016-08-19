@@ -24,7 +24,8 @@ set tabstop=4
 set cindent
 set cinoptions=(0,u0,U0
 
-
+" assorted configuration
+set clipboard+=unnamedplus
 set ruler
 
 " scrolling configuration
