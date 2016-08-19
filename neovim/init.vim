@@ -1,6 +1,7 @@
 call plug#begin("~/.config/nvim/plugged")
 
 Plug 'vim-scripts/Smart-Tabs'
+Plug 'neomake/neomake'
 
 call plug#end()
 
@@ -36,6 +37,16 @@ set smartcase
 set gdefault
 
 colorscheme wombat256
+
+" neomake configuration
+let g:neomake_custom_maker = { 'exe': 'build.sh' }
+
+function! s:OpenProjectFunc(param)
+	let g:neomake_custom_args = [ a:param ]
+endfunction
+command! -nargs=1 OpenProject call s:OpenProjectFunc(<f-args>)
+
+map <F5> :Neomake! custom <CR>
 
 " window navigation keybinds
 " vertical and horizontal split keybinds
