@@ -3,6 +3,7 @@ call plug#begin("~/.config/nvim/plugged")
 Plug 'vim-scripts/Smart-Tabs'
 Plug 'airblade/vim-gitgutter'
 Plug 'neomake/neomake'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
 call plug#end()
 
@@ -48,12 +49,17 @@ noremap <F1> :GitGutterToggle <CR>
 " neomake configuration
 let g:neomake_custom_maker = { 'exe': 'build.sh' }
 
-function! s:OpenProjectFunc(param)
-	let g:neomake_custom_args = [ a:param ]
+" project configuration
+let g:project_dir = "~/projects"
+function! s:OpenProjectFunc(dir)
+	let g:project_dir = a:dir
 endfunction
-command! -nargs=1 OpenProject call s:OpenProjectFunc(<f-args>)
+
+command! -nargs=1 -complete=dir OpenProject call s:OpenProjectFunc(<f-args>)
+command! FuzzyFind :FZF project_dir
 
 map <F5> :Neomake! custom <CR>
+map <C-p> :FZF <C-R>=project_dir<CR> <CR>
 
 " window navigation keybinds
 " vertical and horizontal split keybinds
