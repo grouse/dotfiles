@@ -2,6 +2,7 @@ call plug#begin("~/.config/nvim/plugged")
 
 Plug 'vim-scripts/Smart-Tabs'
 Plug 'airblade/vim-gitgutter'
+Plug 'neomake/neomake'
 
 call plug#end()
 
@@ -24,6 +25,8 @@ set tabstop=4
 set cindent
 set cinoptions=(0,u0,U0
 
+" assorted configuration
+set clipboard+=unnamedplus
 set ruler
 
 " scrolling configuration
@@ -41,6 +44,16 @@ colorscheme wombat256
 let g:gitgutter_enabled = 0
 let g:gitgutter_highlight_lines = 1
 noremap <F1> :GitGutterToggle <CR>
+
+" neomake configuration
+let g:neomake_custom_maker = { 'exe': 'build.sh' }
+
+function! s:OpenProjectFunc(param)
+	let g:neomake_custom_args = [ a:param ]
+endfunction
+command! -nargs=1 OpenProject call s:OpenProjectFunc(<f-args>)
+
+map <F5> :Neomake! custom <CR>
 
 " window navigation keybinds
 " vertical and horizontal split keybinds
