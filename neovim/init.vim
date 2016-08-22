@@ -5,14 +5,16 @@ Plug 'neomake/neomake'
 
 call plug#end()
 
-" relative line numbering for victory
+"" assorted configuration
+set clipboard+=unnamedplus
+set ruler
 set relativenumber
 
 " set text width to (100-1) to automatically word wrap at 100 columns, stumbled upon this
 " awesomeness by accident
 set tw=99
 
-" tab configuration
+"" tab configuration
 " All of this together with smart tabs plugin results in automatic indent with
 " tabs and align with spaces.
 set noexpandtab
@@ -24,15 +26,11 @@ set tabstop=4
 set cindent
 set cinoptions=(0,u0,U0
 
-" assorted configuration
-set clipboard+=unnamedplus
-set ruler
-
-" scrolling configuration
+"" scrolling configuration
 set scrolloff=3
 set sidescrolloff=5
 
-" incremental search configuration
+"" incremental search configuration
 set ignorecase
 set smartcase
 set gdefault
@@ -49,7 +47,7 @@ command! -nargs=1 OpenProject call s:OpenProjectFunc(<f-args>)
 
 map <F5> :Neomake! custom <CR>
 
-" window navigation keybinds
+"" window navigation keybinds
 " vertical and horizontal split keybinds
 map <C-s> :vsplit <CR> :wincmd l <CR>
 map <A-s> :split <CR> :wincmd j <CR>
