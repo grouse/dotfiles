@@ -56,7 +56,16 @@ function! s:CompileProjectFunc()
 	call neoterm#do(cmd)
 endfunction
 
-map <F5> :Neomake! custom <CR>
+"" custom commands
+command! -nargs=1 -complete=dir OpenProject call s:OpenProjectFunc(<f-args>)
+command! CompileProject call s:CompileProjectFunc()
+
+"" leader keybinds
+let mapleader=","
+
+" the h at the end is a complete hack to stop the cursor from moving a character to the right, I 
+" assume this is caused by some weird clash remapping 'c'?
+map <leader>c :CompileProject <CR> h
 
 "" window navigation keybinds
 " vertical and horizontal split keybinds
