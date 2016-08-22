@@ -2,6 +2,7 @@ call plug#begin("~/.config/nvim/plugged")
 
 Plug 'vim-scripts/Smart-Tabs'
 Plug 'neomake/neomake'
+Plug 'kassio/neoterm'
 
 call plug#end()
 
@@ -37,13 +38,23 @@ set gdefault
 
 colorscheme wombat256
 
-" neomake configuration
-let g:neomake_custom_maker = { 'exe': 'build.sh' }
+"" neoterm configuration
+let g:neoterm_position = 'horizontal'
+let g:neoterm_size = 15
 
-function! s:OpenProjectFunc(param)
-	let g:neomake_custom_args = [ a:param ]
+"" custom variables
+let g:project_dir = "~/projects"
+
+"" custom functions
+function! s:OpenProjectFunc(path)
+	let g:project_dir = a:path
+	let g:neomake_cpp_custom_args = [ a:path ]
 endfunction
-command! -nargs=1 OpenProject call s:OpenProjectFunc(<f-args>)
+
+function! s:CompileProjectFunc()
+	let cmd = g:project_dir . "/build.sh"
+	call neoterm#do(cmd)
+endfunction
 
 map <F5> :Neomake! custom <CR>
 
