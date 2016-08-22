@@ -1,7 +1,6 @@
 call plug#begin("~/.config/nvim/plugged")
 
 Plug 'vim-scripts/Smart-Tabs'
-Plug 'neomake/neomake'
 Plug 'kassio/neoterm'
 
 call plug#end()
@@ -48,7 +47,6 @@ let g:project_dir = "~/projects"
 "" custom functions
 function! s:OpenProjectFunc(path)
 	let g:project_dir = a:path
-	let g:neomake_cpp_custom_args = [ a:path ]
 endfunction
 
 function! s:CompileProjectFunc()
