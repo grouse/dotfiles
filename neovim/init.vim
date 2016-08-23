@@ -111,9 +111,6 @@ command! CompilePrevError call s:compile_prev_error()
 "" leader keybinds
 let mapleader=","
 
-" the h at the end is a complete hack to stop the cursor from moving a character to the right, I 
-" assume this is caused by some weird clash remapping 'c'?
-"map <leader>cc :Neomake! custom <CR>
 map <leader>c :Compile <CR>
 map <leader>n :CompileNextError <CR>
 map <leader>p :CompilePrevError <CR>
