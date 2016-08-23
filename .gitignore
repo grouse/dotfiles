@@ -2,6 +2,7 @@
 # swap
 [._]*.s[a-w][a-z]
 [._]s[a-w][a-z]
+neovim/plugged
 # session
 Session.vim
 # temporary
@@ -17,6 +18,7 @@ tags
 \#*\#
 emacs/.emacs.desktop
 emacs/.emacs.desktop.lock
+emacs/session*
 *.elc
 auto-save-list
 tramp
