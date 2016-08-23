@@ -54,28 +54,9 @@ endfunction
 command! -nargs=1 -complete=dir OpenProject call s:OpenProjectFunc(<f-args>)
 
 "" compilation
-let s:compile_output = 0
-let s:compile_job    = -1 
+let s:compile_job        = -1 
 
 function! s:compile_on_output(job_id, data, event)
-	if s:compile_output
-		let old_window         = winnr()
-		let compilation_window = bufwinnr("compilation")
-
-		if compilation_window == -1
-			" NOTE: trying to create a compilation buffer/window here incurs a race condition
-		endif
-
-		" NOTE: this causes us to actually switch windows, append to buffer, switch back. Not only 
-		" does this send "on-window-change" type events inside vim, it's a horrifically slow 
-		" implementation.  
-		" TODO: investigate solution to append to buffer by name/index without having to switch to 
-		" it
-		exe compilation_window . "wincmd w"
-		call append(line('$'), a:data)
-		exe old_window . "wincmd w"
-	endif
-
 	cadde a:data
 endfunction
 
@@ -93,16 +74,18 @@ let s:compile_callbacks = {
 \}
 
 function! s:compile_start()
-	if s:compile_output
-		" TODO: create compilation window + buffer if not created. This needs to be done here so 
-		" that compile_on_output can assume the existance of a compilation buffer
-	endif
-
 	if s:compile_job != -1 
 		echo "compilation job already in progress"
 		return
 	endif
 
+	" NOTE: consider using own implementation of location-list to get more customisable features
+	" like separate warning and error lists, adding the compile error + any corresponding notes,
+	" which gcc/clang puts on preceding line and is often useful, as a dropdown/overlay type UI
+	" thing.
+	" NOTE: quickfix/location list does give us some built in features like being able to see the 
+	" contents with an easy command, replacing the compilation buffer output. Potentially it's
+	" possible to neatly extend the quickfix functionality to be able to do what we want.
 	call setqflist([])
 
 	let s:compile_job = jobstart(['bash'], s:compile_callbacks)
