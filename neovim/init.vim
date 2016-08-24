@@ -2,6 +2,7 @@ call plug#begin("~/.config/nvim/plugged")
 
 Plug 'vim-scripts/Smart-Tabs'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'derekwyatt/vim-fswitch'
 
 call plug#end()
 
@@ -128,3 +129,5 @@ map <C-j> :wincmd j <CR>
 map <C-k> :wincmd k <CR>
 map <C-l> :wincmd l <CR>
 
+" source/header file switching
+map <F4> :FSHere <CR>
