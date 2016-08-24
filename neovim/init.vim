@@ -54,6 +54,13 @@ endfunction
 "" custom commands
 command! -nargs=1 -complete=dir OpenProject call s:OpenProjectFunc(<f-args>)
 
+"" fuzzy searching
+function! s:fuzzy_search()
+	call fzf#run({'dir': g:project_dir, 'sink': 'e'})
+endfunction
+
+command! FuzzySearch call s:fuzzy_search()
+
 "" compilation
 let s:compile_job        = -1 
 
@@ -127,4 +134,6 @@ map <C-h> :wincmd h <CR>
 map <C-j> :wincmd j <CR>
 map <C-k> :wincmd k <CR>
 map <C-l> :wincmd l <CR>
+
+map <C-p> :FuzzySearch <CR>
 
