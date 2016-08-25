@@ -136,6 +136,7 @@ map <C-j> :wincmd j <CR>
 map <C-k> :wincmd k <CR>
 map <C-l> :wincmd l <CR>
 
+" fuzzy searching
 map <C-p> :FuzzySearch <CR>
 
 " source/header file switching
