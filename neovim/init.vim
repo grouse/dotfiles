@@ -1,8 +1,11 @@
 call plug#begin("~/.config/nvim/plugged")
 
-Plug 'vim-scripts/Smart-Tabs'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'derekwyatt/vim-fswitch'
+	Plug 'vim-scripts/Smart-Tabs'
+	Plug 'derekwyatt/vim-fswitch'
+	Plug 'morhetz/gruvbox'
+	Plug 'ctrlpvim/ctrlp.vim'
+	Plug 'vim-airline/vim-airline'
+	Plug 'vim-airline/vim-airline-themes'
 
 call plug#end()
 
@@ -40,27 +43,52 @@ set gdefault
 " gcc
 set errorformat+="%f:%l:%c: error: %m"
 
-colorscheme wombat256
+"" color scheme and syntax highlight configuration
+" third-party colorscheme
+set background=dark
+colorscheme gruvbox
+
+" custom overrides
+function! SetCustomHighlights()
+	syn keyword myNote contained NOTE 
+	syn keyword myTodo contained TODO FIXME IMPORTANT
+
+	hi myNote guibg=none guifg=#ffff00 ctermfg=yellow
+	hi myTodo guibg=none guifg=#ff0000 ctermfg=red
+
+	syn cluster cCommentGroup contains=myNote,myTodo
+	syn cluster vimCommentGroup contains=myNote,myTodo
+endfunction()
+
+au BufRead,BufNewFile * call SetCustomHighlights()
+
+"" airline configuration
+let g:airline_powerline_fonts = 1
+
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#fnamemod  = ":t"
+
+let g:airline_section_a = airline#section#create(["mode"])
+let g:airline_section_b = airline#section#create(["%m%t"])
+let g:airline_section_c = "" 
+
+let g:airline_section_x = "" 
+let g:airline_section_y = airline#section#create(["ffenc"])
+let g:airline_section_z = airline#section#create(["%l:%c"])
+let g:airline_section_error   = ""
+let g:airline_section_warning = "" 
 
 "" custom variables
 let g:project_dir         = "~/projects"
-let g:project_compile_cmd = "~/projects/build.sh"
+let g:project_compile_cmd = "build.sh"
 
 "" custom functions
 function! s:OpenProjectFunc(path)
 	let g:project_dir         = a:path
-	let g:project_compile_cmd = g:project_dir . "/build.sh"
 endfunction
 
 "" custom commands
 command! -nargs=1 -complete=dir OpenProject call s:OpenProjectFunc(<f-args>)
-
-"" fuzzy searching
-function! s:fuzzy_search()
-	call fzf#run({'dir': g:project_dir, 'sink': 'e'})
-endfunction
-
-command! FuzzySearch call s:fuzzy_search()
 
 "" compilation
 let s:compile_job        = -1 
@@ -99,7 +127,7 @@ function! s:compile_start()
 
 	let s:compile_job = jobstart(['bash'], s:compile_callbacks)
 
-	call jobsend(s:compile_job, g:project_compile_cmd . "\n")
+	call jobsend(s:compile_job, g:project_dir . "/" . g:project_compile_cmd . "\n")
 	call jobsend(s:compile_job, "exit\n")
 endfunction
 
@@ -136,8 +164,10 @@ map <C-j> :wincmd j <CR>
 map <C-k> :wincmd k <CR>
 map <C-l> :wincmd l <CR>
 
-" fuzzy searching
-map <C-p> :FuzzySearch <CR>
+"" fuzzy file and buffer find configuration
+map <C-p> :CtrlP <CR> 
+map <A-p> :CtrlPBuffer <CR>
+map <C-a> :CtrlP <C-r>=g:project_dir<CR><CR>
 
-" source/header file switching
+"" source/header file switching
 map <F4> :FSHere <CR>
