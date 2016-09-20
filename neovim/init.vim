@@ -42,6 +42,8 @@ set gdefault
 "" errorformats
 " gcc
 set errorformat+="%f:%l:%c: error: %m"
+" msvc
+set errorformat+="%f(%l): error %#: %m"
 
 "" color scheme and syntax highlight configuration
 " third-party colorscheme
@@ -82,6 +84,10 @@ let g:airline_section_warning = ""
 let g:project_dir         = "~/projects"
 let g:project_compile_cmd = "build.sh"
 
+if has ("win32")
+	let g:project_compile_cmd = "build.bat"
+endif
+
 "" custom functions
 function! s:OpenProjectFunc(path)
 	let g:project_dir         = a:path
@@ -95,6 +101,8 @@ let s:compile_job        = -1
 
 function! s:compile_on_output(job_id, data, event)
 	cadde a:data
+
+	put=a:data
 endfunction
 
 function! s:compile_on_exit(job_id, data, event)
@@ -125,10 +133,16 @@ function! s:compile_start()
 	" possible to neatly extend the quickfix functionality to be able to do what we want.
 	call setqflist([])
 
-	let s:compile_job = jobstart(['bash'], s:compile_callbacks)
+	if has ("win32")
+		new 
+		setlocal buftype=nofile noswapfile
+		let s:compile_job = jobstart([g:project_dir . g:project_compile_cmd], s:compile_callbacks)
+	else
+		let s:compile_job = jobstart(['bash'], s:compile_callbacks)
 
-	call jobsend(s:compile_job, g:project_dir . "/" . g:project_compile_cmd . "\n")
-	call jobsend(s:compile_job, "exit\n")
+		call jobsend(s:compile_job, g:project_dir . g:project_compile_cmd ."\n")
+		call jobsend(s:compile_job, "exit\n")b
+	endif
 endfunction
 
 function! s:compile_next_error()
