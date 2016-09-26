@@ -3,6 +3,7 @@ call plug#begin("~/.config/nvim/plugged")
 	Plug 'vim-scripts/Smart-Tabs'
 	Plug 'derekwyatt/vim-fswitch'
 	Plug 'mhartington/oceanic-next'
+	Plug 'equalsraf/neovim-gui-shim'
 	Plug 'ctrlpvim/ctrlp.vim'
 	Plug 'vim-airline/vim-airline'
 	Plug 'vim-airline/vim-airline-themes'
@@ -45,6 +46,9 @@ set errorformat+="%f:%l:%c: error: %m"
 
 "" color scheme and syntax highlight configuration
 " third-party colorscheme
+set termguicolors
+set cursorline
+
 set background=dark
 colorscheme OceanicNext 
 
@@ -53,8 +57,8 @@ function! SetCustomHighlights()
 	syn keyword myNote contained NOTE 
 	syn keyword myTodo contained TODO FIXME IMPORTANT
 
-	hi myNote guibg=none guifg=#ffff00 ctermfg=yellow
-	hi myTodo guibg=none guifg=#ff0000 ctermfg=red
+	hi myNote guibg=none guifg=#ffff00 
+	hi myTodo guibg=none guifg=#ff0000
 
 	syn cluster cCommentGroup contains=myNote,myTodo
 	syn cluster vimCommentGroup contains=myNote,myTodo
