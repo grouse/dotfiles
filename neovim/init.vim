@@ -2,7 +2,7 @@ call plug#begin("~/.config/nvim/plugged")
 
 	Plug 'vim-scripts/Smart-Tabs'
 	Plug 'derekwyatt/vim-fswitch'
-	Plug 'morhetz/gruvbox'
+	Plug 'mhartington/oceanic-next'
 	Plug 'ctrlpvim/ctrlp.vim'
 	Plug 'vim-airline/vim-airline'
 	Plug 'vim-airline/vim-airline-themes'
@@ -46,7 +46,7 @@ set errorformat+="%f:%l:%c: error: %m"
 "" color scheme and syntax highlight configuration
 " third-party colorscheme
 set background=dark
-colorscheme gruvbox
+colorscheme OceanicNext 
 
 " custom overrides
 function! SetCustomHighlights()
@@ -64,6 +64,7 @@ au BufRead,BufNewFile * call SetCustomHighlights()
 
 "" airline configuration
 let g:airline_powerline_fonts = 1
+let g:airline_theme = "oceanicnext"
 
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod  = ":t"
