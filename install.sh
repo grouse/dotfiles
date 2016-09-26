@@ -3,11 +3,20 @@
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # emacs installation
-ln -s "$DOTFILES_DIR/emacs" ~/.emacs.d
+if [ ! -d ~/.emacs.d ];
+then
+	ln -s "$DOTFILES_DIR/emacs" ~/.emacs.d
+fi
 
 # neovim installation
-ln -s "$DOTFILES_DIR/neovim" ~/.config/nvim
+if [ ! -d ~/.config/nvim ];
+then
+	ln -s "$DOTFILES_DIR/neovim" ~/.config/nvim
+fi
 
 # qtcreator installation
-ln "$DOTFILES_DIR/qtcreator/styles/wombat-style.xml" ~/.config/QtProject/qtcreator/styles/wombat-style.xml
+if [ ! -d ~/.config/QtProject/qtcreator/styles ];
+then
+	ln -s "$DOTFILES_DIR/qtcreator/styles" ~/.config/QtProject/qtcreator/styles
+fi
 
