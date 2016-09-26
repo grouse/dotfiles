@@ -1,1 +1,1 @@
-Guifont Droid Sans Mono for Powerline Regular:h11
+Guifont DejaVu Sans Mono for Powerline Book:h11
