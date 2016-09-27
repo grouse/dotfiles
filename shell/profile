@@ -1,0 +1,10 @@
+#!/bin/sh
+
+export CXX=/usr/bin/clang++
+export CC=/usr/bin/clang
+
+export EDITOR=nvim
+export SVN_EDITOR=nvim
+
+[ -f ~/.profile ] && source ~/.profile
+

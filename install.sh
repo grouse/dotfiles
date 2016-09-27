@@ -20,3 +20,16 @@ then
 	ln -s "$DOTFILES_DIR/qtcreator/styles" ~/.config/QtProject/qtcreator/styles
 fi
 
+# shell installation
+if [ ! -d ~/.config/shell ];
+then
+	ln -s "$DOTFILES_DIR/shell" ~/.config/shell
+fi
+
+# zsh shell installation
+if [ ! -d ~/.config/zsh ];
+then
+	ln -s "$DOTFILES_DIR/zsh" ~/.config/zsh
+fi
+
+

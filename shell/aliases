@@ -1,0 +1,8 @@
+#!/bin/sh
+
+alias ls="ls      --color=auto"
+alias ll="ls -l   --color=auto"
+alias la="ls -lha --color=auto"
+
+GREP_OPTIONS="--exclude=.tags* --exclude *.vcproj --exclude-dir=.svn"
+alias grep="grep --color=auto $GREP_OPTIONS"
