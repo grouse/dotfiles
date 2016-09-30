@@ -47,30 +47,28 @@ set errorformat+="%f:%l:%c: error: %m"
 set errorformat+="%f(%l): error %#: %m"
 
 "" color scheme and syntax highlight configuration
-" third-party colorscheme
+syntax enable
 set termguicolors
 set cursorline
-
 set background=dark
-colorscheme OceanicNext 
+
+" third-party colorscheme
+colorscheme grouse
 
 " custom overrides
 function! SetCustomHighlights()
-	syn keyword myNote contained NOTE 
-	syn keyword myTodo contained TODO FIXME IMPORTANT
+	syn keyword Note contained NOTE 
+	syn keyword Todo contained TODO FIXME IMPORTANT
 
-	hi myNote guibg=none guifg=#ffff00 
-	hi myTodo guibg=none guifg=#ff0000
-
-	syn cluster cCommentGroup contains=myNote,myTodo
-	syn cluster vimCommentGroup contains=myNote,myTodo
+	syn cluster cCommentGroup contains=Note,Todo
+	syn cluster vimCommentGroup contains=Note,Todo
 endfunction()
 
 au BufRead,BufNewFile * call SetCustomHighlights()
 
 "" airline configuration
 let g:airline_powerline_fonts = 1
-let g:airline_theme = "oceanicnext"
+let g:airline_theme = "grouse"
 
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod  = ":t"
