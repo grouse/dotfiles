@@ -28,6 +28,10 @@ set relativenumber
 set ruler
 set noshowmode
 
+set list
+"set listchars=eol:⏎,tab: ,trail:⎵
+set listchars=eol:⏎,tab:▶\ 
+
 
 " set text width to (100-1) to automatically word wrap at 100 columns, stumbled upon this
 " awesomeness by accident
@@ -88,6 +92,22 @@ endfunction()
 au BufRead,BufNewFile * call SetCustomHighlights()
 
 
+function! s:insert_file_header()
+	let author    = 'Jesper Stefansson'
+	let email     = 'jesper.stefansson@gmail.com'
+
+	so ~/.config/nvim/templates/c.vim
+	exe '%s/file: .*/file: ' . expand('%:t') . '/g'
+	exe '%s/created: .*/created: ' . strftime('%Y-%m-%d') . '/g'
+	exe '%s/authors: .*/authors: ' . author . ' (' . email . ')' 
+endfunction()
+
+command! InsertFileHeader :call s:insert_file_header()
+
+au BufNewFile *.cpp call s:insert_file_header()
+
+
+
 "" airline configuration
 let g:airline_powerline_fonts = 1
 let g:airline_theme = "grouse"
@@ -108,7 +128,6 @@ let g:airline_section_warning = ""
 
 "" highlighted yank configuration
 let g:highlightedyank_highlight_duration=200
-
 
 "" custom variables
 let g:project_dir         = "~/projects"
@@ -195,9 +214,15 @@ command! CompilePrevError call s:compile_prev_error()
 "" leader keybinds
 let mapleader=","
 
-"map <leader>c :Compile <CR>
-"map <leader>n :CompileNextError <CR>
-"map <leader>p :CompilePrevError <CR>
+"" compilation
+map <leader>c :Compile <CR>
+map <leader>n :CompileNextError <CR>
+map <leader>p :CompilePrevError <CR>
+
+
+"" NERDCommenter 
+nmap <leader>/ :call NERDComment('n', 'Toggle') <CR>
+xmap <leader>/ :call NERDComment('x', 'Toggle') <CR>
 
 
 "" window navigation keybinds
@@ -219,13 +244,36 @@ if has("win32")
 	map <C-a> :CtrlP <CR> 
 	map <C-p> :CtrlP <C-r>=g:project_dir<CR><CR>
 else
-	function! s:fuzzy_search()
-		call fzf#run({'dir': g:project_dir, 'sink': 'e'})
+	"map <C-p> :call denite#start([{'name': 'file_rec', 'args': [g:project_dir]}]) <CR>
+
+	function! s:project_dir()
+		return g:project_dir
 	endfunction
 
-	command! FuzzySearch call s:fuzzy_search()
+	function! s:buflist()
+		redir => ls
+		silent ls
+		redir END
+		return split(ls, '\n')
+	endfunction
 
-	map <C-p> :FuzzySearch <CR>
+	function! s:bufopen(e)
+		execute 'buffer' matchstr(a:e, '^[ 0-9]*')
+	endfunction
+
+	map <C-p> :call fzf#run({
+	\   'dir': <sid>project_dir(), 
+	\	'sink': 'e'
+	\	})<CR>
+
+	map <A-p> :call fzf#run({
+	\   'source':  reverse(<sid>buflist()),
+	\   'sink':    function('<sid>bufopen'),
+	\   'options': '+m',
+	\   'down':    len(<sid>buflist()) + 2
+	\ })<CR>
+
+
 endif
 
 
