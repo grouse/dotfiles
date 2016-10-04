@@ -9,6 +9,7 @@ let g:colors_name='grouse'
 let s:none      = 'none'
 
 "" emphasis
+" TODO(jesper): these could be useful to add some emphasis to some syntax without making a rainbow
 let s:bold      = 'bold'
 let s:italic    = 'italic'
 let s:underline = 'underline'
@@ -16,21 +17,24 @@ let s:undercurl = 'undercurl'
 let s:inverse   = 'inverse'
 
 "" colour palette
-let s:base00 = '#232123' " darker background
-let s:base01 = '#2a282a' " normal background
-let s:base02 = '#353335' " lighter background
+" backgrounds
+let s:base00 = '#232123' " darker
+let s:base01 = '#2a282a' " normal 
+let s:base02 = '#353335' " lighter 
 
-let s:base03 = '#6e6d6e' " accent foreground 00
-let s:base04 = '#948068' " accent foreground 01
-let s:base05 = '#aeae95' " normal foreground
-let s:base06 = '#a08066' " accent foreground 10
-let s:base07 = '#f7fffe' " accent foreground 11
+" foregrounds
+let s:base03 = '#6e6d6e' " comments, disabled code
+let s:base04 = '#948068' " preprocessor, include, module, etc
+let s:base05 = '#afaf95' " normal
+let s:base06 = '#a09066' " code keywords, statements, etc
+let s:base07 = '#f7fffe' " number, boolean, null, etc
 
 " special colours 
 let s:red     = '#ec5f67' 
 let s:orange  = '#f99157'
 let s:yellow  = '#c3cd3b'
 let s:green   = '#7dba6d'
+let s:cyan    = '#5FB3B3'
 
 function! s:hl(group, fg, bg, attr)
 	" NOTE(jesper): just supporting neovim right now so setting gui highlight is enough
@@ -79,8 +83,10 @@ call s:hl("SpecialKey",   s:none, s:none, s:none)
 call s:hl("PMenu",        s:none, s:none, s:none)
 call s:hl("PMenuSel",     s:none, s:none, s:none)
 
+
 "" standard syntax highlighting 
 call s:hl("Include",      s:base04, s:none, s:none)
+call s:hl("Define",       s:base04, s:none, s:none)
 call s:hl("Comment",      s:base03, s:none, s:none)
 call s:hl("String",       s:green, s:none, s:none)
 
@@ -93,7 +99,6 @@ call s:hl("StorageClass", s:base06, s:none, s:none)
 call s:hl("Type",         s:base06, s:none, s:none)
 call s:hl("Typedef",      s:base06, s:none, s:none)
 call s:hl("Structure",    s:base06, s:none, s:none)
-call s:hl("Define",       s:base06, s:none, s:none)
 
 call s:hl("Repeat",       s:base06, s:none, s:none)
 call s:hl("Conditional",  s:base06, s:none, s:none)
@@ -102,7 +107,6 @@ call s:hl("Number",       s:base07, s:none, s:none)
 call s:hl("Float",        s:base07, s:none, s:none)
 call s:hl("Constant",     s:base07, s:none, s:none)
 call s:hl("Boolean",      s:base07, s:none, s:none)
-
 
 " unset
 call s:hl("Operator",     s:none, s:none, s:none)
@@ -115,6 +119,7 @@ call s:hl("PreProc",      s:none, s:none, s:none)
 call s:hl("Special",      s:none, s:none, s:none)
 call s:hl("SpecialChar",  s:none, s:none, s:none)
 call s:hl("Tag",          s:none, s:none, s:none)
+
 
 "" plugins
 
@@ -136,10 +141,10 @@ call s:hl("DiffLine",    s:none, s:none, s:none)
 call s:hl("gitCommitOverflow", s:none, s:none, s:none)
 call s:hl("gitCommitSummary",  s:none, s:none, s:none)
 
+
 "" programming languages
 " C highlighting 
 call s:hl("cNumber",       s:base07, s:none, s:none)
-
 call s:hl("cDefine",       s:base06, s:none, s:none)
 call s:hl("cPreCondit",    s:base06, s:none, s:none)
 call s:hl("cStorageClass", s:base06, s:none, s:none)
