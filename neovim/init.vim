@@ -1,44 +1,62 @@
 call plug#begin("~/.config/nvim/plugged")
+	"" assorted plugins
 
-	Plug 'vim-scripts/Smart-Tabs'
-	Plug 'derekwyatt/vim-fswitch'
-	Plug 'mhartington/oceanic-next'
-	Plug 'equalsraf/neovim-gui-shim'
+	"" tool plugins
+	Plug 'critiqjo/lldb.nvim'
+
+	"" navigation related plugins
 	Plug 'ctrlpvim/ctrlp.vim'
-	Plug 'vim-airline/vim-airline'
-	Plug 'vim-airline/vim-airline-themes'
+	Plug 'derekwyatt/vim-fswitch'
+	Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
+	"" editing related plugins
+	Plug 'scrooloose/nerdcommenter'
+	Plug 'matze/vim-move'
+	Plug 'vim-scripts/Smart-Tabs'
+	Plug 'godlygeek/tabular'
+
+	"" ui/look and feel related plugins
+	Plug 'equalsraf/neovim-gui-shim'
+	Plug 'vim-airline/vim-airline'
+	Plug 'machakann/vim-highlightedyank'
 call plug#end()
+
 
 "" assorted configuration
 set clipboard+=unnamedplus
-set ruler
 set relativenumber
+set ruler
+set noshowmode
+
 
 " set text width to (100-1) to automatically word wrap at 100 columns, stumbled upon this
 " awesomeness by accident
 set tw=99
 
+
 "" tab configuration
 " All of this together with smart tabs plugin results in automatic indent with
 " tabs and align with spaces.
-set noexpandtab
-set copyindent
-set preserveindent
-set softtabstop=0
-set shiftwidth=4
-set tabstop=4
 set cindent
 set cinoptions=(0,u0,U0
+set copyindent
+set noexpandtab
+set preserveindent
+set shiftwidth=4
+set softtabstop=0
+set tabstop=4
+
 
 "" scrolling configuration
 set scrolloff=3
 set sidescrolloff=5
 
+
 "" incremental search configuration
+set gdefault
 set ignorecase
 set smartcase
-set gdefault
+
 
 "" errorformats
 " gcc
@@ -46,16 +64,19 @@ set errorformat+="%f:%l:%c: error: %m"
 " msvc
 set errorformat+="%f(%l): error %#: %m"
 
+
 "" color scheme and syntax highlight configuration
 syntax enable
 set termguicolors
 set cursorline
 set background=dark
 
-" third-party colorscheme
 colorscheme grouse
 
-" custom overrides
+" custom highlights 
+" NOTE(jesper): should probably do this by overriding syntax linter files, but this seems the
+" cleanest way of getting global highlights without having to edit syntax files for every single
+" file type i'm interested in
 function! SetCustomHighlights()
 	syn keyword Note contained NOTE 
 	syn keyword Todo contained TODO FIXME IMPORTANT
@@ -65,6 +86,7 @@ function! SetCustomHighlights()
 endfunction()
 
 au BufRead,BufNewFile * call SetCustomHighlights()
+
 
 "" airline configuration
 let g:airline_powerline_fonts = 1
@@ -83,6 +105,11 @@ let g:airline_section_z = airline#section#create(["%l:%c"])
 let g:airline_section_error   = ""
 let g:airline_section_warning = "" 
 
+
+"" highlighted yank configuration
+let g:highlightedyank_highlight_duration=200
+
+
 "" custom variables
 let g:project_dir         = "~/projects"
 let g:project_compile_cmd = "build.sh"
@@ -96,8 +123,10 @@ function! s:OpenProjectFunc(path)
 	let g:project_dir         = a:path
 endfunction
 
+
 "" custom commands
 command! -nargs=1 -complete=dir OpenProject call s:OpenProjectFunc(<f-args>)
+
 
 "" compilation
 let s:compile_job        = -1 
@@ -162,12 +191,13 @@ command! Compile call s:compile_start()
 command! CompileNextError call s:compile_next_error()
 command! CompilePrevError call s:compile_prev_error()
 
+
 "" leader keybinds
 let mapleader=","
 
-map <leader>c :Compile <CR>
-map <leader>n :CompileNextError <CR>
-map <leader>p :CompilePrevError <CR>
+"map <leader>c :Compile <CR>
+"map <leader>n :CompileNextError <CR>
+"map <leader>p :CompilePrevError <CR>
 
 
 "" window navigation keybinds
@@ -175,20 +205,30 @@ map <leader>p :CompilePrevError <CR>
 map <C-s> :vsplit <CR> :wincmd l <CR>
 map <A-s> :split <CR> :wincmd j <CR>
 
-" keybinds to switch to left/down/up/right window
-map <C-h> :wincmd h <CR>
-map <C-j> :wincmd j <CR>
-map <C-k> :wincmd k <CR>
-map <C-l> :wincmd l <CR>
 
 "" fuzzy file and buffer find configuration
 set wildignore+=*.o
 set wildignore+=*/tmp/*,*.so,*.swp,*.a
 set wildignore+=*\\tmp\\*,*.obj,*.swp,*.exe,*.lib,*.dll
 
-map <C-p> :CtrlP <CR> 
-map <A-p> :CtrlPBuffer <CR>
-map <C-a> :CtrlP <C-r>=g:project_dir<CR><CR>
+let g:ctrlp_map = ''
+
+if has("win32")
+	let g:ctrlp_max_files = 0
+
+	map <C-a> :CtrlP <CR> 
+	map <C-p> :CtrlP <C-r>=g:project_dir<CR><CR>
+else
+	function! s:fuzzy_search()
+		call fzf#run({'dir': g:project_dir, 'sink': 'e'})
+	endfunction
+
+	command! FuzzySearch call s:fuzzy_search()
+
+	map <C-p> :FuzzySearch <CR>
+endif
+
 
 "" source/header file switching
 map <F4> :FSHere <CR>
+
