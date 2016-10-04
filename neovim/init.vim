@@ -182,6 +182,10 @@ map <C-k> :wincmd k <CR>
 map <C-l> :wincmd l <CR>
 
 "" fuzzy file and buffer find configuration
+set wildignore+=*.o
+set wildignore+=*/tmp/*,*.so,*.swp,*.a
+set wildignore+=*\\tmp\\*,*.obj,*.swp,*.exe,*.lib,*.dll
+
 map <C-p> :CtrlP <CR> 
 map <A-p> :CtrlPBuffer <CR>
 map <C-a> :CtrlP <C-r>=g:project_dir<CR><CR>
