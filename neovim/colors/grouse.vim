@@ -25,9 +25,12 @@ let s:base02 = '#353335' " lighter
 " foregrounds
 let s:base03 = '#6e6d6e' " comments, disabled code
 let s:base04 = '#948068' " preprocessor, include, module, etc
-let s:base05 = '#afaf95' " normal
+
+"let s:base05 = '#e7daba' " normal
+let s:base05 = '#c6b391' " normal
+
 let s:base06 = '#a09066' " code keywords, statements, etc
-let s:base07 = '#f7fffe' " number, boolean, null, etc
+let s:base07 = '#ece6d6' " number, boolean, null, etc
 
 " special colours 
 let s:red     = '#ec5f67' 
@@ -54,6 +57,9 @@ call s:hl("VertSplit",    s:base00, s:base00, s:none)
 call s:hl("Visual",       s:none, s:none, s:inverse)
 call s:hl("VisualNOS",    s:none, s:none, s:inverse)
 
+call s:hl("SpecialKey",   s:base03, s:none, s:none)
+call s:hl("NonText",      s:base03, s:none, s:none)
+
 call s:hl("Italic",       s:none, s:none, s:italic)
 call s:hl("Bold",         s:none, s:none, s:bold)
 call s:hl("Underlined",   s:none, s:none, s:underline)
@@ -70,16 +76,13 @@ call s:hl("Macro",        s:none, s:none, s:none)
 call s:hl("ModeMsg",      s:none, s:none, s:none)
 call s:hl("MoreMsg",      s:none, s:none, s:none)
 call s:hl("Question",     s:none, s:none, s:none)
-call s:hl("SpecialKey",   s:none, s:none, s:none)
 call s:hl("TooLong",      s:none, s:none, s:none)
 call s:hl("WarningMsg",   s:none, s:none, s:none)
 call s:hl("WildMenu",     s:none, s:none, s:none)
 call s:hl("Title",        s:none, s:none, s:none)
 call s:hl("Conceal",      s:none, s:none, s:none)
 call s:hl("Cursor",       s:none, s:none, s:none)
-call s:hl("NonText",      s:none, s:none, s:none)
 call s:hl("SignColumn",   s:none, s:none, s:none)
-call s:hl("SpecialKey",   s:none, s:none, s:none)
 call s:hl("PMenu",        s:none, s:none, s:none)
 call s:hl("PMenuSel",     s:none, s:none, s:none)
 
