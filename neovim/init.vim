@@ -3,6 +3,7 @@ call plug#begin("~/.config/nvim/plugged")
 
 	"" tool plugins
 	Plug 'critiqjo/lldb.nvim'
+	Plug 'tpope/vim-fugitive'
 
 	"" navigation related plugins
 	Plug 'ctrlpvim/ctrlp.vim'
@@ -29,8 +30,7 @@ set ruler
 set noshowmode
 
 set list
-"set listchars=eol:⏎,tab: ,trail:⎵
-set listchars=eol:⏎,tab:▶\ 
+set listchars=eol:⏎,tab:»\ 
 
 
 " set text width to (100-1) to automatically word wrap at 100 columns, stumbled upon this
@@ -92,34 +92,61 @@ endfunction()
 au BufRead,BufNewFile * call SetCustomHighlights()
 
 
-function! s:insert_file_header()
+function! s:format_new_header_file(template)
 	let author    = 'Jesper Stefansson'
 	let email     = 'jesper.stefansson@gmail.com'
 
-	so ~/.config/nvim/templates/c.vim
-	exe '%s/file: .*/file: ' . expand('%:t') . '/g'
-	exe '%s/created: .*/created: ' . strftime('%Y-%m-%d') . '/g'
-	exe '%s/authors: .*/authors: ' . author . ' (' . email . ')' 
+	let template_file = '~/.config/nvim/templates/' . a:template
+	exec 'source ' . template_file
+
+	exec '%s/@FILE/' . expand('%:t')
+	exec '%s/@CREATED/' . strftime('%Y-%m-%d')
+	exec '%s/@AUTHORS/' . author . ' (' . email . ')'
+	exec '%s/@COPYRIGHT_YEAR/' . strftime('%Y')
+
+	exec '%s/@HEADER_DEFINE_GUARD/' . toupper(expand('%:r')) . '_H'
+
+	" NOTE(jesper): by doing this substitute last we move the cursor to this position
+	exec '%s/@CURSOR//'
+endfunction()
+
+function! s:format_new_source_file(template)
+	let author    = 'Jesper Stefansson'
+	let email     = 'jesper.stefansson@gmail.com'
+
+	let template_file = '~/.config/nvim/templates/' . a:template
+	exec 'source ' . template_file
+
+
+	exec '%s/@FILE/' . expand('%:t')
+	exec '%s/@CREATED/' . strftime('%Y-%m-%d')
+	exec '%s/@AUTHORS/' . author . ' (' . email . ')'
+	exec '%s/@COPYRIGHT_YEAR/' . strftime('%Y')
+
+	" NOTE(jesper): by doing this substitute last we move the cursor to this position
+	exec '%s/@CURSOR//'
 endfunction()
 
 command! InsertFileHeader :call s:insert_file_header()
 
-au BufNewFile *.cpp call s:insert_file_header()
-
+au BufNewFile *.cpp,*.c call s:format_new_source_file('c_source.vim')
+au BufNewFile *.hpp,*.h call s:format_new_header_file('c_header.vim')
 
 
 "" airline configuration
 let g:airline_powerline_fonts = 1
+
+let g:airline#extensions#branch#enabled = 1
+
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
 let g:airline_theme = "grouse"
 
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod  = ":t"
 
-let g:airline_section_a = airline#section#create(["mode"])
-let g:airline_section_b = airline#section#create(["%m%t"])
-let g:airline_section_c = "" 
+let g:airline_section_c = airline#section#create(["%m%t"])
 
-let g:airline_section_x = "" 
 let g:airline_section_y = airline#section#create(["ffenc"])
 let g:airline_section_z = airline#section#create(["%l:%c"])
 let g:airline_section_error   = ""
@@ -153,7 +180,7 @@ let s:compile_job        = -1
 function! s:compile_on_output(job_id, data, event)
 	cadde a:data
 
-	put=a:data
+	"put=a:data
 endfunction
 
 function! s:compile_on_exit(job_id, data, event)
@@ -278,5 +305,6 @@ endif
 
 
 "" source/header file switching
+let b:fsnonewfiles = 1
 map <F4> :FSHere <CR>
 
