@@ -1,4 +1,3 @@
-:insert
 /**
  * file:    @FILE
  * created: @CREATED
@@ -13,4 +12,3 @@
 @CURSOR
 
 #endif /* @HEADER_DEFINE_GUARD */
-

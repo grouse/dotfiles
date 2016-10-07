@@ -29,6 +29,8 @@ set relativenumber
 set ruler
 set noshowmode
 
+let mapleader="\<Space>"
+
 set list
 set listchars=eol:⏎,tab:»\ 
 
@@ -92,12 +94,9 @@ endfunction()
 au BufRead,BufNewFile * call SetCustomHighlights()
 
 
-function! s:format_new_header_file(template)
+function! s:format_template()
 	let author    = 'Jesper Stefansson'
 	let email     = 'jesper.stefansson@gmail.com'
-
-	let template_file = '~/.config/nvim/templates/' . a:template
-	exec 'source ' . template_file
 
 	exec '%s/@FILE/' . expand('%:t')
 	exec '%s/@CREATED/' . strftime('%Y-%m-%d')
@@ -110,29 +109,56 @@ function! s:format_new_header_file(template)
 	exec '%s/@CURSOR//'
 endfunction()
 
-function! s:format_new_source_file(template)
-	let author    = 'Jesper Stefansson'
-	let email     = 'jesper.stefansson@gmail.com'
+au BufNewFile *.c,*.cpp 0r ~/.config/nvim/templates/template.c
+au BufNewFile *.h,*.hpp 0r ~/.config/nvim/templates/template.h
 
-	let template_file = '~/.config/nvim/templates/' . a:template
-	exec 'source ' . template_file
+au BufNewFile *.c,*.h,*.cpp,*.hpp call s:format_template()
 
 
-	exec '%s/@FILE/' . expand('%:t')
-	exec '%s/@CREATED/' . strftime('%Y-%m-%d')
-	exec '%s/@AUTHORS/' . author . ' (' . email . ')'
-	exec '%s/@COPYRIGHT_YEAR/' . strftime('%Y')
+"" ctags configuration
+let s:ctags_generate_job = -1
 
-	" NOTE(jesper): by doing this substitute last we move the cursor to this position
-	exec '%s/@CURSOR//'
+
+function! s:ctags_generate_on_output(job_id, data, event)
+	echo a:data
 endfunction()
 
-command! InsertFileHeader :call s:insert_file_header()
+function! s:ctags_generate_on_exit(job_id, data, event)
+	let s:ctags_generate_job = -1
+	if (a:data == 0)
+		echo "ctags generated"
+	else
+		echo "ERROR: ctags not generated")
+	endif
+endfunction
 
-au BufNewFile *.cpp,*.c call s:format_new_source_file('c_source.vim')
-au BufNewFile *.hpp,*.h call s:format_new_header_file('c_header.vim')
+function! s:ctags_generate()
+	if s:ctags_generate_job != -1
+		echo 'ctags are already being generated'
+		return
+	endif
 
+	let cmd = 'ctags -R --c++-kinds=+p --fields=+iaS --extra=+q ' . g:project_dir
+	let ctags_generate_options= {
+		\'on_stdout': function('s:ctags_generate_on_output'),
+		\'on_stderr': function('s:ctags_generate_on_output'),
+		\'on_exit'  : function('s:ctags_generate_on_exit'),
+		\'detach'   : 1
+	\}
 
+	let s:ctags_generate_job = jobstart(cmd, ctags_generate_options)
+endfunction
+
+function! s:ctags_generate_cancel()
+	if s:ctags_generate_job != -1
+		jobstop(s:ctags_generate_job)
+	endif
+endfunction
+		
+
+command! GenerateCTags :call s:ctags_generate()
+command! CancelCTagsJob :call s:ctags_generate_cancel()
+	
 "" airline configuration
 let g:airline_powerline_fonts = 1
 
@@ -158,11 +184,6 @@ let g:highlightedyank_highlight_duration=200
 
 "" custom variables
 let g:project_dir         = "~/projects"
-let g:project_compile_cmd = "build.sh"
-
-if has ("win32")
-	let g:project_compile_cmd = "build.bat"
-endif
 
 "" custom functions
 function! s:OpenProjectFunc(path)
@@ -177,49 +198,52 @@ command! -nargs=1 -complete=dir OpenProject call s:OpenProjectFunc(<f-args>)
 "" compilation
 let s:compile_job        = -1 
 
-function! s:compile_on_output(job_id, data, event)
-	cadde a:data
+let s:compile_script     = 'build.sh'
+if has('win32')
+	let s:compile_script = 'build.bat'
+endif
 
-	"put=a:data
+let g:compile_cmd_cache  = g:project_dir . '/' . s:compile_script . ' debug'
+
+function! s:compile_on_output(job_id, data, event)
+	" TODO(jesper): consider adding this to a no-file scratch buffer so we can easily view the
+	" entire compilation output, but need to figure out how to add text to a buffer without having
+	" to constantly switch back and forth, considering the async nature of this command.
+	" NOTE(jesper): we can just open up the quickfix list, but I'd like to consider filtering the
+	" additions to the quickfix list so that only contains the locations for warnings and errors
+	" without any of the other compilation output
+	cadde a:data
 endfunction
 
 function! s:compile_on_exit(job_id, data, event)
-	call jobstop(s:compile_job)
 	let s:compile_job = -1
-
-	cnext
+	call s:compile_next_error()
 endfunction
 
-let s:compile_callbacks = {
-	\'on_stdout': function('s:compile_on_output'),
-	\'on_stderr': function('s:compile_on_output'),
-	\'on_exit'  : function('s:compile_on_exit')
-\}
-
-function! s:compile_start()
+function! s:compile_start(cmd)
 	if s:compile_job != -1 
 		echo "compilation job already in progress"
 		return
 	endif
 
-	" NOTE: consider using own implementation of location-list to get more customisable features
-	" like separate warning and error lists, adding the compile error + any corresponding notes,
-	" which gcc/clang puts on preceding line and is often useful, as a dropdown/overlay type UI
-	" thing.
-	" NOTE: quickfix/location list does give us some built in features like being able to see the 
-	" contents with an easy command, replacing the compilation buffer output. Potentially it's
-	" possible to neatly extend the quickfix functionality to be able to do what we want.
 	call setqflist([])
 
-	if has ("win32")
-		new 
-		setlocal buftype=nofile noswapfile
-		let s:compile_job = jobstart([g:project_dir . g:project_compile_cmd], s:compile_callbacks)
-	else
-		let s:compile_job = jobstart(['bash'], s:compile_callbacks)
+	let g:compile_cmd_cache = a:cmd
 
-		call jobsend(s:compile_job, g:project_dir . g:project_compile_cmd ."\n")
-		call jobsend(s:compile_job, "exit\n")b
+	let compile_opts = {
+		\'on_stdout': function('s:compile_on_output'),
+		\'on_stderr': function('s:compile_on_output'),
+		\'on_exit'  : function('s:compile_on_exit'),
+		\'opts'     : 1
+	\}
+
+	let s:compile_job = jobstart(a:cmd, compile_opts)
+endfunction
+
+function! s:compile_cancel()
+	if s:compile_job != -1
+		jobstop(s:compile_job)
+		s:compile_job = -1
 	endif
 endfunction
 
@@ -233,21 +257,18 @@ function! s:compile_prev_error()
 	cprev
 endfunction
 
-command! Compile call s:compile_start()
-command! CompileNextError call s:compile_next_error()
-command! CompilePrevError call s:compile_prev_error()
+command! -nargs=1 Compile :call s:compile_start(<f-args>)
+command! CompileCancel    :call s:compile_cancel()
+command! CompileNextError :call s:compile_next_error()
+command! CompilePrevError :call s:compile_prev_error()
 
-
-"" leader keybinds
-let mapleader=","
-
-"" compilation
-map <leader>c :Compile <CR>
+map <leader>c :Compile <C-r>=g:compile_cmd_cache<CR>
 map <leader>n :CompileNextError <CR>
 map <leader>p :CompilePrevError <CR>
 
 
-"" NERDCommenter 
+"" NERDCommenter configuration
+let g:NERDCreateDefaultMappings = 0
 nmap <leader>/ :call NERDComment('n', 'Toggle') <CR>
 xmap <leader>/ :call NERDComment('x', 'Toggle') <CR>
 
@@ -263,6 +284,7 @@ set wildignore+=*.o
 set wildignore+=*/tmp/*,*.so,*.swp,*.a
 set wildignore+=*\\tmp\\*,*.obj,*.swp,*.exe,*.lib,*.dll
 
+" disable default mappings
 let g:ctrlp_map = ''
 
 if has("win32")
@@ -298,13 +320,10 @@ else
 	\   'sink':    function('<sid>bufopen'),
 	\   'options': '+m',
 	\   'down':    len(<sid>buflist()) + 2
-	\ })<CR>
-
-
+	\ })<CR><CR>
 endif
 
 
 "" source/header file switching
-let b:fsnonewfiles = 1
 map <F4> :FSHere <CR>
 

@@ -1,4 +1,3 @@
-:insert
 /**
  * file:    @FILE
  * created: @CREATED
