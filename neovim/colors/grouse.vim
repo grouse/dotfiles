@@ -57,7 +57,7 @@ call s:hl("VertSplit",    s:base00, s:base00, s:none)
 call s:hl("Visual",       s:none, s:none, s:inverse)
 call s:hl("VisualNOS",    s:none, s:none, s:inverse)
 
-call s:hl("SpecialKey",   s:base03, s:none, s:none)
+call s:hl("SpecialKey",   s:base02, s:base00, s:none)
 call s:hl("NonText",      s:base03, s:none, s:none)
 
 call s:hl("Italic",       s:none, s:none, s:italic)
@@ -88,13 +88,17 @@ call s:hl("PMenuSel",     s:none, s:none, s:none)
 
 
 "" standard syntax highlighting 
-call s:hl("Include",      s:base04, s:none, s:none)
-call s:hl("Define",       s:base04, s:none, s:none)
-call s:hl("Comment",      s:base03, s:none, s:none)
 call s:hl("String",       s:green, s:none, s:none)
+call s:hl("Character",    s:green, s:none, s:none)
 
 call s:hl("Note",         s:yellow, s:none, s:none)
 call s:hl("Todo",         s:red, s:none, s:none)
+
+call s:hl("Comment",      s:base03, s:none, s:none)
+
+call s:hl("Include",      s:base04, s:none, s:none)
+call s:hl("Define",       s:base04, s:none, s:none)
+call s:hl("PreProc",      s:base04, s:none, s:none)
 
 call s:hl("Keyword",      s:base06, s:none, s:none)
 call s:hl("Statement",    s:base06, s:none, s:none)
@@ -102,7 +106,8 @@ call s:hl("StorageClass", s:base06, s:none, s:none)
 call s:hl("Type",         s:base06, s:none, s:none)
 call s:hl("Typedef",      s:base06, s:none, s:none)
 call s:hl("Structure",    s:base06, s:none, s:none)
-
+call s:hl("Label",        s:base06, s:none, s:none)
+call s:hl("Operator",     s:base06, s:none, s:none)
 call s:hl("Repeat",       s:base06, s:none, s:none)
 call s:hl("Conditional",  s:base06, s:none, s:none)
 
@@ -112,13 +117,9 @@ call s:hl("Constant",     s:base07, s:none, s:none)
 call s:hl("Boolean",      s:base07, s:none, s:none)
 
 " unset
-call s:hl("Operator",     s:none, s:none, s:none)
-call s:hl("Character",    s:none, s:none, s:none)
 call s:hl("Delimiter",    s:none, s:none, s:none)
 call s:hl("Function",     s:none, s:none, s:none)
 call s:hl("Identifier",   s:none, s:none, s:none)
-call s:hl("Label",        s:none, s:none, s:none)
-call s:hl("PreProc",      s:none, s:none, s:none)
 call s:hl("Special",      s:none, s:none, s:none)
 call s:hl("SpecialChar",  s:none, s:none, s:none)
 call s:hl("Tag",          s:none, s:none, s:none)

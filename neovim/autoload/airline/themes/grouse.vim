@@ -35,9 +35,9 @@ let g:airline#themes#grouse#palette.insert = copy(g:airline#themes#grouse#palett
 let g:airline#themes#grouse#palette.replace = copy(g:airline#themes#grouse#palette.normal)
 let g:airline#themes#grouse#palette.visual = copy(g:airline#themes#grouse#palette.normal)
 
-let s:IA1   = [ s:base03, s:base00, 0, 0]
-let s:IA2   = [ s:base03, s:base00, 0, 0]
-let s:IA3   = [ s:base03, s:base01, 0, 0]
+let s:IA1   = [ s:base03, s:base02, 0, 0]
+let s:IA2   = [ s:base03, s:base02, 0, 0]
+let s:IA3   = [ s:base03, s:base02, 0, 0]
 let g:airline#themes#grouse#palette.inactive = airline#themes#generate_color_map(s:IA1, s:IA2, s:IA3)
 
 let g:airline#themes#grouse#palette.accents = {
