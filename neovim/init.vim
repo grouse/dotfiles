@@ -170,7 +170,7 @@ let g:airline_theme = "grouse"
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod  = ":t"
 
-let g:airline_section_c = airline#section#create(["%m%t"])
+let g:airline_section_c = airline#section#create(["file"])
 
 let g:airline_section_y = airline#section#create(["ffenc"])
 let g:airline_section_z = airline#section#create(["%l:%c"])
