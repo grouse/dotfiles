@@ -11,7 +11,6 @@ call plug#begin("~/.config/nvim/plugged")
 	Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
 	"" editing related plugins
-	Plug 'scrooloose/nerdcommenter'
 	Plug 'matze/vim-move'
 	Plug 'vim-scripts/Smart-Tabs'
 	Plug 'godlygeek/tabular'
@@ -267,10 +266,77 @@ map <leader>n :CompileNextError <CR>
 map <leader>p :CompilePrevError <CR>
 
 
-"" NERDCommenter configuration
-let g:NERDCreateDefaultMappings = 0
-nmap <leader>/ :call NERDComment('n', 'Toggle') <CR>
-xmap <leader>/ :call NERDComment('x', 'Toggle') <CR>
+"" code commenting functions and motions
+let b:comment_line = '\/\/'
+let b:comment_selection_start = '\/*'
+let b:comment_selection_end   = '*\/'
+
+function! s:set_comment_characters(line, start, end)
+	let b:comment_line = a:line
+	let b:comment_selection_start = a:start
+	let b:comment_selection_end = a:end
+endfunction
+
+au FileType vim call s:set_comment_characters('" ', '', '')
+au FileType cpp call s:set_comment_characters('\/\/ ', '\/*', '*\/')
+
+function! s:insert_comment(type, ...)
+	let selection_save = &selection
+	let register_save  = @@
+
+	let &selection = "inclusive"
+
+	" TODO(jesper): want to look into making the comment_line be column aligned when several lines
+	" are commented out
+	if a:0 || a:type == 'line'
+		if a:0
+			let [line_start, line_end] = [getpos("'<")[1], getpos("'>")[1]]
+		else
+			let [line_start, line_end] = [line("'['"), line("']")]
+		endif
+
+		for line_num in range(line_start, line_end)
+			let line = getline(line_num)
+
+			if line != ''
+				if match(line, '\s*'.b:comment_line.'.*') != -1
+					let line = substitute(line, '\(\s*\)'.b:comment_line.'\(.*\)', '\1\2', "M")
+				else
+					let line = substitute(line, '\(\s*\)\(.*\)', '\1'.b:comment_line.'\2', "M")
+				endif
+				call setline(line_num, line)
+			endif
+		endfor
+	else 
+		if b:comment_selection_start == '' 
+			let [l, r, line_num] = [getpos("'[")[2], getpos("']")[2], line("'[")]
+			let line = getline(line_num)
+
+			let [num_left, num_middle] = [l - 1, len(line) - l]
+			let line = substitute(line, 
+						\'\(.\{'.num_left.'}\)\(.\{'.num_middle.'}\)',
+						\'\1'.b:comment_line.' \2', "M")
+		else
+			let [l, r, line_num] = [getpos("'[")[2], getpos("']")[2], line("'[")]
+			let line = getline(line_num)
+
+			let [num_left, num_middle, num_right] = [l - 1, r - l + 1, len(line) - r]
+			let line = substitute(line, 
+						\'\(.\{'.num_left.'}\)\(.\{'.num_middle.'}\)\(.\{'.num_right.'}\)', 
+						\'\1'.b:comment_selection_start.' \2 '.b:comment_selection_end.'\3', "M")
+		endif
+
+		call setline(line_num, line)
+	endif
+
+	let &selection = selection_save
+	let @@         = register_save
+endfunction
+
+" NOTE(jesper): probably not the best keybinds for this, but it'll do for now
+nmap <silent> <leader>/ :<C-U>set opfunc=<SID>insert_comment<CR>g@
+nmap <silent> <leader>// :<C-U>set opfunc=<SID>insert_comment<Bar>exe 'norm! 'v:count1.'g@_'<CR>
+vmap <silent> <leader>/  :<C-U>call <SID>insert_comment(visualmode(), 1)<CR>
 
 
 "" window navigation keybinds
