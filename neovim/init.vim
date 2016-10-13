@@ -278,7 +278,36 @@ function! s:set_comment_characters(line, start, end)
 endfunction
 
 au FileType vim call s:set_comment_characters('" ', '', '')
-au FileType cpp call s:set_comment_characters('\/\/ ', '\/*', '*\/')
+au FileType cpp call s:set_comment_characters('\/\/', '\/*', '*\/')
+
+function! s:insert_comment_line(line_num, line)
+	if match(a:line, '\s*'.b:comment_line.'.*') == -1
+		let line = substitute(a:line, '\(\s*\)\(.*\)', '\1'.b:comment_line.'\2', "M")
+		call setline(a:line_num, line)
+	endif
+endfunction
+
+function! s:remove_comment_line(line_num, line)
+	if match(a:line, '\s*'.b:comment_line.'.*') != -1
+		let line = substitute(a:line, '\(\s*\)'.b:comment_line.'\(.*\)', '\1\2', "M")
+		call setline(a:line_num, line)
+	endif
+endfunction
+
+function! s:insert_comment_selection(start, end, line_num)
+	let line = getline(a:line_num)
+
+	if line == ''
+		return
+	endif
+
+	let [num_left, num_middle, num_right] = [a:start, a:end - a:start, len(line) - a:end]
+	let line = substitute(line, 
+				\'\(.\{'.num_left.'}\)\(.\{'.num_middle.'}\)\(.\{'.num_right.'}\)', 
+				\'\1'.b:comment_selection_start.' \2 '.b:comment_selection_end.'\3', "M")
+
+	call setline(a:line_num, line)
+endfunction
 
 function! s:insert_comment(type, ...)
 	let selection_save = &selection
@@ -295,38 +324,41 @@ function! s:insert_comment(type, ...)
 			let [line_start, line_end] = [line("'['"), line("']")]
 		endif
 
-		for line_num in range(line_start, line_end)
-			let line = getline(line_num)
 
-			if line != ''
-				if match(line, '\s*'.b:comment_line.'.*') != -1
-					let line = substitute(line, '\(\s*\)'.b:comment_line.'\(.*\)', '\1\2', "M")
-				else
-					let line = substitute(line, '\(\s*\)\(.*\)', '\1'.b:comment_line.'\2', "M")
-				endif
-				call setline(line_num, line)
+		if b:comment_line != '' 
+			let start_line = getline(line_start)
+
+			let uncomment = 0
+			if match(start_line, '\s*'.b:comment_line.'.*') != -1
+				let uncomment = 1
 			endif
-		endfor
-	else 
-		if b:comment_selection_start == '' 
-			let [l, r, line_num] = [getpos("'[")[2], getpos("']")[2], line("'[")]
-			let line = getline(line_num)
 
-			let [num_left, num_middle] = [l - 1, len(line) - l]
-			let line = substitute(line, 
-						\'\(.\{'.num_left.'}\)\(.\{'.num_middle.'}\)',
-						\'\1'.b:comment_line.' \2', "M")
+			for line_num in range(line_start, line_end)
+				let line = getline(line_num)
+
+				if line == ''
+					continue
+				endif
+
+				if uncomment == 1
+					call s:remove_comment_line(line_num, line)
+				else
+					call s:insert_comment_line(line_num, line)
+				endif
+			endfor
+		elseif b:comment_selection_start != ''
+			echo "not currently supported"
 		else
-			let [l, r, line_num] = [getpos("'[")[2], getpos("']")[2], line("'[")]
-			let line = getline(line_num)
-
-			let [num_left, num_middle, num_right] = [l - 1, r - l + 1, len(line) - r]
-			let line = substitute(line, 
-						\'\(.\{'.num_left.'}\)\(.\{'.num_middle.'}\)\(.\{'.num_right.'}\)', 
-						\'\1'.b:comment_selection_start.' \2 '.b:comment_selection_end.'\3', "M")
+			echo "can't comment current filetype"
 		endif
-
-		call setline(line_num, line)
+	else 
+		if b:comment_selection_start != '' 
+			call s:insert_comment_selection((getpos("'[")[2] - 1), (getpos("']")[2] + 1), line("'["))
+		elseif b:comment_line != ''
+			call s:insert_comment_line(line("'["))
+		else
+			echo "can't comment current filetype"
+		endif
 	endif
 
 	let &selection = selection_save
