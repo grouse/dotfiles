@@ -182,7 +182,7 @@ let g:airline_section_warning = ""
 let g:highlightedyank_highlight_duration=200
 
 "" custom variables
-let g:project_dir         = "~/projects"
+let g:project_dir         = "./"
 
 "" custom functions
 function! s:OpenProjectFunc(path)
