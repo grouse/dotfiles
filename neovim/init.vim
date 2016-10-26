@@ -1,5 +1,6 @@
 call plug#begin("~/.config/nvim/plugged")
 	"" assorted plugins
+	Plug 'kshenoy/vim-signature'
 
 	"" tool plugins
 	Plug 'critiqjo/lldb.nvim'
@@ -418,7 +419,7 @@ else
 	\   'sink':    function('<sid>bufopen'),
 	\   'options': '+m',
 	\   'down':    len(<sid>buflist()) + 2
-	\ })<CR><CR>
+	\ })<CR>
 endif
 
 
