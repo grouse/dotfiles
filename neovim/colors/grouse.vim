@@ -26,7 +26,6 @@ let s:base02 = '#353335' " lighter
 let s:base03 = '#6e6d6e' " comments, disabled code
 let s:base04 = '#948068' " preprocessor, include, module, etc
 
-"let s:base05 = '#e7daba' " normal
 let s:base05 = '#c6b391' " normal
 
 let s:base06 = '#a09066' " code keywords, statements, etc
@@ -37,7 +36,7 @@ let s:red     = '#ec5f67'
 let s:orange  = '#f99157'
 let s:yellow  = '#c3cd3b'
 let s:green   = '#7dba6d'
-let s:cyan    = '#5FB3B3'
+let s:cyan    = '#5fb3b3'
 
 function! s:hl(group, fg, bg, attr)
 	" NOTE(jesper): just supporting neovim right now so setting gui highlight is enough
@@ -53,6 +52,7 @@ call s:hl("IncSearch",    s:none, s:none, s:inverse)
 call s:hl("LineNr",       s:base03, s:base00, s:none)
 call s:hl("MatchParen",   s:base07, s:base00, s:none)
 call s:hl("Search",       s:none, s:none, s:inverse)
+call s:hl("SignColumn",   s:none, s:base00, s:none)
 call s:hl("VertSplit",    s:base00, s:base00, s:none)
 call s:hl("Visual",       s:none, s:none, s:inverse)
 call s:hl("VisualNOS",    s:none, s:none, s:inverse)
@@ -82,7 +82,6 @@ call s:hl("WildMenu",     s:none, s:none, s:none)
 call s:hl("Title",        s:none, s:none, s:none)
 call s:hl("Conceal",      s:none, s:none, s:none)
 call s:hl("Cursor",       s:none, s:none, s:none)
-call s:hl("SignColumn",   s:none, s:none, s:none)
 call s:hl("PMenu",        s:none, s:none, s:none)
 call s:hl("PMenuSel",     s:none, s:none, s:none)
 
