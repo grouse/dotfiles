@@ -187,7 +187,7 @@ let g:airline_section_warning = ""
 
 
 "" highlighted yank configuration
-let g:highlightedyank_highlight_duration=200
+let g:highlightedyank_highlight_duration=300
 
 "" custom variables
 let g:project_dir         = "./"
