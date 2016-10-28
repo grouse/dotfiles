@@ -79,6 +79,13 @@ set background=dark
 
 colorscheme grouse
 
+"" utility functions
+function! s:warn(msg)
+  echohl ErrorMsg
+  echomsg a:msg
+  echohl NONE
+endfunction
+
 " custom highlights 
 " NOTE(jesper): should probably do this by overriding syntax linter files, but this seems the
 " cleanest way of getting global highlights without having to edit syntax files for every single
@@ -370,6 +377,57 @@ endfunction
 nmap <silent> <leader>/ :<C-U>set opfunc=<SID>insert_comment<CR>g@
 nmap <silent> <leader>// :<C-U>set opfunc=<SID>insert_comment<Bar>exe 'norm! 'v:count1.'g@_'<CR>
 vmap <silent> <leader>/  :<C-U>call <SID>insert_comment(visualmode(), 1)<CR>
+
+"" buffer management configuration
+" close the current buffer and keep the window layout
+" http://vim.wikia.com/wiki/Deleting_a_buffer_without_closing_the_window
+function! s:Bclose(bang, buffer)
+  if empty(a:buffer)
+    let btarget = bufnr('%')
+  elseif a:buffer =~ '^\d\+$'
+    let btarget = bufnr(str2nr(a:buffer))
+  else
+    let btarget = bufnr(a:buffer)
+  endif
+  if btarget < 0
+    call s:warn('No matching buffer for '.a:buffer)
+    return
+  endif
+  if empty(a:bang) && getbufvar(btarget, '&modified')
+    call s:warn('No write since last change for buffer '.btarget.' (use :Bclose!)')
+    return
+  endif
+  " Numbers of windows that view target buffer which we will delete.
+  let wnums = filter(range(1, winnr('$')), 'winbufnr(v:val) == btarget')
+  let wcurrent = winnr()
+  for w in wnums
+    execute w.'wincmd w'
+    let prevbuf = bufnr('#')
+    if prevbuf > 0 && buflisted(prevbuf) && prevbuf != w
+      buffer #
+    else
+      bprevious
+    endif
+    if btarget == bufnr('%')
+      " Numbers of listed buffers which are not the target to be deleted.
+      let blisted = filter(range(1, bufnr('$')), 'buflisted(v:val) && v:val != btarget')
+      " Listed, not target, and not displayed.
+      let bhidden = filter(copy(blisted), 'bufwinnr(v:val) < 0')
+      " Take the first buffer, if any (could be more intelligent).
+      let bjump = (bhidden + blisted + [-1])[0]
+      if bjump > 0
+        execute 'buffer '.bjump
+      else
+        execute 'enew'.a:bang
+      endif
+    endif
+  endfor
+  execute 'bdelete'.a:bang.' '.btarget
+  execute wcurrent.'wincmd w'
+endfunction
+
+command! -bang -complete=buffer -nargs=? Bclose call s:Bclose('<bang>', '<args>')
+map <leader>bc :Bclose<CR>
 
 
 "" window navigation keybinds
