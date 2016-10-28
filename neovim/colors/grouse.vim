@@ -57,7 +57,7 @@ call s:hl("VertSplit",    s:base00, s:base00, s:none)
 call s:hl("Visual",       s:none, s:none, s:inverse)
 call s:hl("VisualNOS",    s:none, s:none, s:inverse)
 
-call s:hl("SpecialKey",   s:base02, s:base00, s:none)
+call s:hl("SpecialKey",   s:base03, s:none, s:none)
 call s:hl("NonText",      s:base03, s:none, s:none)
 
 call s:hl("Italic",       s:none, s:none, s:italic)
@@ -93,7 +93,7 @@ call s:hl("Character",    s:green, s:none, s:none)
 call s:hl("Note",         s:yellow, s:none, s:none)
 call s:hl("Todo",         s:red, s:none, s:none)
 
-call s:hl("Comment",      s:base03, s:none, s:none)
+call s:hl("Comment",      s:base03, s:none, s:italic)
 
 call s:hl("Include",      s:base04, s:none, s:none)
 call s:hl("Define",       s:base04, s:none, s:none)
@@ -125,6 +125,8 @@ call s:hl("Tag",          s:none, s:none, s:none)
 
 
 "" plugins
+" vim-highlighted-yank
+call s:hl("HighlightedyankRegion", s:cyan, s:none, s:none)
 
 "" tools
 " diff highlighting 
