@@ -33,7 +33,7 @@ set noshowmode
 let mapleader="\<Space>"
 
 set list
-set listchars=eol:⏎,tab:»\ 
+set listchars=eol:⏎,tab:⤚⎼
 
 
 " set text width to (100-1) to automatically word wrap at 100 columns, stumbled upon this
