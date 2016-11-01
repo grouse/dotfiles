@@ -274,6 +274,8 @@ map <leader>c :Compile <C-r>=g:compile_cmd_cache<CR>
 map <leader>n :CompileNextError <CR>
 map <leader>p :CompilePrevError <CR>
 
+"" assorted keybinds
+:nnoremap <Leader>s :%s/\<<C-r><C-w>\>/
 
 "" code commenting functions and motions
 let b:comment_line = '\/\/'
