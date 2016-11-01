@@ -223,7 +223,7 @@ endfunction
 
 function! s:compile_on_exit(job_id, data, event)
 	let s:compile_job = -1
-	call s:compile_next_error()
+	cfirst
 endfunction
 
 function! s:compile_start(cmd)
