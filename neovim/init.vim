@@ -85,6 +85,9 @@ function! s:warn(msg)
   echohl NONE
 endfunction
 
+" create a horizontal scratch buffer with 5 lines height
+command! Scratch new | resize 5 | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
+
 " custom highlights 
 " NOTE(jesper): should probably do this by overriding syntax linter files, but this seems the
 " cleanest way of getting global highlights without having to edit syntax files for every single
