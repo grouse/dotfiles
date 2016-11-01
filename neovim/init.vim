@@ -66,10 +66,8 @@ set smartcase
 
 
 "" errorformats
-" gcc
-set errorformat+="%f:%l:%c: error: %m"
-" msvc
-set errorformat+="%f(%l): error %#: %m"
+set errorformat+="%f:%l:%c: error: %m"  " gcc
+set errorformat+="%f(%l): error %#: %m" " msvc
 
 
 "" color scheme and syntax highlight configuration
