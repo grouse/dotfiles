@@ -45,6 +45,10 @@ map Y y$
 vnoremap < <gv
 vnoremap > >gv
 
+" center view around cursor when moving to next/previous match in search
+nnoremap n nzz
+nnoremap N Nzz
+
 " set text width to (100-1) to automatically word wrap at 100 columns, stumbled upon this
 " awesomeness by accident
 set tw=99
