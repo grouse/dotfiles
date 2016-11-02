@@ -38,6 +38,9 @@ set listchars=eol:⏎,tab:⤚⎼
 " let terminal resize scale the internal windows
 autocmd VimResized * :wincmd =
 
+" let capital Y copy from cursor to end of line, instead of entire line
+map Y y$
+
 " set text width to (100-1) to automatically word wrap at 100 columns, stumbled upon this
 " awesomeness by accident
 set tw=99
