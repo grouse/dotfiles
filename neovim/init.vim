@@ -71,6 +71,7 @@ set undoreload=10000
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+
 " set text width to (100-1) to automatically word wrap at 100 columns, stumbled upon this
 " awesomeness by accident
 set tw=99
@@ -91,7 +92,9 @@ set tabstop=4
 
 "" scrolling configuration
 set scrolloff=3
-set sidescrolloff=5
+
+" this doesn't actually happen because I have soft wrapping on, but just in case
+set sidescrolloff=5 
 
 
 "" incremental search configuration
@@ -123,7 +126,7 @@ endfunction
 " create a horizontal scratch buffer with 5 lines height
 command! Scratch new | resize 5 | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
 
-" custom highlights 
+"" custom highlights 
 " NOTE(jesper): should probably do this by overriding syntax linter files, but this seems the
 " cleanest way of getting global highlights without having to edit syntax files for every single
 " file type i'm interested in
@@ -138,6 +141,7 @@ endfunction()
 au BufRead,BufNewFile * call SetCustomHighlights()
 
 
+"" template insertion and formatting"
 function! s:format_template()
 	let author    = 'Jesper Stefansson'
 	let email     = 'jesper.stefansson@gmail.com'
