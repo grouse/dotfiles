@@ -38,6 +38,10 @@ let mapleader="\<Space>"
 set list
 set listchars=eol:⏎,tab:⤚⎼
 
+" make splits open below/to the right of the current buffer
+set splitbelow        " new hoz splits go below
+set splitright        " new vert splits go right
+
 " let terminal resize scale the internal windows
 autocmd VimResized * :wincmd =
 
@@ -468,8 +472,8 @@ map <leader>bc :Bclose<CR>
 
 "" window navigation keybinds
 " vertical and horizontal split keybinds
-map <C-s> :vsplit <CR> :wincmd l <CR>
-map <A-s> :split <CR> :wincmd j <CR>
+map <silent> <C-s> :vsplit <CR>
+map <silent> <A-s> :split <CR>
 
 
 "" fuzzy file and buffer find configuration
