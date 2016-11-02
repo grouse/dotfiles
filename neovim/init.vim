@@ -54,6 +54,12 @@ nmap <silent> <leader>yt  i<C-R>=strftime("%Y-%m-%d %T")<CR><ESC>
 nmap <silent> <leader>ymd i<C-R>=strftime("%Y-%m-%d")<CR><ESC>
 nmap <silent> <leader>hms i<C-R>=strftime("%T")<CR><ESC>
 
+" cache undo history to file so that it's possible to undo after reopening a recently closed file
+set undofile
+set undodir=$HOME/.cache/nvim/undo
+set undolevels=1000
+set undoreload=10000
+
 " set text width to (100-1) to automatically word wrap at 100 columns, stumbled upon this
 " awesomeness by accident
 set tw=99
