@@ -35,6 +35,8 @@ let mapleader="\<Space>"
 set list
 set listchars=eol:⏎,tab:⤚⎼
 
+" let terminal resize scale the internal windows
+autocmd VimResized * :wincmd =
 
 " set text width to (100-1) to automatically word wrap at 100 columns, stumbled upon this
 " awesomeness by accident
