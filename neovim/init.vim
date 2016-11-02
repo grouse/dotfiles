@@ -25,6 +25,9 @@ call plug#end()
 
 
 "" assorted configuration
+" NOTE(jesper): this is a bit busted on Windows, inserting extra new lines most likely related to
+" its \r\n newline scheme. I'm starting to work with registers more in my usual workflow so this
+" might be going soon to avoid the problem and to make better use of the vim registers
 set clipboard+=unnamedplus
 set relativenumber
 set ruler
