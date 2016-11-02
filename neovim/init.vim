@@ -49,6 +49,11 @@ vnoremap > >gv
 nnoremap n nzz
 nnoremap N Nzz
 
+" insert today's date into the buffer in the common different formats
+nmap <silent> <leader>yt  i<C-R>=strftime("%Y-%m-%d %T")<CR><ESC>
+nmap <silent> <leader>ymd i<C-R>=strftime("%Y-%m-%d")<CR><ESC>
+nmap <silent> <leader>hms i<C-R>=strftime("%T")<CR><ESC>
+
 " set text width to (100-1) to automatically word wrap at 100 columns, stumbled upon this
 " awesomeness by accident
 set tw=99
@@ -445,6 +450,7 @@ endfunction
 
 command! -bang -complete=buffer -nargs=? Bclose call s:Bclose('<bang>', '<args>')
 map <leader>bc :Bclose<CR>
+
 
 
 "" window navigation keybinds
