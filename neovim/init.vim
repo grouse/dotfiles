@@ -1,6 +1,7 @@
 call plug#begin("~/.config/nvim/plugged")
 	"" assorted plugins
 	Plug 'kshenoy/vim-signature'
+	Plug 'tpope/vim-speeddating'
 
 	"" tool plugins
 	Plug 'critiqjo/lldb.nvim'
