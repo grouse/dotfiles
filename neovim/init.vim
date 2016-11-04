@@ -1,7 +1,6 @@
 call plug#begin("~/.config/nvim/plugged")
 	"" assorted plugins
 	Plug 'kshenoy/vim-signature'
-	Plug 'jiangmiao/auto-pairs'
 
 	"" tool plugins
 	Plug 'critiqjo/lldb.nvim'
