@@ -472,11 +472,16 @@ command! -bang -complete=buffer -nargs=? Bclose call s:Bclose('<bang>', '<args>'
 map <leader>bc :Bclose<CR>
 
 
-
 "" window navigation keybinds
 " vertical and horizontal split keybinds
 map <silent> <C-s> :vsplit <CR>
 map <silent> <A-s> :split <CR>
+
+" make navigation between splits easier, witohut having to leave the home row
+map sh <C-w>h
+map sl <C-w>l
+map sj <C-w>j
+map sk <C-w>k
 
 
 "" fuzzy file and buffer find configuration
