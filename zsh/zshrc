@@ -23,7 +23,7 @@ zstyle ':completion::complete:*' cache-path $ZSH_CACHE_DIR
 ## prompt configuration
 autoload -Uz colors && colors
 autoload -Uz promptinit && promptinit
-PROMPT="$fg[green]%n@%m$reset_color:$fg[blue]%1~$reset_color%(!.#.$) "
+PROMPT="%n@%m %(!.#.$) "
 
 ## shell history configuration
 HISTFILE=~/.cache/zsh/history
