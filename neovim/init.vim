@@ -57,9 +57,9 @@ nnoremap n nzz
 nnoremap N Nzz
 
 " insert today's date into the buffer in the common different formats
-nmap <silent> <leader>yt  i<C-R>=strftime("%Y-%m-%d %T")<CR><ESC>
-nmap <silent> <leader>ymd i<C-R>=strftime("%Y-%m-%d")<CR><ESC>
-nmap <silent> <leader>hms i<C-R>=strftime("%T")<CR><ESC>
+nmap <silent> <leader>yt  a<C-R>=strftime("%Y-%m-%d %T")<CR><ESC>
+nmap <silent> <leader>ymd a<C-R>=strftime("%Y-%m-%d")<CR><ESC>
+nmap <silent> <leader>hms a<C-R>=strftime("%T")<CR><ESC>
 
 " cache undo history to file so that it's possible to undo after reopening a recently closed file
 set undofile
