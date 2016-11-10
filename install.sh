@@ -6,7 +6,7 @@ CONFIGURATIONS=(emacs neovim qtcreator zsh shell)
 DISTRIBUTIONS=(ubuntu arch)
 
 function eval_print {
-	echo "$1"
+	echo "-- $1"
 	eval $1
 }
 
@@ -28,6 +28,7 @@ function print_usage_exit {
 }
 
 
+# distribution packages installation functions
 function install_packages_arch {
 	echo "-- installing system packages for Arch Linux"
 	# TODO(jesper): implement!
@@ -35,8 +36,28 @@ function install_packages_arch {
 
 function install_packages_ubuntu {
 	echo "-- installing system packages for Ubuntu"
-	# TODO(jesper): implement!
+
+	echo ""
+	echo "-- adding non-default ppa"
+	echo "sudo add-apt-repository ppa:graphics-drivers/ppa"
+
+	echo ""
+	echo "-- updating package database"
+	eval_print "sudo apt update"
+
+	echo ""
+	echo "-- installing drivers"
+	eval_print "sudo apt install nvidia-370"
+
+	echo ""
+	echo "-- installing development tools"
+	eval_print "sudo apt install neovim emacs qtcreator clang gcc git subversion"
+
+	echo ""
+	echo "-- installing development libraries"
+	eval_print "sudo apt install vulkan-utils libsdl2-2.0-0 libsdl2-dbg libsdl2-dev"
 }
+
 
 # configuration installation functions
 function install_config_emacs {
