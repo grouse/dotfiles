@@ -76,6 +76,15 @@ let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 " set text width to (100-1) to automatically word wrap at 100 columns
 set tw=99
 
+" restore the cursor position when opening a file
+function s:restore_cursor_position()
+	if line("'\"") >0 && line("'\"") <= line("$") && &filetype != "gitcommit"
+		execute("normal '\"")
+	endif
+endfunction
+
+au BufReadPost * call s:restore_cursor_position()
+
 
 "" tab configuration
 " All of this together with smart tabs plugin results in automatic indent with
