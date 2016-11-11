@@ -435,7 +435,7 @@ nmap <silent> <leader>// :<C-U>set opfunc=<SID>insert_comment<Bar>exe 'norm! 'v:
 vmap <silent> <leader>/  :<C-U>call <SID>insert_comment(visualmode(), 1)<CR>
 
 "" clean line selected with motions or visual
-function! s:clean_line(type, ...)
+function! s:trim_whitespace(type, ...)
 	let selection_save = &selection
 	let register_save  = @@
 
@@ -460,9 +460,9 @@ function! s:clean_line(type, ...)
 endfunction
 
 " NOTE(jesper): this keybind is rather un-mnemonic...
-nmap <silent> <leader>t  :<C-U>set opfunc=<SID>clean_line<CR>g@
-nmap <silent> <leader>tt :<C-U>set opfunc=<SID>clean_line<Bar>exe 'norm! 'v:count1.'g@_'<CR>
-vmap <silent> <leader>t  :<C-U>call <SID>clean_line(visualmode(), 1)<CR>
+nmap <silent> <leader>t  :<C-U>set opfunc=<SID>trim_whitespace<CR>g@
+nmap <silent> <leader>tt :<C-U>set opfunc=<SID>trim_whitespace<Bar>exe 'norm! 'v:count1.'g@_'<CR>
+vmap <silent> <leader>t  :<C-U>call <SID>trim_whitespace(visualmode(), 1)<CR>
 
 "" buffer management configuration
 " close the current buffer and keep the window layout
