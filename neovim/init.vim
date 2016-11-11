@@ -106,7 +106,7 @@ set tabstop=4
 set scrolloff=3
 
 " this doesn't actually happen because I have soft wrapping on, but just in case
-set sidescrolloff=5 
+set sidescrolloff=5
 
 
 "" incremental search configuration
@@ -138,12 +138,12 @@ endfunction
 " create a horizontal scratch buffer with 5 lines height
 command! Scratch new | resize 5 | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
 
-"" custom highlights 
+"" custom highlights
 " NOTE(jesper): should probably do this by overriding syntax linter files, but this seems the
 " cleanest way of getting global highlights without having to edit syntax files for every single
 " file type i'm interested in
 function! SetCustomHighlights()
-	syn keyword Note contained NOTE 
+	syn keyword Note contained NOTE
 	syn keyword Todo contained TODO FIXME IMPORTANT
 
 	syn cluster cCommentGroup contains=Note,Todo
@@ -214,11 +214,11 @@ function! s:ctags_generate_cancel()
 		jobstop(s:ctags_generate_job)
 	endif
 endfunction
-		
+
 
 command! GenerateCTags :call s:ctags_generate()
 command! CancelCTagsJob :call s:ctags_generate_cancel()
-	
+
 "" airline configuration
 let g:airline_powerline_fonts = 1
 
@@ -236,7 +236,7 @@ let g:airline_section_c = airline#section#create(["file"])
 let g:airline_section_y = airline#section#create(["ffenc"])
 let g:airline_section_z = airline#section#create(["%l:%c"])
 let g:airline_section_error   = ""
-let g:airline_section_warning = "" 
+let g:airline_section_warning = ""
 
 
 "" highlighted yank configuration
@@ -256,7 +256,7 @@ command! -nargs=1 -complete=dir OpenProject call s:OpenProjectFunc(<f-args>)
 
 
 "" compilation
-let s:compile_job        = -1 
+let s:compile_job        = -1
 
 let s:compile_script     = 'build.sh'
 if has('win32')
@@ -281,7 +281,7 @@ function! s:compile_on_exit(job_id, data, event)
 endfunction
 
 function! s:compile_start(cmd)
-	if s:compile_job != -1 
+	if s:compile_job != -1
 		echo "compilation job already in progress"
 		return
 	endif
@@ -365,8 +365,8 @@ function! s:insert_comment_selection(start, end, line_num)
 	endif
 
 	let [num_left, num_middle, num_right] = [a:start, a:end - a:start, len(line) - a:end]
-	let line = substitute(line, 
-				\'\(.\{'.num_left.'}\)\(.\{'.num_middle.'}\)\(.\{'.num_right.'}\)', 
+	let line = substitute(line,
+				\'\(.\{'.num_left.'}\)\(.\{'.num_middle.'}\)\(.\{'.num_right.'}\)',
 				\'\1'.b:comment_selection_start.' \2 '.b:comment_selection_end.'\3', "M")
 
 	call setline(a:line_num, line)
@@ -389,7 +389,7 @@ function! s:insert_comment(type, ...)
 		endif
 
 
-		if b:comment_line != '' 
+		if b:comment_line != ''
 			let start_line = getline(line_start)
 
 			let uncomment = 0
@@ -415,8 +415,8 @@ function! s:insert_comment(type, ...)
 		else
 			echo "can't comment current filetype"
 		endif
-	else 
-		if b:comment_selection_start != '' 
+	else
+		if b:comment_selection_start != ''
 			call s:insert_comment_selection((getpos("'[")[2] - 1), (getpos("']")[2] + 1), line("'["))
 		elseif b:comment_line != ''
 			call s:insert_comment_line(line("'["))
@@ -443,7 +443,7 @@ function! s:clean_line(type, ...)
 
 	if a:0
 		let [line_start, line_end] = [getpos("'<")[1], getpos("'>")[1]]
-	else 
+	else
 		let [line_start, line_end] = [line("'['"), line("']")]
 	endif
 
@@ -561,7 +561,7 @@ let g:ctrlp_map = ''
 if has("win32")
 	let g:ctrlp_max_files = 0
 
-	map <C-a> :CtrlP <CR> 
+	map <C-a> :CtrlP <CR>
 	map <C-p> :CtrlP <C-r>=g:project_dir<CR><CR>
 else
 	"map <C-p> :call denite#start([{'name': 'file_rec', 'args': [g:project_dir]}]) <CR>
@@ -582,7 +582,7 @@ else
 	endfunction
 
 	map <C-p> :call fzf#run({
-	\   'dir': <sid>project_dir(), 
+	\   'dir': <sid>project_dir(),
 	\	'sink': 'e'
 	\	})<CR>
 
