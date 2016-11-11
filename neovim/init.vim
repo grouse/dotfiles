@@ -77,7 +77,7 @@ let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 set tw=99
 
 " restore the cursor position when opening a file
-function s:restore_cursor_position()
+function! s:restore_cursor_position()
 	if line("'\"") >0 && line("'\"") <= line("$") && &filetype != "gitcommit"
 		execute("normal '\"")
 	endif
