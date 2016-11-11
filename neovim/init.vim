@@ -144,7 +144,7 @@ command! Scratch new | resize 5 | setlocal nobuflisted buftype=nofile bufhidden=
 " file type i'm interested in
 function! SetCustomHighlights()
 	syn keyword Note contained NOTE
-	syn keyword Todo contained TODO FIXME IMPORTANT
+	syn keyword Todo contained TODO FIXME IMPORTANT HACK
 
 	syn cluster cCommentGroup contains=Note,Todo
 	syn cluster vimCommentGroup contains=Note,Todo
