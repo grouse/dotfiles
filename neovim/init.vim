@@ -2,6 +2,7 @@ call plug#begin("~/.config/nvim/plugged")
 	"" assorted plugins
 	Plug 'kshenoy/vim-signature'
 	Plug 'tpope/vim-speeddating'
+	Plug 'bkad/CamelCaseMotion'
 
 	"" tool plugins
 	Plug 'critiqjo/lldb.nvim'
@@ -482,6 +483,22 @@ map sh <C-w>h
 map sl <C-w>l
 map sj <C-w>j
 map sk <C-w>k
+
+"" CamelCaseMotion configuration
+" NOTE(jesper): put behind leader keybinds for now as I'm not entirely convinced I want this to be
+" the default behaviour
+map <silent> <leader> w <Plug>CamelCaseMotion_w
+map <silent> <leader> b <Plug>CamelCaseMotion_b
+map <silent> <leader> e <Plug>CamelCaseMotion_e
+map <silent> <leader> ge <Plug>CamelCaseMotion_ge
+
+omap <silent> <leader> iw <Plug>CamelCaseMotion_iw
+omap <silent> <leader> ib <Plug>CamelCaseMotion_ib
+omap <silent> <leader> ie <Plug>CamelCaseMotion_ie
+
+xmap <silent> <leader> iw <Plug>CamelCaseMotion_iw
+xmap <silent> <leader> ib <Plug>CamelCaseMotion_ib
+xmap <silent> <leader> ie <Plug>CamelCaseMotion_ie
 
 
 "" fuzzy file and buffer find configuration
