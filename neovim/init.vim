@@ -598,3 +598,17 @@ endif
 "" source/header file switching
 map <F4> :FSHere <CR>
 
+"" tab configuration
+" NOTE(jesper): not really doing much with these atm but would like to experiment with how it might
+" change and improve my workflow, these binds give me a starting point
+map <silent> <C-t> :tabedit<CR>
+map <silent> <C-q> :tabclose<CR>
+map <A-1> 1gt
+map <A-2> 2gt
+map <A-3> 3gt
+map <A-4> 4gt
+map <A-6> 5gt
+map <A-7> 6gt
+map <A-8> 7gt
+map <A-9> 8gt
+
