@@ -92,8 +92,17 @@ nnoremap <CR> :nohlsearch<CR>
 "" tab configuration
 " All of this together with smart tabs plugin results in automatic indent with
 " tabs and align with spaces.
+" 
+set cinoptions=(0  " align continuation lines with next non-whitespace character after the
+                   " unclosed parenthesis
+set cinoptions+=u0 " same as ( but one level deeper
+set cinoptions+=U0 " ignore indent specified by ( and u
+set cinoptions+=:0 " place case labels on same level as the switch
+set cinoptions+=l1 " align new lines to case label instead of following statement
+set cinoptions+=g0 " align C++ class member visibility label with class statement
+
 set cindent
-set cinoptions=(0,u0,U0
+
 set copyindent
 set noexpandtab
 set preserveindent
