@@ -372,6 +372,7 @@ function! s:insert_comment_selection(start, end, line_num)
 	call setline(a:line_num, line)
 endfunction
 
+
 function! s:insert_comment(type, ...)
 	let selection_save = &selection
 	let register_save  = @@
@@ -432,6 +433,36 @@ endfunction
 nmap <silent> <leader>/ :<C-U>set opfunc=<SID>insert_comment<CR>g@
 nmap <silent> <leader>// :<C-U>set opfunc=<SID>insert_comment<Bar>exe 'norm! 'v:count1.'g@_'<CR>
 vmap <silent> <leader>/  :<C-U>call <SID>insert_comment(visualmode(), 1)<CR>
+
+"" clean line selected with motions or visual
+function! s:clean_line(type, ...)
+	let selection_save = &selection
+	let register_save  = @@
+
+	let &selection = "inclusive"
+
+	if a:0
+		let [line_start, line_end] = [getpos("'<")[1], getpos("'>")[1]]
+	else 
+		let [line_start, line_end] = [line("'['"), line("']")]
+	endif
+
+	for line_num in range(line_start, line_end)
+		let line = getline(line_num)
+
+		" remove trailing whitespace
+		let line = substitute(line, '\s\+$', '', "M")
+		call setline(line_num, line)
+	endfor
+
+	let &selection = selection_save
+	let @@         = register_save
+endfunction
+
+" NOTE(jesper): this keybind is rather un-mnemonic...
+nmap <silent> <leader>t  :<C-U>set opfunc=<SID>clean_line<CR>g@
+nmap <silent> <leader>tt :<C-U>set opfunc=<SID>clean_line<Bar>exe 'norm! 'v:count1.'g@_'<CR>
+vmap <silent> <leader>t  :<C-U>call <SID>clean_line(visualmode(), 1)<CR>
 
 "" buffer management configuration
 " close the current buffer and keep the window layout
