@@ -85,6 +85,9 @@ endfunction
 
 au BufReadPost * call s:restore_cursor_position()
 
+" clear the search highlight when pressing enter
+nnoremap <CR> :nohlsearch<CR>
+
 
 "" tab configuration
 " All of this together with smart tabs plugin results in automatic indent with
