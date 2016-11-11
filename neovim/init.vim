@@ -198,7 +198,7 @@ function! s:ctags_generate()
 		return
 	endif
 
-	let cmd = 'ctags -R --c++-kinds=+p --fields=+iaS --extra=+q ' . g:project_dir
+	let cmd = 'ctags -R --c++-kinds=+p --fields=+iaS --extra=+q ' . t:project_dir
 	let ctags_generate_options= {
 		\'on_stdout': function('s:ctags_generate_on_output'),
 		\'on_stderr': function('s:ctags_generate_on_output'),
@@ -243,11 +243,12 @@ let g:airline_section_warning = ""
 let g:highlightedyank_highlight_duration=300
 
 "" custom variables
-let g:project_dir         = "./"
+let t:project_dir = "./"
 
 "" custom functions
 function! s:OpenProjectFunc(path)
-	let g:project_dir         = a:path
+	let t:project_dir = a:path
+	let t:compile_cmd_cache = t:project_dir . '/' . t:compile_script . ' debug'
 endfunction
 
 
@@ -256,14 +257,14 @@ command! -nargs=1 -complete=dir OpenProject call s:OpenProjectFunc(<f-args>)
 
 
 "" compilation
-let s:compile_job        = -1
+let t:compile_job        = -1
+let t:compile_script     = 'build.sh'
 
-let s:compile_script     = 'build.sh'
 if has('win32')
-	let s:compile_script = 'build.bat'
+	let t:compile_script = 'build.bat'
 endif
 
-let g:compile_cmd_cache  = g:project_dir . '/' . s:compile_script . ' debug'
+let t:compile_cmd_cache = t:project_dir . '/' . t:compile_script . ' debug'
 
 function! s:compile_on_output(job_id, data, event)
 	" TODO(jesper): consider adding this to a no-file scratch buffer so we can easily view the
@@ -276,19 +277,19 @@ function! s:compile_on_output(job_id, data, event)
 endfunction
 
 function! s:compile_on_exit(job_id, data, event)
-	let s:compile_job = -1
+	let t:compile_job = -1
 	cfirst
 endfunction
 
 function! s:compile_start(cmd)
-	if s:compile_job != -1
+	if t:compile_job != -1
 		echo "compilation job already in progress"
 		return
 	endif
 
 	call setqflist([])
 
-	let g:compile_cmd_cache = a:cmd
+	let t:compile_cmd_cache = a:cmd
 
 	let compile_opts = {
 		\'on_stdout': function('s:compile_on_output'),
@@ -297,13 +298,13 @@ function! s:compile_start(cmd)
 		\'opts'     : 1
 	\}
 
-	let s:compile_job = jobstart(a:cmd, compile_opts)
+	let t:compile_job = jobstart(a:cmd, compile_opts)
 endfunction
 
 function! s:compile_cancel()
-	if s:compile_job != -1
-		jobstop(s:compile_job)
-		s:compile_job = -1
+	if t:compile_job != -1
+		jobstop(t:compile_job)
+		t:compile_job = -1
 	endif
 endfunction
 
@@ -322,7 +323,7 @@ command! CompileCancel    :call s:compile_cancel()
 command! CompileNextError :call s:compile_next_error()
 command! CompilePrevError :call s:compile_prev_error()
 
-map <leader>c :Compile <C-r>=g:compile_cmd_cache<CR>
+map <leader>c :Compile <C-r>=t:compile_cmd_cache<CR>
 map <leader>n :CompileNextError <CR>
 map <leader>p :CompilePrevError <CR>
 
@@ -387,7 +388,6 @@ function! s:insert_comment(type, ...)
 		else
 			let [line_start, line_end] = [line("'['"), line("']")]
 		endif
-
 
 		if b:comment_line != ''
 			let start_line = getline(line_start)
@@ -562,12 +562,12 @@ if has("win32")
 	let g:ctrlp_max_files = 0
 
 	map <C-a> :CtrlP <CR>
-	map <C-p> :CtrlP <C-r>=g:project_dir<CR><CR>
+	map <C-p> :CtrlP <C-r>=t:project_dir<CR><CR>
 else
 	"map <C-p> :call denite#start([{'name': 'file_rec', 'args': [g:project_dir]}]) <CR>
 
 	function! s:project_dir()
-		return g:project_dir
+		return t:project_dir
 	endfunction
 
 	function! s:buflist()
@@ -601,7 +601,7 @@ map <F4> :FSHere <CR>
 "" tab configuration
 " NOTE(jesper): not really doing much with these atm but would like to experiment with how it might
 " change and improve my workflow, these binds give me a starting point
-map <silent> <C-t> :tabedit<CR>
+map <silent> <C-t> :tabnew<CR>
 map <silent> <C-q> :tabclose<CR>
 map <A-1> 1gt
 map <A-2> 2gt
@@ -612,3 +612,30 @@ map <A-7> 6gt
 map <A-8> 7gt
 map <A-9> 8gt
 
+" NOTE(jesper): HACK: when creating a new tab it seems the tab scoped variables defined in this
+" init.vim script isn't being created for it, so we need to initialise them ourselves
+let g:creating_tab = 0
+
+function! s:create_tab()
+	let g:creating_tab = 1
+endfunction
+
+function! s:enter_tab()
+	if g:creating_tab == 1
+		let g:creating_tab = 0
+
+		let t:project_dir = "./"
+
+		let t:compile_job    = -1
+		let t:compile_script = 'build.sh'
+
+		if has('win32')
+			let t:compile_script = 'build.bat'
+		endif
+
+		let t:compile_cmd_cache = t:project_dir . '/' . t:compile_script . ' debug'
+	endif
+endfunction
+
+au TabNew *   :call s:create_tab()
+au TabEnter * :call s:enter_tab()
