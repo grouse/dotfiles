@@ -110,6 +110,31 @@ set shiftwidth=4
 set softtabstop=0
 set tabstop=4
 
+" ultra handmade way of making my preferred indentation style for switch cases work :)
+" NOTE(jesper): this was a lot easier and cleaner than I thought it'd be, might be interesting to
+" look into similar solutions for automatic code formatting
+function! Indent(line_num)
+	let l:indent = cindent(a:line_num)
+
+	let l:prev_line = split(getline(a:line_num - 1), " ")[0]
+
+	let l:prev_line = substitute(l:prev_line, '\s*', '', "M")
+	let l:prev_line = substitute(l:prev_line, '\s+$', '', "M")
+
+	if l:prev_line ==# "case"
+		let l:line  = split(getline(a:line_num), " ")[0]
+
+		let l:line = substitute(l:line, '\s*', '', "M")
+		let l:line = substitute(l:line, '\s+$', '', "M")
+
+		if l:line ==# "{"
+			let l:indent = cindent(a:line_num - 1)
+		endif
+	endif
+
+	return l:indent
+endfunction
+set indentexpr=Indent(line(\".\"))
 
 "" scrolling configuration
 set scrolloff=3
