@@ -92,7 +92,6 @@ nnoremap <CR> :nohlsearch<CR>
 "" tab configuration
 " All of this together with smart tabs plugin results in automatic indent with
 " tabs and align with spaces.
-" 
 set cinoptions=(0  " align continuation lines with next non-whitespace character after the
                    " unclosed parenthesis
 set cinoptions+=u0 " same as ( but one level deeper
@@ -103,9 +102,12 @@ set cinoptions+=g0 " align C++ class member visibility label with class statemen
 
 set cindent
 
+set nosmarttab     " make BS behave like a normal backspace when deleting spaces
+
 set copyindent
 set noexpandtab
 set preserveindent
+
 set shiftwidth=4
 set softtabstop=0
 set tabstop=4
