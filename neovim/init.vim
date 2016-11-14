@@ -156,6 +156,9 @@ set smartcase
 
 
 "" errorformats
+" TODO(jesper): the first error ends up being a Makefile error which should be filtered out
+" properly as it does not contain any file/line information as it's a more generic "compilation
+" failed" type error
 set errorformat+="%f:%l:%c: error: %m"  " gcc
 set errorformat+="%f(%l): error %#: %m" " msvc
 
