@@ -88,7 +88,6 @@ au BufReadPost * call s:restore_cursor_position()
 " clear the search highlight when pressing enter
 nnoremap <CR> :nohlsearch<CR>
 
-
 "" tab configuration
 " All of this together with smart tabs plugin results in automatic indent with
 " tabs and align with spaces.
@@ -156,11 +155,9 @@ set smartcase
 
 
 "" errorformats
-" TODO(jesper): the first error ends up being a Makefile error which should be filtered out
-" properly as it does not contain any file/line information as it's a more generic "compilation
-" failed" type error
-set errorformat+="%f:%l:%c: error: %m"  " gcc
-set errorformat+="%f(%l): error %#: %m" " msvc
+set errorformat=%f:%l:%c:\ %trror:\ %m
+set errorformat+=%f:%l:%c:\ fatal\ %trror:\ %m
+set errorformat+=%f:%l:%c:\ %tarning:\ %m
 
 
 "" color scheme and syntax highlight configuration
