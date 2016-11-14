@@ -118,6 +118,10 @@ set tabstop=4
 function! Indent(line_num)
 	let l:indent = cindent(a:line_num)
 
+	if a:line_num == 0
+		return l:indent
+	endif
+
 	let l:prev_line = split(getline(a:line_num - 1), " ")[0]
 
 	let l:prev_line = substitute(l:prev_line, '\s*', '', "M")
