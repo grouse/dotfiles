@@ -307,18 +307,14 @@ endif
 let t:compile_cmd_cache = t:project_dir . '/' . t:compile_script . ' debug'
 
 function! s:compile_on_output(job_id, data, event)
-	" TODO(jesper): consider adding this to a no-file scratch buffer so we can easily view the
-	" entire compilation output, but need to figure out how to add text to a buffer without having
-	" to constantly switch back and forth, considering the async nature of this command.
-	" NOTE(jesper): we can just open up the quickfix list, but I'd like to consider filtering the
-	" additions to the quickfix list so that only contains the locations for warnings and errors
-	" without any of the other compilation output
 	cadde a:data
 endfunction
 
 function! s:compile_on_exit(job_id, data, event)
 	let t:compile_job = -1
-	cfirst
+	" TODO(jesper): currently this throws a multiline error if the quickfix list doesn't contain
+	" any valid errors. It's an obvious enough notification, but should really fix it
+	cnext
 endfunction
 
 function! s:compile_start(cmd)
