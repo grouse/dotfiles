@@ -54,8 +54,8 @@ vnoremap < <gv
 vnoremap > >gv
 
 " center view around cursor when moving to next/previous match in search
-nnoremap n nzz
-nnoremap N Nzz
+nnoremap <silent> n nzz
+nnoremap <silent> N Nzz
 
 " insert today's date into the buffer in the common different formats
 nmap <silent> <leader>yt  a<C-R>=strftime("%Y-%m-%d %T")<CR><ESC>
