@@ -274,7 +274,7 @@ let g:airline#extensions#tabline#fnamemod  = ":t"
 let g:airline_section_c = airline#section#create(["file"])
 
 let g:airline_section_y = airline#section#create(["ffenc"])
-let g:airline_section_z = airline#section#create(["%l:%c"])
+let g:airline_section_z = airline#section#create(["%l:%v"])
 let g:airline_section_error   = ""
 let g:airline_section_warning = ""
 
