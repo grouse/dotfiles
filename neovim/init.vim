@@ -283,7 +283,7 @@ let g:airline_section_warning = ""
 let g:highlightedyank_highlight_duration=300
 
 "" custom variables
-let t:project_dir = "./"
+let t:project_dir = getcwd()
 
 "" custom functions
 function! s:OpenProjectFunc(path)
@@ -660,7 +660,7 @@ function! s:enter_tab()
 	if g:creating_tab == 1
 		let g:creating_tab = 0
 
-		let t:project_dir = "./"
+		let t:project_dir = getcwd()
 
 		let t:compile_job    = -1
 		let t:compile_script = 'build.sh'
