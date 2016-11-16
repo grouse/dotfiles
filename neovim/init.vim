@@ -184,7 +184,10 @@ command! Scratch new | resize 5 | setlocal nobuflisted buftype=nofile bufhidden=
 " file type i'm interested in
 function! SetCustomHighlights()
 	syn keyword Note contained NOTE
-	syn keyword Todo contained TODO FIXME IMPORTANT HACK
+	syn keyword Note contained NOTE:
+
+	syn keyword Todo contained TODO  FIXME  IMPORTANT  HACK
+	syn keyword Todo contained TODO: FIXME: IMPORTANT: HACK:
 
 	syn cluster cCommentGroup contains=Note,Todo
 	syn cluster vimCommentGroup contains=Note,Todo
@@ -651,7 +654,7 @@ map <A-8> 7gt
 map <A-9> 8gt
 
 " NOTE(jesper): HACK: when creating a new tab it seems the tab scoped variables defined in this
-" init.vim script isn't being created for it, so we need to initialise them ourselves
+" init.vim script aren't initialised for the new tab, so we need to it ourselves
 let g:creating_tab = 0
 
 function! s:create_tab()
