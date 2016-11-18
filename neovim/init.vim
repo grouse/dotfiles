@@ -283,7 +283,7 @@ let g:airline_section_warning = ""
 
 
 "" highlighted yank configuration
-let g:highlightedyank_highlight_duration=300
+let g:highlightedyank_highlight_duration=350
 
 "" custom variables
 let t:project_dir = getcwd()
