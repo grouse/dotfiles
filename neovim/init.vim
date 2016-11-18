@@ -640,18 +640,17 @@ endif
 map <F4> :FSHere <CR>
 
 "" tab configuration
-" NOTE(jesper): not really doing much with these atm but would like to experiment with how it might
-" change and improve my workflow, these binds give me a starting point
 map <silent> <C-t> :tabnew<CR>
 map <silent> <C-q> :tabclose<CR>
 map <A-1> 1gt
 map <A-2> 2gt
 map <A-3> 3gt
 map <A-4> 4gt
-map <A-6> 5gt
-map <A-7> 6gt
-map <A-8> 7gt
-map <A-9> 8gt
+map <A-5> 5gt
+map <A-6> 6gt
+map <A-7> 7gt
+map <A-8> 8gt
+map <A-9> 9gt
 
 " NOTE(jesper): HACK: when creating a new tab it seems the tab scoped variables defined in this
 " init.vim script aren't initialised for the new tab, so we need to it ourselves
