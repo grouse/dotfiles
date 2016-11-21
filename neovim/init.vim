@@ -45,6 +45,9 @@ autocmd VimResized * :wincmd =
 " let capital Y copy from cursor to end of line, instead of entire line
 map Y y$
 
+" map ; to :
+map ; :
+
 " reselect visual block after indenting
 vnoremap < <gv
 vnoremap > >gv
