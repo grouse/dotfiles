@@ -14,7 +14,6 @@ call plug#begin("~/.config/nvim/plugged")
 	Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
 	"" editing related plugins
-	Plug 'matze/vim-move'
 	Plug 'vim-scripts/Smart-Tabs'
 	Plug 'godlygeek/tabular'
 
