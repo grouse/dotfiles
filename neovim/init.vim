@@ -157,6 +157,9 @@ set errorformat=%f:%l:%c:\ %trror:\ %m
 set errorformat+=%f:%l:%c:\ fatal\ %trror:\ %m
 set errorformat+=%f:%l:%c:\ %tarning:\ %m
 
+set errorformat+=%f(%l):\ %trror\ %m
+set errorformat+=%f(%l):\ %tarning\ %m
+
 
 "" color scheme and syntax highlight configuration
 syntax enable
