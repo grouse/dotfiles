@@ -643,15 +643,15 @@ map <F4> :FSHere <CR>
 "" tab configuration
 map <silent> <C-t> :tabnew<CR>
 map <silent> <C-q> :tabclose<CR>
-map <A-1> 1gt
-map <A-2> 2gt
-map <A-3> 3gt
-map <A-4> 4gt
-map <A-5> 5gt
-map <A-6> 6gt
-map <A-7> 7gt
-map <A-8> 8gt
-map <A-9> 9gt
+map <silent> <A-1> 1gt
+map <silent> <A-2> 2gt
+map <silent> <A-3> 3gt
+map <silent> <A-4> 4gt
+map <silent> <A-5> 5gt
+map <silent> <A-6> 6gt
+map <silent> <A-7> 7gt
+map <silent> <A-8> 8gt
+map <silent> <A-9> 9gt
 
 " NOTE(jesper): HACK: when creating a new tab it seems the tab scoped variables defined in this
 " init.vim script aren't initialised for the new tab, so we need to it ourselves
