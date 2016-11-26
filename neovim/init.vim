@@ -71,8 +71,7 @@ let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 
-" set text width to (100-1) to automatically word wrap at 100 columns
-set tw=99
+set textwidth=79
 
 " restore the cursor position when opening a file
 function! s:restore_cursor_position()
