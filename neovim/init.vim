@@ -14,7 +14,6 @@ call plug#begin("~/.config/nvim/plugged")
 	Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
 	"" editing related plugins
-	Plug 'matze/vim-move'
 	Plug 'vim-scripts/Smart-Tabs'
 	Plug 'godlygeek/tabular'
 
@@ -26,10 +25,6 @@ call plug#end()
 
 
 "" assorted configuration
-" NOTE(jesper): this is a bit busted on Windows, inserting extra new lines most likely related to
-" its \r\n newline scheme. I'm starting to work with registers more in my usual workflow so this
-" might be going soon to avoid the problem and to make better use of the vim registers
-set clipboard+=unnamedplus
 set relativenumber
 set ruler
 set noshowmode
@@ -48,6 +43,9 @@ autocmd VimResized * :wincmd =
 
 " let capital Y copy from cursor to end of line, instead of entire line
 map Y y$
+
+" map ; to :
+map ; :
 
 " reselect visual block after indenting
 vnoremap < <gv
@@ -73,8 +71,7 @@ let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 
-" set text width to (100-1) to automatically word wrap at 100 columns
-set tw=99
+set textwidth=79
 
 " restore the cursor position when opening a file
 function! s:restore_cursor_position()
@@ -155,14 +152,14 @@ set smartcase
 
 
 "" errorformats
-" gcc
-"set errorformat=%f:%l:%c:\ %trror:\ %m
-"set errorformat+=%f:%l:%c:\ fatal\ %trror:\ %m
-"set errorformat+=%f:%l:%c:\ %tarning:\ %m
+set errorformat=%f:%l:%c:\ %trror:\ %m
+set errorformat+=%f:%l:%c:\ fatal\ %trror:\ %m
+set errorformat+=%f:%l:%c:\ %tarning:\ %m
 
-" msvc
-"set errorformat+=\ %#%f(%l):\ %terror:\ %m 
-"
+set errorformat+=%f(%l):\ %trror\ %m
+set errorformat+=%f(%l):\ %tarning\ %m
+set errorformat+=%f(%l)\ :\ %tarning\ %m
+
 
 "" color scheme and syntax highlight configuration
 syntax enable
@@ -287,7 +284,7 @@ let g:airline_section_warning = ""
 
 
 "" highlighted yank configuration
-let g:highlightedyank_highlight_duration=300
+let g:highlightedyank_highlight_duration=350
 
 "" custom variables
 let t:project_dir = getcwd()
@@ -644,18 +641,17 @@ endif
 map <F4> :FSHere <CR>
 
 "" tab configuration
-" NOTE(jesper): not really doing much with these atm but would like to experiment with how it might
-" change and improve my workflow, these binds give me a starting point
 map <silent> <C-t> :tabnew<CR>
 map <silent> <C-q> :tabclose<CR>
-map <A-1> 1gt
-map <A-2> 2gt
-map <A-3> 3gt
-map <A-4> 4gt
-map <A-6> 5gt
-map <A-7> 6gt
-map <A-8> 7gt
-map <A-9> 8gt
+map <silent> <A-1> 1gt
+map <silent> <A-2> 2gt
+map <silent> <A-3> 3gt
+map <silent> <A-4> 4gt
+map <silent> <A-5> 5gt
+map <silent> <A-6> 6gt
+map <silent> <A-7> 7gt
+map <silent> <A-8> 8gt
+map <silent> <A-9> 9gt
 
 " NOTE(jesper): HACK: when creating a new tab it seems the tab scoped variables defined in this
 " init.vim script aren't initialised for the new tab, so we need to it ourselves

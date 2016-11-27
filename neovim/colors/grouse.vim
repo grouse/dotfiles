@@ -32,11 +32,12 @@ let s:base06 = '#a09066' " code keywords, statements, etc
 let s:base07 = '#ece6d6' " number, boolean, null, etc
 
 " special colours 
-let s:red     = '#ec5f67' 
+let s:red     = '#E5786D'
 let s:orange  = '#f99157'
 let s:yellow  = '#c3cd3b'
 let s:green   = '#7dba6d'
 let s:cyan    = '#5fb3b3'
+let s:blue    = '#94AFCC'
 
 function! s:hl(group, fg, bg, attr)
 	" NOTE(jesper): just supporting neovim right now so setting gui highlight is enough
@@ -130,17 +131,17 @@ call s:hl("HighlightedyankRegion", s:cyan, s:none, s:none)
 
 "" tools
 " diff highlighting 
-call s:hl("DiffAdd",     s:green, s:none, s:none)
+call s:hl("DiffAdd",     s:green,  s:none, s:none)
 call s:hl("DiffChange",  s:yellow, s:none, s:none)
-call s:hl("DiffDelete",  s:red, s:none, s:none)
+call s:hl("DiffDelete",  s:red,    s:none, s:none)
 
 call s:hl("DiffAdded",   s:green, s:none, s:none)
-call s:hl("DiffRemoved", s:red, s:none, s:none)
+call s:hl("DiffRemoved", s:red,   s:none, s:none)
 
-call s:hl("DiffText",    s:none, s:none, s:none)
 call s:hl("DiffFile",    s:none, s:none, s:none)
 call s:hl("DiffNewFile", s:none, s:none, s:none)
-call s:hl("DiffLine",    s:none, s:none, s:none)
+call s:hl("DiffLine",    s:none,  s:none, s:none)
+call s:hl("DiffText",    s:none,   s:none, s:none)
 
 " git highlighting 
 call s:hl("gitCommitOverflow", s:none, s:none, s:none)
