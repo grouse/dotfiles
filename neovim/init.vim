@@ -155,10 +155,14 @@ set smartcase
 
 
 "" errorformats
-set errorformat=%f:%l:%c:\ %trror:\ %m
-set errorformat+=%f:%l:%c:\ fatal\ %trror:\ %m
-set errorformat+=%f:%l:%c:\ %tarning:\ %m
+" gcc
+"set errorformat=%f:%l:%c:\ %trror:\ %m
+"set errorformat+=%f:%l:%c:\ fatal\ %trror:\ %m
+"set errorformat+=%f:%l:%c:\ %tarning:\ %m
 
+" msvc
+"set errorformat+=\ %#%f(%l):\ %terror:\ %m 
+"
 
 "" color scheme and syntax highlight configuration
 syntax enable
