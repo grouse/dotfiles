@@ -152,10 +152,13 @@ set smartcase
 
 
 "" errorformats
+"gcc/clang
 set errorformat=%f:%l:%c:\ %trror:\ %m
 set errorformat+=%f:%l:%c:\ fatal\ %trror:\ %m
 set errorformat+=%f:%l:%c:\ %tarning:\ %m
+set errorformat+=%f:%l:\ %m
 
+"msvc
 set errorformat+=%f(%l):\ %trror\ %m
 set errorformat+=%f(%l):\ %tarning\ %m
 set errorformat+=%f(%l)\ :\ %tarning\ %m
