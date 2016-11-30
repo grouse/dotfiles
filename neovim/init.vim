@@ -13,7 +13,7 @@
 "
 "            Jesper Stefansson (jesper.stefansson@gmail.com)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""" Plugins
+"" Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 call plug#begin("~/.config/nvim/plugged")
 	"" assorted plugins
@@ -41,7 +41,7 @@ call plug#begin("~/.config/nvim/plugged")
 call plug#end()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""" Appearance
+"" Appearance
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set relativenumber
 set ruler
