@@ -60,13 +60,14 @@ call s:hl("VisualNOS",    s:none, s:none, s:inverse)
 
 call s:hl("SpecialKey",   s:base03, s:none, s:none)
 call s:hl("NonText",      s:base03, s:none, s:none)
+call s:hl("TrailingWhitespace", s:none, s:red, s:none)
 
 call s:hl("Italic",       s:none, s:none, s:italic)
 call s:hl("Bold",         s:none, s:none, s:bold)
 call s:hl("Underlined",   s:none, s:none, s:underline)
 
 " unset
-call s:hl("ColorColumn",  s:none, s:none, s:none)
+call s:hl("ColorColumn",  s:none, s:base00, s:none)
 call s:hl("Debug",        s:none, s:none, s:none)
 call s:hl("Directory",    s:none, s:none, s:none)
 call s:hl("ErrorMsg",     s:none, s:none, s:none)

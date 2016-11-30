@@ -32,7 +32,7 @@ set noshowmode
 let mapleader="\<Space>"
 
 set list
-set listchars=eol:⏎,tab:⤚⎼
+set listchars=tab:⤚⎼
 
 " make splits open below/to the right of the current buffer
 set splitbelow        " new hoz splits go below
@@ -71,7 +71,8 @@ let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 
-set textwidth=79
+set textwidth=80
+let &colorcolumn="80,".join(range(100,280),",")
 
 " restore the cursor position when opening a file
 function! s:restore_cursor_position()
@@ -107,6 +108,7 @@ set preserveindent
 set shiftwidth=4
 set softtabstop=0
 set tabstop=4
+
 
 " ultra handmade way of making my preferred indentation style for switch cases work :)
 " NOTE(jesper): this was a lot easier and cleaner than I thought it'd be, might be interesting to
@@ -193,12 +195,13 @@ function! SetCustomHighlights()
 	syn keyword Todo contained TODO  FIXME  IMPORTANT  HACK
 	syn keyword Todo contained TODO: FIXME: IMPORTANT: HACK:
 
+	match TrailingWhitespace /\s\+$/
+
 	syn cluster cCommentGroup contains=Note,Todo
 	syn cluster vimCommentGroup contains=Note,Todo
 endfunction()
 
 au BufRead,BufNewFile * call SetCustomHighlights()
-
 
 "" template insertion and formatting"
 function! s:format_template()
