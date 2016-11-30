@@ -32,7 +32,7 @@ call plug#begin("~/.config/nvim/plugged")
 
 	"" editing related plugins
 	Plug 'vim-scripts/Smart-Tabs'
-	Plug 'godlygeek/tabular'
+	Plug 'junegunn/vim-easy-align'
 
 	"" ui/look and feel related plugins
 	Plug 'equalsraf/neovim-gui-shim'
@@ -171,6 +171,10 @@ map <silent> <A-9> 9gt
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Plugin configuration
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" vim-easy-align
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
+
 "" airline
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#branch#enabled = 1
