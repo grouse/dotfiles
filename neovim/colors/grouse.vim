@@ -95,7 +95,7 @@ call s:hl("Character",    s:green, s:none, s:none)
 call s:hl("Note",         s:yellow, s:none, s:none)
 call s:hl("Todo",         s:red, s:none, s:none)
 
-call s:hl("Comment",      s:base03, s:none, s:italic)
+call s:hl("Comment",      s:base03, s:none, s:none)
 
 call s:hl("Include",      s:base04, s:none, s:none)
 call s:hl("Define",       s:base04, s:none, s:none)
