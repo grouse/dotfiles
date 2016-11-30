@@ -264,6 +264,7 @@ function! s:warn(msg)
   echohl NONE
 endfunction
 
+
 " restore the cursor position when opening a file
 function! s:restore_cursor_position()
 	if line("'\"") >0 && line("'\"") <= line("$") && &filetype != "gitcommit"
@@ -575,36 +576,18 @@ nmap <silent> <leader>/ :<C-U>set opfunc=<SID>insert_comment<CR>g@
 nmap <silent> <leader>// :<C-U>set opfunc=<SID>insert_comment<Bar>exe 'norm! 'v:count1.'g@_'<CR>
 vmap <silent> <leader>/  :<C-U>call <SID>insert_comment(visualmode(), 1)<CR>
 
+" remove trailing whitespaces
+function! s:strip_whitespace(start, end)
+	let _s=@/
+	let l = line(".")
+	let c = col(".")
 
-"" clean line selected with motions or visual
-function! s:trim_whitespace(type, ...)
-	let selection_save = &selection
-	let register_save  = @@
+	silent! execute ':' . a:start . ',' . a:end . 's/\s\+$//e'
 
-	let &selection = "inclusive"
-
-	if a:0
-		let [line_start, line_end] = [getpos("'<")[1], getpos("'>")[1]]
-	else
-		let [line_start, line_end] = [line("'['"), line("']")]
-	endif
-
-	for line_num in range(line_start, line_end)
-		let line = getline(line_num)
-
-		" remove trailing whitespace
-		let line = substitute(line, '\s\+$', '', "M")
-		call setline(line_num, line)
-	endfor
-
-	let &selection = selection_save
-	let @@         = register_save
+	let @/=_s
+	call cursor(l, c)
 endfunction
-
-" NOTE(jesper): this keybind is rather un-mnemonic...
-nmap <silent> <leader>t  :<C-U>set opfunc=<SID>trim_whitespace<CR>g@
-nmap <silent> <leader>tt :<C-U>set opfunc=<SID>trim_whitespace<Bar>exe 'norm! 'v:count1.'g@_'<CR>
-vmap <silent> <leader>t  :<C-U>call <SID>trim_whitespace(visualmode(), 1)<CR>
+command! -range=% StripWhitespace :call s:strip_whitespace(<line1>, <line2>)
 
 
 "" buffer management configuration
