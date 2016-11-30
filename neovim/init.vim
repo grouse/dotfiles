@@ -1,3 +1,20 @@
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"   /\        |\
+"  /|\\       ||\                                  _
+"  ||\\\      |||                                  `'
+"  |||\\\     |||   .;;;;;;.   .;;;;;;. ;.      .; .; , .,.  .,.
+"  ||| \\\    |||  /;      :  .;      :. \\    //  || ||; '|/' '|,
+"  |||  \\\   |||  ||======'  |;      ;|  \\  //   || ||   ||   ||
+"  |||   \\\  |||  |;     ,;  ';      :'   \`;/    || ||   ||   ||
+"  |||    \\\ |||   `'===='    `'===='`     \/     || ||   ||   ||
+"  |||     \\\||/
+"  \||      \\\/
+"   \|       \/
+"
+"            Jesper Stefansson (jesper.stefansson@gmail.com)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Plugins
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 call plug#begin("~/.config/nvim/plugged")
 	"" assorted plugins
 	Plug 'kshenoy/vim-signature'
@@ -23,28 +40,90 @@ call plug#begin("~/.config/nvim/plugged")
 	Plug 'machakann/vim-highlightedyank'
 call plug#end()
 
-
-"" assorted configuration
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Appearance
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set relativenumber
 set ruler
 set noshowmode
+set cursorline
+set termguicolors
 
-let mapleader="\<Space>"
+let &colorcolumn="80,".join(range(100,280),",")
 
-set list
-set listchars=tab:⤚⎼
+set background=dark
+colorscheme grouse
 
+" use line cursor in insert mode
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" Core behaviour
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " make splits open below/to the right of the current buffer
-set splitbelow        " new hoz splits go below
-set splitright        " new vert splits go right
+set splitbelow splitright
 
 " let terminal resize scale the internal windows
 autocmd VimResized * :wincmd =
 
+" cache undo history to file so that it's possible to undo after reopening a
+" recently closed file
+set undofile undodir=$HOME/.cache/nvim/undo
+set undolevels=1000 undoreload=10000
+
+"" scrolling configuration
+set scrolloff=5 sidescrolloff=5
+
+"" incremental search configuration
+set gdefault ignorecase smartcase
+
+set wildignore+=*.o
+set wildignore+=*/tmp/*,*.so,*.swp,*.a
+set wildignore+=*\\tmp\\*,*.obj,*.swp,*.exe,*.lib,*.dll
+
+"" errorformats
+"gcc/clang
+set errorformat=%f:%l:%c:\ %trror:\ %m
+set errorformat+=%f:%l:%c:\ fatal\ %trror:\ %m
+set errorformat+=%f:%l:%c:\ %tarning:\ %m
+set errorformat+=%f:%l:\ %m
+
+"msvc
+set errorformat+=%f(%l):\ %trror\ %m
+set errorformat+=%f(%l):\ %tarning\ %m
+set errorformat+=%f(%l)\ :\ %tarning\ %m
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" Editing/Formatting
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+syntax enable
+set list listchars=tab:⤚⎼
+set textwidth=80
+
+"" indentation & alignment
+set cinoptions=(0  " align continuation lines with next non-whitespace character
+                   " after the unclosed parenthesis
+set cinoptions+=u0 " same as ( but one level deeper
+set cinoptions+=U0 " ignore indent specified by ( and u
+set cinoptions+=:0 " place case labels on same level as the switch
+set cinoptions+=l1 " align new lines to case label instead of following statement
+set cinoptions+=g0 " align C++ class member visibility label with class statement
+
+set cindent
+set nosmarttab     " make BS behave like a normal backspace when deleting spaces
+
+set copyindent noexpandtab preserveindent
+set shiftwidth=4 softtabstop=0 tabstop=4
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" Core keybindings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let mapleader="\<Space>"
+
 " let capital Y copy from cursor to end of line, instead of entire line
 map Y y$
-
-" map ; to :
 map ; :
 
 " reselect visual block after indenting
@@ -60,19 +139,130 @@ nmap <silent> <leader>yt  a<C-R>=strftime("%Y-%m-%d %T")<CR><ESC>
 nmap <silent> <leader>ymd a<C-R>=strftime("%Y-%m-%d")<CR><ESC>
 nmap <silent> <leader>hms a<C-R>=strftime("%T")<CR><ESC>
 
-" cache undo history to file so that it's possible to undo after reopening a recently closed file
-set undofile
-set undodir=$HOME/.cache/nvim/undo
-set undolevels=1000
-set undoreload=10000
+" clear the search highlight when pressing enter
+nnoremap <silent> <CR> :nohlsearch<CR>
 
-" use line cursor in insert mode
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+" start a subsitute search for the word under the cursor
+nnoremap <Leader>s :%s/\<<C-r><C-w>\>/
 
-set textwidth=80
-let &colorcolumn="80,".join(range(100,280),",")
+" vertical and horizontal split keybinds
+map <silent> <C-s> :vsplit <CR>
+map <silent> <A-s> :split <CR>
+
+" make navigation between splits easier, witohut having to leave the home row
+map sh <C-w>h
+map sl <C-w>l
+map sj <C-w>j
+map sk <C-w>k
+
+" tab keybinds
+map <silent> <C-t> :tabnew<CR>
+map <silent> <C-q> :tabclose<CR>
+map <silent> <A-1> 1gt
+map <silent> <A-2> 2gt
+map <silent> <A-3> 3gt
+map <silent> <A-4> 4gt
+map <silent> <A-5> 5gt
+map <silent> <A-6> 6gt
+map <silent> <A-7> 7gt
+map <silent> <A-8> 8gt
+map <silent> <A-9> 9gt
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" Plugin configuration
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" airline
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#branch#enabled = 1
+
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+let g:airline_theme = "grouse"
+
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#fnamemod  = ":t"
+
+let g:airline_section_c = airline#section#create(["file"])
+
+let g:airline_section_y = airline#section#create(["ffenc"])
+let g:airline_section_z = airline#section#create(["%l:%v"])
+let g:airline_section_error   = ""
+let g:airline_section_warning = ""
+
+
+"" highlighted yank
+let g:highlightedyank_highlight_duration=350
+
+
+"" CamelCaseMotion
+" NOTE(jesper): put behind leader keybinds for now because the word motion
+" isn't 100% accurate to the usual vim behaviour (in non-camelcase/underscore
+" motions) which is throwing me off a lot
+map <silent> <leader>w <Plug>CamelCaseMotion_w
+map <silent> <leader>b <Plug>CamelCaseMotion_b
+map <silent> <leader>e <Plug>CamelCaseMotion_e
+map <silent> <leader>ge <Plug>CamelCaseMotion_ge
+
+omap <silent> <leader>iw <Plug>CamelCaseMotion_iw
+omap <silent> <leader>ib <Plug>CamelCaseMotion_ib
+omap <silent> <leader>ie <Plug>CamelCaseMotion_ie
+
+xmap <silent> <leader>iw <Plug>CamelCaseMotion_iw
+xmap <silent> <leader>ib <Plug>CamelCaseMotion_ib
+xmap <silent> <leader>ie <Plug>CamelCaseMotion_ie
+
+
+"" Fuzzy file searching
+" disable default mappings
+let g:ctrlp_map = ''
+
+if has("win32")
+let g:ctrlp_map = ''
+	let g:ctrlp_max_files = 0
+
+	map <C-a> :CtrlP <CR>
+	map <C-p> :CtrlP <C-r>=t:project_dir<CR><CR>
+else
+	function! s:project_dir()
+		return t:project_dir
+	endfunction
+
+	function! s:buflist()
+		redir => ls
+		silent ls
+		redir END
+		return split(ls, '\n')
+	endfunction
+
+	function! s:bufopen(e)
+		execute 'buffer' matchstr(a:e, '^[ 0-9]*')
+	endfunction
+
+	map <C-p> :call fzf#run({
+	\   'dir': <sid>project_dir(),
+	\	'sink': 'e'
+	\	})<CR>
+
+	map <A-p> :call fzf#run({
+	\   'source':  reverse(<sid>buflist()),
+	\   'sink':    function('<sid>bufopen'),
+	\   'options': '+m',
+	\   'down':    len(<sid>buflist()) + 2
+	\ })<CR>
+endif
+
+
+"" FSwitch
+map <F4> :FSHere <CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" Extended behaviour
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! s:warn(msg)
+  echohl ErrorMsg
+  echomsg a:msg
+  echohl NONE
+endfunction
 
 " restore the cursor position when opening a file
 function! s:restore_cursor_position()
@@ -80,39 +270,12 @@ function! s:restore_cursor_position()
 		execute("normal '\"")
 	endif
 endfunction
-
 au BufReadPost * call s:restore_cursor_position()
 
-" clear the search highlight when pressing enter
-nnoremap <silent> <CR> :nohlsearch<CR>
 
-"" tab configuration
-" All of this together with smart tabs plugin results in automatic indent with
-" tabs and align with spaces.
-set cinoptions=(0  " align continuation lines with next non-whitespace character after the
-                   " unclosed parenthesis
-set cinoptions+=u0 " same as ( but one level deeper
-set cinoptions+=U0 " ignore indent specified by ( and u
-set cinoptions+=:0 " place case labels on same level as the switch
-set cinoptions+=l1 " align new lines to case label instead of following statement
-set cinoptions+=g0 " align C++ class member visibility label with class statement
-
-set cindent
-
-set nosmarttab     " make BS behave like a normal backspace when deleting spaces
-
-set copyindent
-set noexpandtab
-set preserveindent
-
-set shiftwidth=4
-set softtabstop=0
-set tabstop=4
-
-
-" ultra handmade way of making my preferred indentation style for switch cases work :)
-" NOTE(jesper): this was a lot easier and cleaner than I thought it'd be, might be interesting to
-" look into similar solutions for automatic code formatting
+" handmade way of making my preferred indentation style for switch cases work
+" NOTE(jesper): this was a lot easier and cleaner than I thought it'd be, might
+" be interesting to look into similar solutions for automatic code formatting
 function! Indent(line_num)
 	let l:indent = cindent(a:line_num)
 
@@ -140,49 +303,14 @@ function! Indent(line_num)
 endfunction
 set indentexpr=Indent(line(\".\"))
 
-"" scrolling configuration
-set scrolloff=3
-
-" this doesn't actually happen because I have soft wrapping on, but just in case
-set sidescrolloff=5
-
-
-"" incremental search configuration
-set gdefault
-set ignorecase
-set smartcase
-
-
-"" errorformats
-"gcc/clang
-set errorformat=%f:%l:%c:\ %trror:\ %m
-set errorformat+=%f:%l:%c:\ fatal\ %trror:\ %m
-set errorformat+=%f:%l:%c:\ %tarning:\ %m
-set errorformat+=%f:%l:\ %m
-
-"msvc
-set errorformat+=%f(%l):\ %trror\ %m
-set errorformat+=%f(%l):\ %tarning\ %m
-set errorformat+=%f(%l)\ :\ %tarning\ %m
-
-
-"" color scheme and syntax highlight configuration
-syntax enable
-set termguicolors
-set cursorline
-set background=dark
-
-colorscheme grouse
-
-"" utility functions
-function! s:warn(msg)
-  echohl ErrorMsg
-  echomsg a:msg
-  echohl NONE
-endfunction
 
 " create a horizontal scratch buffer with 5 lines height
-command! Scratch new | resize 5 | setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
+function! s:create_scratch_buffer()
+	new | resize 5
+	setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
+endfunction
+command! Scratch :call s:create_scratch_buffer()
+
 
 "" custom highlights
 " NOTE(jesper): should probably do this by overriding syntax linter files, but this seems the
@@ -200,8 +328,8 @@ function! SetCustomHighlights()
 	syn cluster cCommentGroup contains=Note,Todo
 	syn cluster vimCommentGroup contains=Note,Todo
 endfunction()
-
 au BufRead,BufNewFile * call SetCustomHighlights()
+
 
 "" template insertion and formatting"
 function! s:format_template()
@@ -221,14 +349,11 @@ endfunction()
 
 au BufNewFile *.c,*.cpp 0r ~/.config/nvim/templates/template.c
 au BufNewFile *.h,*.hpp 0r ~/.config/nvim/templates/template.h
-
 au BufNewFile *.c,*.h,*.cpp,*.hpp call s:format_template()
 
 
 "" ctags configuration
 let s:ctags_generate_job = -1
-
-
 function! s:ctags_generate_on_output(job_id, data, event)
 	echo a:data
 endfunction()
@@ -265,48 +390,20 @@ function! s:ctags_generate_cancel()
 	endif
 endfunction
 
-
 command! GenerateCTags :call s:ctags_generate()
 command! CancelCTagsJob :call s:ctags_generate_cancel()
 
-"" airline configuration
-let g:airline_powerline_fonts = 1
 
-let g:airline#extensions#branch#enabled = 1
-
-let g:airline_left_sep = ''
-let g:airline_right_sep = ''
-let g:airline_theme = "grouse"
-
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#fnamemod  = ":t"
-
-let g:airline_section_c = airline#section#create(["file"])
-
-let g:airline_section_y = airline#section#create(["ffenc"])
-let g:airline_section_z = airline#section#create(["%l:%v"])
-let g:airline_section_error   = ""
-let g:airline_section_warning = ""
-
-
-"" highlighted yank configuration
-let g:highlightedyank_highlight_duration=350
-
-"" custom variables
+"" Project configuration
 let t:project_dir = getcwd()
 
-"" custom functions
 function! s:OpenProjectFunc(path)
 	let t:project_dir = a:path
-	let t:compile_cmd_cache = t:project_dir . '/' . t:compile_script . ' debug'
+	let t:compile_cmd_cache = t:project_dir . '/' . t:compile_script
 endfunction
-
-
-"" custom commands
 command! -nargs=1 -complete=dir OpenProject call s:OpenProjectFunc(<f-args>)
 
-
-"" compilation
+"" Project compilation
 let t:compile_job        = -1
 let t:compile_script     = 'build.sh'
 
@@ -314,7 +411,7 @@ if has('win32')
 	let t:compile_script = 'build.bat'
 endif
 
-let t:compile_cmd_cache = t:project_dir . '/' . t:compile_script . ' debug'
+let t:compile_cmd_cache = t:project_dir . '/' . t:compile_script
 
 function! s:compile_on_output(job_id, data, event)
 	cadde a:data
@@ -322,8 +419,9 @@ endfunction
 
 function! s:compile_on_exit(job_id, data, event)
 	let t:compile_job = -1
-	" TODO(jesper): currently this throws a multiline error if the quickfix list doesn't contain
-	" any valid errors. It's an obvious enough notification, but should really fix it
+	" TODO(jesper): currently this throws a multiline error if the quickfix list
+	" doesn't contain any valid errors. It's an obvious enough notification, but
+	" should really fix it
 	cnext
 endfunction
 
@@ -373,8 +471,6 @@ map <leader>c :Compile <C-r>=t:compile_cmd_cache<CR>
 map <leader>n :CompileNextError <CR>
 map <leader>p :CompilePrevError <CR>
 
-"" assorted keybinds
-:nnoremap <Leader>s :%s/\<<C-r><C-w>\>/
 
 "" code commenting functions and motions
 let b:comment_line = '\/\/'
@@ -418,7 +514,6 @@ function! s:insert_comment_selection(start, end, line_num)
 
 	call setline(a:line_num, line)
 endfunction
-
 
 function! s:insert_comment(type, ...)
 	let selection_save = &selection
@@ -480,6 +575,7 @@ nmap <silent> <leader>/ :<C-U>set opfunc=<SID>insert_comment<CR>g@
 nmap <silent> <leader>// :<C-U>set opfunc=<SID>insert_comment<Bar>exe 'norm! 'v:count1.'g@_'<CR>
 vmap <silent> <leader>/  :<C-U>call <SID>insert_comment(visualmode(), 1)<CR>
 
+
 "" clean line selected with motions or visual
 function! s:trim_whitespace(type, ...)
 	let selection_save = &selection
@@ -509,6 +605,7 @@ endfunction
 nmap <silent> <leader>t  :<C-U>set opfunc=<SID>trim_whitespace<CR>g@
 nmap <silent> <leader>tt :<C-U>set opfunc=<SID>trim_whitespace<Bar>exe 'norm! 'v:count1.'g@_'<CR>
 vmap <silent> <leader>t  :<C-U>call <SID>trim_whitespace(visualmode(), 1)<CR>
+
 
 "" buffer management configuration
 " close the current buffer and keep the window layout
@@ -570,97 +667,9 @@ command! -bang -complete=buffer -nargs=? Bclose call s:Bclose('<bang>', '<args>'
 map <leader>bc :Bclose<CR>
 
 
-"" window navigation keybinds
-" vertical and horizontal split keybinds
-map <silent> <C-s> :vsplit <CR>
-map <silent> <A-s> :split <CR>
-
-" make navigation between splits easier, witohut having to leave the home row
-map sh <C-w>h
-map sl <C-w>l
-map sj <C-w>j
-map sk <C-w>k
-
-"" CamelCaseMotion configuration
-" NOTE(jesper): put behind leader keybinds for now because the word motion isn't 100% accurate to
-" the usual vim behaviour (in non-camelcase/underscore motions) which is throwing me off a lot
-map <silent> <leader>w <Plug>CamelCaseMotion_w
-map <silent> <leader>b <Plug>CamelCaseMotion_b
-map <silent> <leader>e <Plug>CamelCaseMotion_e
-map <silent> <leader>ge <Plug>CamelCaseMotion_ge
-
-omap <silent> <leader>iw <Plug>CamelCaseMotion_iw
-omap <silent> <leader>ib <Plug>CamelCaseMotion_ib
-omap <silent> <leader>ie <Plug>CamelCaseMotion_ie
-
-xmap <silent> <leader>iw <Plug>CamelCaseMotion_iw
-xmap <silent> <leader>ib <Plug>CamelCaseMotion_ib
-xmap <silent> <leader>ie <Plug>CamelCaseMotion_ie
-
-
-"" fuzzy file and buffer find configuration
-set wildignore+=*.o
-set wildignore+=*/tmp/*,*.so,*.swp,*.a
-set wildignore+=*\\tmp\\*,*.obj,*.swp,*.exe,*.lib,*.dll
-
-" disable default mappings
-let g:ctrlp_map = ''
-
-if has("win32")
-	let g:ctrlp_max_files = 0
-
-	map <C-a> :CtrlP <CR>
-	map <C-p> :CtrlP <C-r>=t:project_dir<CR><CR>
-else
-	"map <C-p> :call denite#start([{'name': 'file_rec', 'args': [g:project_dir]}]) <CR>
-
-	function! s:project_dir()
-		return t:project_dir
-	endfunction
-
-	function! s:buflist()
-		redir => ls
-		silent ls
-		redir END
-		return split(ls, '\n')
-	endfunction
-
-	function! s:bufopen(e)
-		execute 'buffer' matchstr(a:e, '^[ 0-9]*')
-	endfunction
-
-	map <C-p> :call fzf#run({
-	\   'dir': <sid>project_dir(),
-	\	'sink': 'e'
-	\	})<CR>
-
-	map <A-p> :call fzf#run({
-	\   'source':  reverse(<sid>buflist()),
-	\   'sink':    function('<sid>bufopen'),
-	\   'options': '+m',
-	\   'down':    len(<sid>buflist()) + 2
-	\ })<CR>
-endif
-
-
-"" source/header file switching
-map <F4> :FSHere <CR>
-
-"" tab configuration
-map <silent> <C-t> :tabnew<CR>
-map <silent> <C-q> :tabclose<CR>
-map <silent> <A-1> 1gt
-map <silent> <A-2> 2gt
-map <silent> <A-3> 3gt
-map <silent> <A-4> 4gt
-map <silent> <A-5> 5gt
-map <silent> <A-6> 6gt
-map <silent> <A-7> 7gt
-map <silent> <A-8> 8gt
-map <silent> <A-9> 9gt
-
-" NOTE(jesper): HACK: when creating a new tab it seems the tab scoped variables defined in this
-" init.vim script aren't initialised for the new tab, so we need to it ourselves
+" NOTE(jesper): HACK: when creating a new tab it seems the tab scoped variables
+" defined in this init.vim script aren't initialised for the new tab, so we
+" need to it ourselves
 let g:creating_tab = 0
 
 function! s:create_tab()
@@ -680,9 +689,10 @@ function! s:enter_tab()
 			let t:compile_script = 'build.bat'
 		endif
 
-		let t:compile_cmd_cache = t:project_dir . '/' . t:compile_script . ' debug'
+		let t:compile_cmd_cache = t:project_dir . '/' . t:compile_script
 	endif
 endfunction
 
 au TabNew *   :call s:create_tab()
 au TabEnter * :call s:enter_tab()
+
