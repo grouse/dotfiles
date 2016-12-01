@@ -19,8 +19,8 @@ let s:inverse   = 'inverse'
 "" colour palette
 " backgrounds
 let s:base00 = '#232123' " darker
-let s:base01 = '#2a282a' " normal 
-let s:base02 = '#353335' " lighter 
+let s:base01 = '#2a282a' " normal
+let s:base02 = '#353335' " lighter
 
 " foregrounds
 let s:base03 = '#6e6d6e' " comments, disabled code
@@ -31,7 +31,7 @@ let s:base05 = '#c6b391' " normal
 let s:base06 = '#a09066' " code keywords, statements, etc
 let s:base07 = '#ece6d6' " number, boolean, null, etc
 
-" special colours 
+" special colours
 let s:red     = '#E5786D'
 let s:orange  = '#f99157'
 let s:yellow  = '#c3cd3b'
@@ -44,7 +44,7 @@ function! s:hl(group, fg, bg, attr)
 	exec "hi " . a:group . " guifg=" . a:fg . " guibg=" . a:bg . " gui=" . a:attr
 endfunction
 
-"" editor colors 
+"" editor colors
 call s:hl("Normal",       s:base05, s:base01, s:none)
 
 call s:hl("CursorLine",   s:none, s:base02, s:none)
@@ -88,7 +88,7 @@ call s:hl("PMenu",        s:none, s:none, s:none)
 call s:hl("PMenuSel",     s:none, s:none, s:none)
 
 
-"" standard syntax highlighting 
+"" standard syntax highlighting
 call s:hl("String",       s:green, s:none, s:none)
 call s:hl("Character",    s:green, s:none, s:none)
 
@@ -131,7 +131,7 @@ call s:hl("Tag",          s:none, s:none, s:none)
 call s:hl("HighlightedyankRegion", s:cyan, s:none, s:none)
 
 "" tools
-" diff highlighting 
+" diff highlighting
 call s:hl("DiffAdd",     s:green,  s:none, s:none)
 call s:hl("DiffChange",  s:yellow, s:none, s:none)
 call s:hl("DiffDelete",  s:red,    s:none, s:none)
@@ -144,19 +144,19 @@ call s:hl("DiffNewFile", s:none, s:none, s:none)
 call s:hl("DiffLine",    s:none,  s:none, s:none)
 call s:hl("DiffText",    s:none,   s:none, s:none)
 
-" git highlighting 
+" git highlighting
 call s:hl("gitCommitOverflow", s:none, s:none, s:none)
 call s:hl("gitCommitSummary",  s:none, s:none, s:none)
 
 
 "" programming languages
-" C highlighting 
+" C highlighting
 call s:hl("cNumber",       s:base07, s:none, s:none)
 call s:hl("cDefine",       s:base06, s:none, s:none)
 call s:hl("cPreCondit",    s:base06, s:none, s:none)
 call s:hl("cStorageClass", s:base06, s:none, s:none)
 
-" C# highlighting 
+" C# highlighting
 call s:hl("csClass",                s:none, s:none, s:none)
 call s:hl("csAttribute",            s:none, s:none, s:none)
 call s:hl("csModifier",             s:none, s:none, s:none)
@@ -165,12 +165,12 @@ call s:hl("csUnspecifiedStatement", s:none, s:none, s:none)
 call s:hl("csContextualStatement",  s:none, s:none, s:none)
 call s:hl("csNewDecleration",       s:none, s:none, s:none)
 
-" CSS highlighting 
+" CSS highlighting
 call s:hl("cssBraces",    s:none, s:none, s:none)
 call s:hl("cssClassName", s:none, s:none, s:none)
 call s:hl("cssColor",     s:none, s:none, s:none)
 
-" HTML highlighting 
+" HTML highlighting
 call s:hl("htmlBold",   s:none, s:none, s:none)
 call s:hl("htmlItalic", s:none, s:none, s:none)
 call s:hl("htmlEndTag", s:none, s:none, s:none)
@@ -178,12 +178,12 @@ call s:hl("htmlTag",    s:none, s:none, s:none)
 call s:hl("xmlTag",     s:none, s:none, s:none)
 call s:hl("xmlEndTag",  s:none, s:none, s:none)
 
-" JavaScript highlighting 
+" JavaScript highlighting
 call s:hl("javaScript",       s:none, s:none, s:none)
 call s:hl("javaScriptBraces", s:none, s:none, s:none)
 call s:hl("javaScriptNumber", s:none, s:none, s:none)
 
-" Markdown highlighting 
+" Markdown highlighting
 call s:hl("markdownCode",             s:none, s:none, s:none)
 call s:hl("markdownError",            s:none, s:none, s:none)
 call s:hl("markdownCodeBlock",        s:none, s:none, s:none)
@@ -192,7 +192,7 @@ call s:hl("markdownItalic",           s:none, s:none, s:none)
 call s:hl("markdownBold",             s:none, s:none, s:none)
 call s:hl("markdownCodeDelimiter",    s:none, s:none, s:none)
 
-" PHP highlighting 
+" PHP highlighting
 call s:hl("phpMemberSelector", s:none, s:none, s:none)
 call s:hl("phpComparison",     s:none, s:none, s:none)
 call s:hl("phpParent",         s:none, s:none, s:none)
