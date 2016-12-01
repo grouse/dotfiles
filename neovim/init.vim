@@ -492,8 +492,6 @@ endfunction
 
 command! -nargs=1 Compile :call s:compile_start(<f-args>)
 command! CompileCancel    :call s:compile_cancel()
-command! CompileNextError :call s:compile_next_error()
-command! CompilePrevError :call s:compile_prev_error()
 
 map <leader>c :Compile <C-r>=t:compile_cmd_cache<CR>
 
