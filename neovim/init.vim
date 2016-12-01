@@ -189,6 +189,10 @@ map <silent> <A-7> 7gt
 map <silent> <A-8> 8gt
 map <silent> <A-9> 9gt
 
+" buffer keybinds
+map <silent> <A-j> :bprevious<CR>
+map <silent> <A-k> :bnext<CR>
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Plugin configuration
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
