@@ -24,6 +24,7 @@ call plug#begin("~/.config/nvim/plugged")
 	"" tool plugins
 	Plug 'critiqjo/lldb.nvim'
 	Plug 'tpope/vim-fugitive'
+	Plug 'mileszs/ack.vim'
 
 	"" navigation related plugins
 	Plug 'ctrlpvim/ctrlp.vim'
@@ -171,6 +172,11 @@ map <silent> <A-9> 9gt
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Plugin configuration
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" ack.vim
+if executable('ag')
+	let g:ackprg = 'ag --vimgrep'
+endif
+
 "" vim-easy-align
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
