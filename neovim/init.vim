@@ -99,6 +99,10 @@ set errorformat+=%f(%l):\ %trror\ %m
 set errorformat+=%f(%l):\ %tarning\ %m
 set errorformat+=%f(%l)\ :\ %tarning\ %m
 
+
+" Automatically cd to the directory of the opened file
+autocmd BufEnter * silent! lcd %:p:h
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Editing/Formatting
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
