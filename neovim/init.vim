@@ -34,6 +34,7 @@ call plug#begin("~/.config/nvim/plugged")
 	"" editing related plugins
 	Plug 'vim-scripts/Smart-Tabs'
 	Plug 'junegunn/vim-easy-align'
+	Plug 'ntpeters/vim-better-whitespace'
 
 	"" ui/look and feel related plugins
 	Plug 'equalsraf/neovim-gui-shim'
@@ -362,8 +363,6 @@ function! SetCustomHighlights()
 	syn keyword Todo contained TODO  FIXME  IMPORTANT  HACK
 	syn keyword Todo contained TODO: FIXME: IMPORTANT: HACK:
 
-	match TrailingWhitespace /\s\+$/
-
 	syn cluster cCommentGroup contains=Note,Todo
 	syn cluster vimCommentGroup contains=Note,Todo
 endfunction()
@@ -601,19 +600,6 @@ endfunction
 nmap <silent> <leader>/ :<C-U>set opfunc=<SID>insert_comment<CR>g@
 nmap <silent> <leader>// :<C-U>set opfunc=<SID>insert_comment<Bar>exe 'norm! 'v:count1.'g@_'<CR>
 vmap <silent> <leader>/  :<C-U>call <SID>insert_comment(visualmode(), 1)<CR>
-
-" remove trailing whitespaces
-function! s:strip_whitespace(start, end)
-	let _s=@/
-	let l = line(".")
-	let c = col(".")
-
-	silent! execute ':' . a:start . ',' . a:end . 's/\s\+$//e'
-
-	let @/=_s
-	call cursor(l, c)
-endfunction
-command! -range=% StripWhitespace :call s:strip_whitespace(<line1>, <line2>)
 
 
 "" buffer management configuration
