@@ -301,11 +301,15 @@ endfunction
 
 " restore the cursor position when opening a file
 function! s:restore_cursor_position()
-	if line("'\"") >0 && line("'\"") <= line("$") && &filetype != "gitcommit"
-		execute("normal '\"")
+	if line("'\"") <= line("$")
+		normal! g`"
+		return 1
 	endif
 endfunction
 au BufReadPost * call s:restore_cursor_position()
+
+" in git commit message windows, put the cursor at the start
+au FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
 
 
 " handmade way of making my preferred indentation style for switch cases work
