@@ -130,6 +130,9 @@ set shiftwidth=4 softtabstop=0 tabstop=4
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let mapleader="\<Space>"
 
+map <silent> <leader>n :cnext<CR>
+map <silent> <leader>p :cprev<CR>
+
 " let capital Y copy from cursor to end of line, instead of entire line
 map Y y$
 map ; :
@@ -470,24 +473,12 @@ function! s:compile_cancel()
 	endif
 endfunction
 
-function! s:compile_next_error()
-	" TODO: wrap
-	cnext
-endfunction
-
-function! s:compile_prev_error()
-	" TODO: wrap
-	cprev
-endfunction
-
 command! -nargs=1 Compile :call s:compile_start(<f-args>)
 command! CompileCancel    :call s:compile_cancel()
 command! CompileNextError :call s:compile_next_error()
 command! CompilePrevError :call s:compile_prev_error()
 
 map <leader>c :Compile <C-r>=t:compile_cmd_cache<CR>
-map <leader>n :CompileNextError <CR>
-map <leader>p :CompilePrevError <CR>
 
 
 "" code commenting functions and motions
