@@ -353,9 +353,9 @@ command! Scratch :call s:create_scratch_buffer()
 
 
 "" custom highlights
-" NOTE(jesper): should probably do this by overriding syntax linter files, but this seems the
-" cleanest way of getting global highlights without having to edit syntax files for every single
-" file type i'm interested in
+" NOTE(jesper): should probably do this by overriding syntax linter files, but
+" this seems the cleanest way of getting global highlights without having to
+" edit syntax files for every single file type i'm interested in
 function! SetCustomHighlights()
 	syn keyword Note contained NOTE
 	syn keyword Note contained NOTE:
