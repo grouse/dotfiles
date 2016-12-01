@@ -64,6 +64,7 @@ let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 "" Core behaviour
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set nobackup nowritebackup noswapfile autoread
+set hidden " Allow buffer switching without saving
 
 " make splits open below/to the right of the current buffer
 set splitbelow splitright
