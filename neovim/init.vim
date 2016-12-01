@@ -145,6 +145,16 @@ vnoremap > >gv
 nnoremap <silent> n nzz
 nnoremap <silent> N Nzz
 
+" center view around cursor when moving up/down with C-u etc
+nnoremap <C-u> <C-u>zz
+nnoremap <C-d> <C-d>zz
+nnoremap <C-f> <C-f>zz
+nnoremap <C-b> <C-b>zz
+vnoremap <C-u> <C-u>zz
+vnoremap <C-d> <C-d>zz
+vnoremap <C-f> <C-f>zz
+vnoremap <C-b> <C-b>zz
+
 " insert today's date into the buffer in the common different formats
 nmap <silent> <leader>yt  a<C-R>=strftime("%Y-%m-%d %T")<CR><ESC>
 nmap <silent> <leader>ymd a<C-R>=strftime("%Y-%m-%d")<CR><ESC>
