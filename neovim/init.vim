@@ -307,7 +307,11 @@ endif
 
 
 "" FSwitch
-map <F4> :FSHere <CR>
+map <silent> <F4><F4> :FSHere<CR>
+map <silent> <F4>j :FSBelow<CR>
+map <silent> <F4>k :FSAbove<CR>
+map <silent> <F4>l :FSRight<CR>
+map <silent> <F4>h :FSLeft<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Extended behaviour
