@@ -69,6 +69,9 @@ let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 set nobackup nowritebackup noswapfile autoread
 set hidden " Allow buffer switching without saving
 
+" enable inccommand for incremental substitute, nvim you glorious bastard
+set inccommand=split
+
 " make splits open below/to the right of the current buffer
 set splitbelow splitright
 
