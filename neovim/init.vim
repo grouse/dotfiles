@@ -184,11 +184,17 @@ nnoremap <Leader>s :%s/\<<C-r><C-w>\>/
 map <silent> <C-s> :vsplit <CR>
 map <silent> <A-s> :split <CR>
 
-" make navigation between splits easier, witohut having to leave the home row
+" move cursor to window left/right/down/up
 map sh <C-w>h
 map sl <C-w>l
 map sj <C-w>j
 map sk <C-w>k
+
+" move window to split left/right/down/up
+map Sh <C-w>H
+map Sl <C-w>L
+map Sj <C-w>J
+map Sk <C-w>K
 
 " tab keybinds
 map <silent> <C-t> :tabnew<CR>
