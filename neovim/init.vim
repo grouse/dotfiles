@@ -45,7 +45,9 @@ call plug#end()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Appearance
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set relativenumber
+" disable line numbers by default, use <F2> to toggle
+set norelativenumber nonumber
+
 set ruler
 set noshowmode
 set cursorline
@@ -130,6 +132,10 @@ set shiftwidth=4 softtabstop=0 tabstop=4
 "" Core keybindings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let mapleader="\<Space>"
+
+" toggle line numbers
+nmap <silent> <F2> :windo set relativenumber!<CR>
+imap <silent> <F2> <ESC>:windo set relativenumber!<CR>a
 
 map <silent> <leader>n :cnext<CR>
 map <silent> <leader>p :cprev<CR>
