@@ -32,6 +32,7 @@ let s:base06 = '#a09066' " code keywords, statements, etc
 let s:base07 = '#ece6d6' " number, boolean, null, etc
 
 " special colours
+let s:black   = '#131313'
 let s:red     = '#E5786D'
 let s:orange  = '#f99157'
 let s:yellow  = '#c3cd3b'
@@ -47,27 +48,29 @@ endfunction
 "" editor colors
 call s:hl("Normal",       s:base05, s:base01, s:none)
 
+call s:hl("CursorColumn", s:none, s:base02, s:none)
 call s:hl("CursorLine",   s:none, s:base02, s:none)
 call s:hl("CursorLineNr", s:base07, s:base01, s:none)
+
+call s:hl("ColorColumn",  s:none, s:base00, s:none)
 call s:hl("IncSearch",    s:none, s:none, s:inverse)
 call s:hl("LineNr",       s:base03, s:base00, s:none)
 call s:hl("MatchParen",   s:base07, s:base00, s:none)
 call s:hl("Search",       s:none, s:none, s:inverse)
 call s:hl("SignColumn",   s:none, s:base00, s:none)
-call s:hl("VertSplit",    s:base00, s:base00, s:none)
+call s:hl("VertSplit",    s:black, s:black, s:none)
 call s:hl("Visual",       s:none, s:none, s:inverse)
 call s:hl("VisualNOS",    s:none, s:none, s:inverse)
 
-call s:hl("SpecialKey",   s:base03, s:none, s:none)
-call s:hl("NonText",      s:base03, s:none, s:none)
 call s:hl("ExtraWhitespace", s:none, s:red, s:none)
+call s:hl("NonText",      s:base03, s:none, s:none)
+call s:hl("SpecialKey",   s:base03, s:none, s:none)
 
-call s:hl("Italic",       s:none, s:none, s:italic)
 call s:hl("Bold",         s:none, s:none, s:bold)
+call s:hl("Italic",       s:none, s:none, s:italic)
 call s:hl("Underlined",   s:none, s:none, s:underline)
 
 " unset
-call s:hl("ColorColumn",  s:none, s:base00, s:none)
 call s:hl("Debug",        s:none, s:none, s:none)
 call s:hl("Directory",    s:none, s:none, s:none)
 call s:hl("ErrorMsg",     s:none, s:none, s:none)
