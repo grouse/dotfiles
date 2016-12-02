@@ -94,17 +94,15 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.a
 set wildignore+=*\\tmp\\*,*.obj,*.swp,*.exe,*.lib,*.dll
 
 "" errorformats
-"gcc/clang
+" gcc/clang
 set errorformat=%f:%l:%c:\ %trror:\ %m
 set errorformat+=%f:%l:%c:\ fatal\ %trror:\ %m
 set errorformat+=%f:%l:%c:\ %tarning:\ %m
 set errorformat+=%f:%l:\ %m
-
-"msvc
+" msvc
 set errorformat+=%f(%l):\ %trror\ %m
 set errorformat+=%f(%l):\ %tarning\ %m
 set errorformat+=%f(%l)\ :\ %tarning\ %m
-
 
 " Automatically cd to the directory of the opened file
 autocmd BufEnter * silent! lcd %:p:h
@@ -144,6 +142,7 @@ nmap Q q
 nmap <silent> <F2> :windo set relativenumber!<CR>
 imap <silent> <F2> <ESC>:windo set relativenumber!<CR>a
 
+" quickfix list navigation
 map <silent> <leader>n :cnext<CR>
 map <silent> <leader>p :cprev<CR>
 
@@ -216,7 +215,7 @@ map <silent> <A-k> :bnext<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Plugin configuration
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" ack.vim
+"" ack.vim
 if executable('ag')
 	let g:ackprg = 'ag --vimgrep'
 endif
@@ -225,7 +224,7 @@ endif
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
-"" airline
+"" vim-airline
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#branch#enabled = 1
 
@@ -244,7 +243,7 @@ let g:airline_section_error   = ""
 let g:airline_section_warning = ""
 
 
-"" highlighted yank
+"" vim-highlightedyank
 let g:highlightedyank_highlight_duration=350
 
 
@@ -266,7 +265,7 @@ xmap <silent> <leader>ib <Plug>CamelCaseMotion_ib
 xmap <silent> <leader>ie <Plug>CamelCaseMotion_ie
 
 
-"" Fuzzy file searching
+"" ctrlp.vim | fzf
 " disable default mappings
 let g:ctrlp_map = ''
 
