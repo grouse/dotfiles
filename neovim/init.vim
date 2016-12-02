@@ -456,7 +456,8 @@ command! CancelCTagsJob :call s:ctags_generate_cancel()
 
 
 "" Project configuration
-let t:project_dir = getcwd()
+" initialised in s:initialise_tab_variables
+let t:project_dir=""
 
 function! s:OpenProjectFunc(path)
 	let t:project_dir = a:path
@@ -465,14 +466,10 @@ endfunction
 command! -nargs=1 -complete=dir OpenProject call s:OpenProjectFunc(<f-args>)
 
 "" Project compilation
-let t:compile_job        = -1
-let t:compile_script     = 'build.sh'
-
-if has('win32')
-	let t:compile_script = 'build.bat'
-endif
-
-let t:compile_cmd_cache = t:project_dir . '/' . t:compile_script
+" initialised in s:initialise_tab_variables
+let t:compile_job=0
+let t:compile_script=""
+let t:compile_cmd_cache=""
 
 function! s:compile_on_output(job_id, data, event)
 	cadde a:data
@@ -686,29 +683,19 @@ map <leader>bc :Bclose<CR>
 " NOTE(jesper): HACK: when creating a new tab it seems the tab scoped variables
 " defined in this init.vim script aren't initialised for the new tab, so we
 " need to it ourselves
-let g:creating_tab = 0
+function! s:init_tab_variables()
+	echo "initialising tab variables"
 
-function! s:create_tab()
-	let g:creating_tab = 1
-endfunction
+	let t:project_dir    = getcwd()
+	let t:compile_job    = -1
+	let t:compile_script = 'build.sh'
 
-function! s:enter_tab()
-	if g:creating_tab == 1
-		let g:creating_tab = 0
-
-		let t:project_dir = getcwd()
-
-		let t:compile_job    = -1
-		let t:compile_script = 'build.sh'
-
-		if has('win32')
-			let t:compile_script = 'build.bat'
-		endif
-
-		let t:compile_cmd_cache = t:project_dir . '/' . t:compile_script
+	if has('win32')
+		let t:compile_script = 'build.bat'
 	endif
+
+	let t:compile_cmd_cache = t:project_dir . '/' . t:compile_script
 endfunction
 
-au TabNew *   :call s:create_tab()
-au TabEnter * :call s:enter_tab()
+au VimEnter,TabNew * :call s:init_tab_variables()
 
