@@ -136,6 +136,10 @@ set shiftwidth=4 softtabstop=0 tabstop=4
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let mapleader="\<Space>"
 
+" override the keybinding for ex mode. maybe one day I'll find a use for it, but
+" for now it's amazingly annoying to hit accidentally
+nmap Q q
+
 " toggle line numbers
 nmap <silent> <F2> :windo set relativenumber!<CR>
 imap <silent> <F2> <ESC>:windo set relativenumber!<CR>a
