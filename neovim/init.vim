@@ -682,19 +682,29 @@ map <leader>bc :Bclose<CR>
 " NOTE(jesper): HACK: when creating a new tab it seems the tab scoped variables
 " defined in this init.vim script aren't initialised for the new tab, so we
 " need to it ourselves
-function! s:init_tab_variables()
-	echo "initialising tab variables"
-
-	let t:project_dir    = getcwd()
-	let t:compile_job    = -1
-	let t:compile_script = 'build.sh'
-
-	if has('win32')
-		let t:compile_script = 'build.bat'
-	endif
-
-	let t:compile_cmd_cache = t:project_dir . '/' . t:compile_script
+let g:creating_tab = 0
+function! s:init_tab_variables_pre()
+	let g:creating_tab = 1
 endfunction
 
-au VimEnter,TabNew * :call s:init_tab_variables()
+function! s:init_tab_variables()
+	if g:creating_tab == 1
+		echo "initialising tab variables"
+
+		let t:project_dir    = getcwd()
+		let t:compile_job    = -1
+		let t:compile_script = 'build.sh'
+
+		if has('win32')
+			let t:compile_script = 'build.bat'
+		endif
+
+		let t:compile_cmd_cache = t:project_dir . '/' . t:compile_script
+
+		let g:creating_tab = 0
+	endif
+endfunction
+
+au VimEnter,TabNew   * :call s:init_tab_variables_pre()
+au VimEnter,TabEnter * :call s:init_tab_variables()
 
