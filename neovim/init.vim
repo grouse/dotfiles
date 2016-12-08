@@ -22,6 +22,7 @@
 "  e) Core keybindings
 "  f) Plugin configuration
 "  g) Extended behaviour
+"  h) Autocmd groups
 "
 "==============================================================================
 "= a) Plugins
