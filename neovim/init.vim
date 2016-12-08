@@ -711,11 +711,6 @@ augroup vim-resize-windows
 	autocmd VimResized * :wincmd =
 augroup end
 
-augroup vim-auto-cd
-	autocmd!
-	autocmd BufEnter * silent! lcd %:p:h
-augroup end
-
 augroup restore-cursor-pos
 	autocmd!
 	autocmd BufReadPost * call s:restore_cursor_position()
