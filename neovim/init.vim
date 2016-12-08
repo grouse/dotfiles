@@ -24,7 +24,6 @@ call plug#begin("~/.config/nvim/plugged")
 	"" tool plugins
 	Plug 'critiqjo/lldb.nvim'
 	Plug 'tpope/vim-fugitive'
-	Plug 'mileszs/ack.vim'
 
 	"" navigation related plugins
 	Plug 'ctrlpvim/ctrlp.vim'
@@ -94,8 +93,10 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.a
 set wildignore+=*\\tmp\\*,*.obj,*.swp,*.exe,*.lib,*.dll
 
 "" errorformats
+" generic
+set errorformat=%f:%l:%c:\%m
 " gcc/clang
-set errorformat=%f:%l:%c:\ %trror:\ %m
+set errorformat+=%f:%l:%c:\ %trror:\ %m
 set errorformat+=%f:%l:%c:\ fatal\ %trror:\ %m
 set errorformat+=%f:%l:%c:\ %tarning:\ %m
 set errorformat+=%f:%l:\ %m
@@ -215,11 +216,6 @@ map <silent> <A-k> :bnext<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Plugin configuration
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" ack.vim
-if executable('ag')
-	let g:ackprg = 'ag --vimgrep'
-endif
-
 "" vim-easy-align
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
@@ -455,21 +451,63 @@ command! CancelCTagsJob :call s:ctags_generate_cancel()
 
 
 "" Project configuration
-" initialised in s:initialise_tab_variables
-let t:project_dir=""
-
 function! s:OpenProjectFunc(path)
 	let t:project_dir = a:path
 	let t:compile_cmd_cache = t:project_dir . '/' . t:compile_script
 endfunction
 command! -nargs=1 -complete=dir OpenProject call s:OpenProjectFunc(<f-args>)
 
-"" Project compilation
-" initialised in s:initialise_tab_variables
-let t:compile_job=0
-let t:compile_script=""
-let t:compile_cmd_cache=""
 
+"" Project searching
+let g:project_search_job = -1
+let g:project_search_goto_first = 0
+
+function! s:project_search_on_output(job_id, data, event)
+	cadde a:data
+
+	if g:project_search_goto_first == 1
+		execute "cc"
+		let g:project_search_goto_first = 0
+	endif
+endfunction
+
+function! s:project_search_on_exit(job_id, data, event)
+	let g:project_search_job = -1
+endfunction
+
+function! s:project_search(term, folder)
+	if g:project_search_job != -1
+		echo "project search in progress"
+		return
+	endif
+
+	call setqflist([])
+
+	let search_opts = {
+		\'on_stdout': function('s:project_search_on_output'),
+		\'on_stderr': function('s:project_search_on_output'),
+		\'on_exit'  : function('s:project_search_on_exit')
+	\}
+
+	let g:project_search_goto_first = 1
+	let g:project_search_job = jobstart('ag --vimgrep "'.a:term.'" '.a:folder, search_opts)
+
+	execute "botright copen"
+endfunction
+
+function! s:project_search_cancel()
+	if g:project_search_job != -1
+		jobstop(g:project_search_job)
+		g:project_search_job = -1
+	endif
+endfunction
+
+command! SearchCancel :call s:project_search_cancel()
+command! -nargs=1 Search :call s:project_search(<q-args>, t:project_dir)
+command! -nargs=1 SearchCWD :call s:project_search(<q-args>, getcwd())
+
+
+"" Project compilation
 function! s:compile_on_output(job_id, data, event)
 	cadde a:data
 endfunction
