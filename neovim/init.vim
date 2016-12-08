@@ -408,48 +408,6 @@ au BufNewFile *.h,*.hpp 0r ~/.config/nvim/templates/template.h
 au BufNewFile *.c,*.h,*.cpp,*.hpp call s:format_template()
 
 
-"" ctags configuration
-let s:ctags_generate_job = -1
-function! s:ctags_generate_on_output(job_id, data, event)
-	echo a:data
-endfunction()
-
-function! s:ctags_generate_on_exit(job_id, data, event)
-	let s:ctags_generate_job = -1
-	if (a:data == 0)
-		echo "ctags generated"
-	else
-		echo "ERROR: ctags not generated")
-	endif
-endfunction
-
-function! s:ctags_generate()
-	if s:ctags_generate_job != -1
-		echo 'ctags are already being generated'
-		return
-	endif
-
-	let cmd = 'ctags -R --c++-kinds=+p --fields=+iaS --extra=+q ' . t:project_dir
-	let ctags_generate_options= {
-		\'on_stdout': function('s:ctags_generate_on_output'),
-		\'on_stderr': function('s:ctags_generate_on_output'),
-		\'on_exit'  : function('s:ctags_generate_on_exit'),
-		\'detach'   : 1
-	\}
-
-	let s:ctags_generate_job = jobstart(cmd, ctags_generate_options)
-endfunction
-
-function! s:ctags_generate_cancel()
-	if s:ctags_generate_job != -1
-		jobstop(s:ctags_generate_job)
-	endif
-endfunction
-
-command! GenerateCTags :call s:ctags_generate()
-command! CancelCTagsJob :call s:ctags_generate_cancel()
-
-
 "" Project configuration
 function! s:OpenProjectFunc(path)
 	let t:project_dir = a:path
