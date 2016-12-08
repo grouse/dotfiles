@@ -274,7 +274,6 @@ xmap <silent> <leader>ie <Plug>CamelCaseMotion_ie
 let g:ctrlp_map = ''
 
 if has("win32")
-let g:ctrlp_map = ''
 	let g:ctrlp_max_files = 0
 
 	map <C-a> :CtrlP <CR>
@@ -378,7 +377,7 @@ command! Scratch :call s:create_scratch_buffer()
 " NOTE(jesper): should probably do this by overriding syntax linter files, but
 " this seems the cleanest way of getting global highlights without having to
 " edit syntax files for every single file type i'm interested in
-function! SetCustomHighlights()
+function! s:custom_syntax()
 	syn keyword Note contained NOTE
 	syn keyword Note contained NOTE:
 
@@ -725,7 +724,7 @@ augroup end
 
 augroup custom-highlights
 	autocmd!
-	autocmd BufRead,BufNewFile * call SetCustomHighlights()
+	autocmd BufRead,BufNewFile * call s:custom_syntax()
 augroup end
 
 augroup auto-file-templates
