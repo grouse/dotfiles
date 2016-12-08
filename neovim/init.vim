@@ -103,12 +103,12 @@ set wildignore+=*\\tmp\\*,*.obj,*.swp,*.exe,*.lib,*.dll
 
 "" errorformats
 " generic
-set errorformat=%f:%l:%c:\%m
+set errorformat=%f:%l:%c:%m
 " gcc/clang
-set errorformat+=%f:%l:%c:\ %trror:\ %m
-set errorformat+=%f:%l:%c:\ fatal\ %trror:\ %m
-set errorformat+=%f:%l:%c:\ %tarning:\ %m
-set errorformat+=%f:%l:\ %m
+set errorformat+=%f:%l:%c:\ %trror:%m
+set errorformat+=%f:%l:%c:\ fatal\ %trror:%m
+set errorformat+=%f:%l:%c:\ %tarning:%m
+set errorformat+=%f:%l:%m
 " msvc
 set errorformat+=%f(%l):\ %trror\ %m
 set errorformat+=%f(%l):\ %tarning\ %m
@@ -151,8 +151,8 @@ nmap <silent> <F2> :windo set relativenumber!<CR>
 imap <silent> <F2> <ESC>:windo set relativenumber!<CR>a
 
 " quickfix list navigation
-map <silent> <leader>n :cnext<CR>
-map <silent> <leader>p :cprev<CR>
+map <silent> <C-j> :cnext<CR>
+map <silent> <C-k> :cprev<CR>
 
 " let capital Y copy from cursor to end of line, instead of entire line
 map Y y$
@@ -421,6 +421,7 @@ let g:project_search_goto_first = 0
 
 function! s:project_search_on_output(job_id, data, event)
 	cadde a:data
+	redraw!
 
 	if g:project_search_goto_first == 1
 		execute "cc"
