@@ -1,4 +1,4 @@
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"==============================================================================
 "   /\        |\
 "  /|\\       ||\                                  _
 "  ||\\\      |||                                  `'
@@ -12,9 +12,20 @@
 "   \|       \/
 "
 "            Jesper Stefansson (jesper.stefansson@gmail.com)
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" Plugins
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"==============================================================================
+"= Table of Contents
+"==============================================================================
+"  a) Plugins
+"  b) Appearance
+"  c) Core behaviour
+"  d) Editing/Formatting
+"  e) Core keybindings
+"  f) Plugin configuration
+"  g) Extended behaviour
+"
+"==============================================================================
+"= a) Plugins
+"==============================================================================
 call plug#begin("~/.config/nvim/plugged")
 	"" assorted plugins
 	Plug 'kshenoy/vim-signature'
@@ -41,9 +52,9 @@ call plug#begin("~/.config/nvim/plugged")
 	Plug 'machakann/vim-highlightedyank'
 call plug#end()
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" Appearance
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"==============================================================================
+"= b) Appearance
+"==============================================================================
 " disable line numbers by default, use <F2> to toggle
 set norelativenumber nonumber
 
@@ -62,9 +73,9 @@ let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" Core behaviour
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"==============================================================================
+"= c) Core behaviour
+"==============================================================================
 set nobackup nowritebackup noswapfile autoread
 set hidden " Allow buffer switching without saving
 
@@ -73,9 +84,6 @@ set inccommand=split
 
 " make splits open below/to the right of the current buffer
 set splitbelow splitright
-
-" let terminal resize scale the internal windows
-autocmd VimResized * :wincmd =
 
 " cache undo history to file so that it's possible to undo after reopening a
 " recently closed file
@@ -105,12 +113,10 @@ set errorformat+=%f(%l):\ %trror\ %m
 set errorformat+=%f(%l):\ %tarning\ %m
 set errorformat+=%f(%l)\ :\ %tarning\ %m
 
-" Automatically cd to the directory of the opened file
-autocmd BufEnter * silent! lcd %:p:h
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" Editing/Formatting
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"==============================================================================
+"= d) Editing/Formatting
+"==============================================================================
 syntax enable
 set list listchars=tab:⤚⎼
 set textwidth=80
@@ -130,9 +136,9 @@ set nosmarttab     " make BS behave like a normal backspace when deleting spaces
 set copyindent noexpandtab preserveindent
 set shiftwidth=4 softtabstop=0 tabstop=4
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" Core keybindings
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"==============================================================================
+"= e) Core keybindings
+"==============================================================================
 let mapleader="\<Space>"
 
 " override the keybinding for ex mode. maybe one day I'll find a use for it, but
@@ -213,12 +219,13 @@ map <silent> <A-9> 9gt
 map <silent> <A-j> :bprevious<CR>
 map <silent> <A-k> :bnext<CR>
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" Plugin configuration
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"==============================================================================
+"= f) Plugin configuration
+"==============================================================================
 "" vim-easy-align
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
+
 
 "" vim-airline
 let g:airline_powerline_fonts = 1
@@ -308,9 +315,9 @@ map <silent> <F4>k :FSAbove<CR>
 map <silent> <F4>l :FSRight<CR>
 map <silent> <F4>h :FSLeft<CR>
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" Extended behaviour
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"==============================================================================
+"= g) Extended behaviour
+"==============================================================================
 function! s:warn(msg)
   echohl ErrorMsg
   echomsg a:msg
@@ -325,10 +332,6 @@ function! s:restore_cursor_position()
 		return 1
 	endif
 endfunction
-au BufReadPost * call s:restore_cursor_position()
-
-" in git commit message windows, put the cursor at the start
-au FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
 
 
 " handmade way of making my preferred indentation style for switch cases work
@@ -384,7 +387,6 @@ function! SetCustomHighlights()
 	syn cluster cCommentGroup contains=Note,Todo
 	syn cluster vimCommentGroup contains=Note,Todo
 endfunction()
-au BufRead,BufNewFile * call SetCustomHighlights()
 
 
 "" template insertion and formatting"
@@ -402,10 +404,6 @@ function! s:format_template()
 	" NOTE(jesper): by doing this substitute last we move the cursor to this position
 	exec '%s/@CURSOR//'
 endfunction()
-
-au BufNewFile *.c,*.cpp 0r ~/.config/nvim/templates/template.c
-au BufNewFile *.h,*.hpp 0r ~/.config/nvim/templates/template.h
-au BufNewFile *.c,*.h,*.cpp,*.hpp call s:format_template()
 
 
 "" Project configuration
@@ -521,9 +519,6 @@ function! s:set_comment_characters(line, start, end)
 	let b:comment_selection_start = a:start
 	let b:comment_selection_end = a:end
 endfunction
-
-au FileType vim call s:set_comment_characters('" ', '', '')
-au FileType cpp call s:set_comment_characters('\/\/', '\/*', '*\/')
 
 function! s:insert_comment_line(line_num, line)
 	if match(a:line, '\s*'.b:comment_line.'.*') == -1
@@ -701,6 +696,46 @@ function! s:init_tab_variables()
 	endif
 endfunction
 
-au VimEnter,TabNew   * :call s:init_tab_variables_pre()
-au VimEnter,TabEnter * :call s:init_tab_variables()
+"==============================================================================
+"= h) Autocmd groups
+"==============================================================================
+augroup init-tab-variables
+	autocmd!
+	autocmd VimEnter,TabNew   * :call s:init_tab_variables_pre()
+	autocmd VimEnter,TabEnter * :call s:init_tab_variables()
+augroup end
+
+augroup vim-resize-windows
+	autocmd!
+	autocmd VimResized * :wincmd =
+augroup end
+
+augroup vim-auto-cd
+	autocmd!
+	autocmd BufEnter * silent! lcd %:p:h
+augroup end
+
+augroup restore-cursor-pos
+	autocmd!
+	autocmd BufReadPost * call s:restore_cursor_position()
+	autocmd FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+augroup end
+
+augroup custom-highlights
+	autocmd!
+	autocmd BufRead,BufNewFile * call SetCustomHighlights()
+augroup end
+
+augroup auto-file-templates
+	autocmd!
+	autocmd BufNewFile *.c,*.cpp 0r ~/.config/nvim/templates/template.c
+	autocmd BufNewFile *.h,*.hpp 0r ~/.config/nvim/templates/template.h
+	autocmd BufNewFile *.c,*.h,*.cpp,*.hpp call s:format_template()
+augroup end
+
+augroup filetype-comment-style
+	autocmd!
+	autocmd FileType vim call s:set_comment_characters('" ', '', '')
+	autocmd FileType cpp call s:set_comment_characters('\/\/', '\/*', '*\/')
+augroup end
 
