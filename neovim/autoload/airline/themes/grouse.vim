@@ -1,21 +1,27 @@
 let g:airline#themes#grouse#palette = {}
 
 "" colour palette
-let s:base00 = '#232123' " darker background
-let s:base01 = '#2a282a' " normal background
-let s:base02 = '#353335' " lighter background
+let s:base00 = '#232123' " darker
+let s:base01 = '#2a282a' " normal
+let s:base02 = '#353335' " lighter
 
-let s:base03 = '#6e6d6e' " accent foreground 00
-let s:base04 = '#948068' " accent foreground 01
-let s:base05 = '#c6b391' " normal foreground
-let s:base06 = '#a08066' " accent foreground 10
-let s:base07 = '#f7fffe' " accent foreground 11
+" foregrounds
+let s:base03 = '#6e6d6e' " comments, disabled code
+let s:base04 = '#948068' " preprocessor, include, module, etc
 
-" special colours 
-let s:red     = '#ec5f67' 
+let s:base05 = '#c6b391' " normal
+
+let s:base06 = '#a09066' " code keywords, statements, etc
+let s:base07 = '#ece6d6' " number, boolean, null, etc
+
+" special colours
+let s:black   = '#131313'
+let s:red     = '#E5786D'
 let s:orange  = '#f99157'
 let s:yellow  = '#c3cd3b'
 let s:green   = '#7dba6d'
+let s:cyan    = '#5fb3b3'
+let s:blue    = '#94AFCC'
 
 let s:none      = 'none'
 
@@ -35,9 +41,9 @@ let g:airline#themes#grouse#palette.insert = copy(g:airline#themes#grouse#palett
 let g:airline#themes#grouse#palette.replace = copy(g:airline#themes#grouse#palette.normal)
 let g:airline#themes#grouse#palette.visual = copy(g:airline#themes#grouse#palette.normal)
 
-let s:IA1   = [ s:base03, s:base02, 0, 0]
-let s:IA2   = [ s:base03, s:base02, 0, 0]
-let s:IA3   = [ s:base03, s:base02, 0, 0]
+let s:IA1   = [ s:base03, s:black, 0, 0]
+let s:IA2   = [ s:base03, s:black, 0, 0]
+let s:IA3   = [ s:base03, s:black, 0, 0]
 let g:airline#themes#grouse#palette.inactive = airline#themes#generate_color_map(s:IA1, s:IA2, s:IA3)
 
 let g:airline#themes#grouse#palette.accents = {
