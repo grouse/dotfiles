@@ -53,6 +53,10 @@ call plug#begin("~/.config/nvim/plugged")
 	Plug 'machakann/vim-highlightedyank'
 call plug#end()
 
+if filereadable('~/.config/nvim/local.vim')
+	source '~/.config/nvim/local.vim'
+endif
+
 "==============================================================================
 "= b) Appearance
 "==============================================================================
