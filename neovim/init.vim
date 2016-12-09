@@ -322,6 +322,10 @@ map <silent> <F4>h :FSLeft<CR>
 "==============================================================================
 "= g) Extended behaviour
 "==============================================================================
+if !exists('g:strip_whitespace_on_save')
+	let g:strip_whitespace_on_save = 1
+endif
+
 function! s:warn(msg)
   echohl ErrorMsg
   echomsg a:msg
@@ -704,6 +708,14 @@ endfunction
 "==============================================================================
 "= h) Autocmd groups
 "==============================================================================
+augroup vim-on-save
+	autocmd!
+
+	if g:strip_whitespace_on_save == 1
+		autocmd BufWritePre * :StripWhitespace
+	endif
+augroup end
+
 augroup init-tab-variables
 	autocmd!
 	autocmd VimEnter,TabNew   * :call s:init_tab_variables_pre()
