@@ -398,19 +398,22 @@ endfunction()
 
 
 "" template insertion and formatting"
-function! s:format_template()
+function! s:format_template(template)
+	let l:file = '~/.config/nvim/templates/'.a:template
+	silent execute "0read ".fnameescape(l:file)
+
 	let author    = 'Jesper Stefansson'
 	let email     = 'jesper.stefansson@gmail.com'
 
-	exec '%s/@FILE/' . expand('%:t')
-	exec '%s/@CREATED/' . strftime('%Y-%m-%d')
-	exec '%s/@AUTHORS/' . author . ' (' . email . ')'
-	exec '%s/@COPYRIGHT_YEAR/' . strftime('%Y')
+	silent exec '%s/@FILE/' . expand('%:t')
+	silent exec '%s/@CREATED/' . strftime('%Y-%m-%d')
+	silent exec '%s/@AUTHORS/' . author . ' (' . email . ')'
+	silent exec '%s/@COPYRIGHT_YEAR/' . strftime('%Y')
 
-	exec '%s/@HEADER_DEFINE_GUARD/' . toupper(expand('%:r')) . '_H'
+	silent exec '%s/@HEADER_DEFINE_GUARD/' . toupper(expand('%:r')) . '_H'
 
 	" NOTE(jesper): by doing this substitute last we move the cursor to this position
-	exec '%s/@CURSOR//'
+	silent exec '%s/@CURSOR//'
 endfunction()
 
 
@@ -740,9 +743,8 @@ augroup end
 
 augroup auto-file-templates
 	autocmd!
-	autocmd BufNewFile *.c,*.cpp 0r ~/.config/nvim/templates/template.c
-	autocmd BufNewFile *.h,*.hpp 0r ~/.config/nvim/templates/template.h
-	autocmd BufNewFile *.c,*.h,*.cpp,*.hpp call s:format_template()
+	autocmd BufNewFile *.c,*.cpp call s:format_template('c.vim')
+	autocmd BufNewFile *.h,*.hpp call s:format_template('h.vim')
 augroup end
 
 augroup filetype-comment-style
