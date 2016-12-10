@@ -1,4 +1,4 @@
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"==============================================================================
 "   /\        |\
 "  /|\\       ||\                                  _
 "  ||\\\      |||                                  `'
@@ -12,9 +12,21 @@
 "   \|       \/
 "
 "            Jesper Stefansson (jesper.stefansson@gmail.com)
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" Plugins
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"==============================================================================
+"= Table of Contents
+"==============================================================================
+"  a) Plugins
+"  b) Appearance
+"  c) Core behaviour
+"  d) Editing/Formatting
+"  e) Core keybindings
+"  f) Plugin configuration
+"  g) Extended behaviour
+"  h) Autocmd groups
+"
+"==============================================================================
+"= a) Plugins
+"==============================================================================
 call plug#begin("~/.config/nvim/plugged")
 	"" assorted plugins
 	Plug 'kshenoy/vim-signature'
@@ -24,7 +36,6 @@ call plug#begin("~/.config/nvim/plugged")
 	"" tool plugins
 	Plug 'critiqjo/lldb.nvim'
 	Plug 'tpope/vim-fugitive'
-	Plug 'mileszs/ack.vim'
 
 	"" navigation related plugins
 	Plug 'ctrlpvim/ctrlp.vim'
@@ -42,9 +53,13 @@ call plug#begin("~/.config/nvim/plugged")
 	Plug 'machakann/vim-highlightedyank'
 call plug#end()
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" Appearance
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if filereadable('~/.config/nvim/local.vim')
+	source '~/.config/nvim/local.vim'
+endif
+
+"==============================================================================
+"= b) Appearance
+"==============================================================================
 " disable line numbers by default, use <F2> to toggle
 set norelativenumber nonumber
 
@@ -63,9 +78,9 @@ let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" Core behaviour
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"==============================================================================
+"= c) Core behaviour
+"==============================================================================
 set nobackup nowritebackup noswapfile autoread
 set hidden " Allow buffer switching without saving
 
@@ -74,9 +89,6 @@ set inccommand=split
 
 " make splits open below/to the right of the current buffer
 set splitbelow splitright
-
-" let terminal resize scale the internal windows
-autocmd VimResized * :wincmd =
 
 " cache undo history to file so that it's possible to undo after reopening a
 " recently closed file
@@ -94,23 +106,23 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.a
 set wildignore+=*\\tmp\\*,*.obj,*.swp,*.exe,*.lib,*.dll
 
 "" errorformats
+" generic
+set errorformat=%f:%l:%c:%m
 " gcc/clang
-set errorformat=%f:%l:%c:\ %trror:\ %m
-set errorformat+=%f:%l:%c:\ fatal\ %trror:\ %m
-set errorformat+=%f:%l:%c:\ %tarning:\ %m
-set errorformat+=%f:%l:\ %m
+set errorformat+=%f:%l:%c:\ %trror:%m
+set errorformat+=%f:%l:%c:\ fatal\ %trror:%m
+set errorformat+=%f:%l:%c:\ %tarning:%m
+set errorformat+=%f:%l:%m
 " msvc
 set errorformat+=%f(%l):\ %trror\ %m
 set errorformat+=%f(%l):\ %tarning\ %m
 set errorformat+=%f(%l)\ :\ %tarning\ %m
 set errorformat+=%f(%l):\ fatal\ %trror\ %m
 
-" Automatically cd to the directory of the opened file
-autocmd BufEnter * silent! lcd %:p:h
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" Editing/Formatting
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"==============================================================================
+"= d) Editing/Formatting
+"==============================================================================
 syntax enable
 set list listchars=tab:⤚⎼
 set textwidth=80
@@ -130,9 +142,9 @@ set nosmarttab     " make BS behave like a normal backspace when deleting spaces
 set copyindent noexpandtab preserveindent
 set shiftwidth=4 softtabstop=0 tabstop=4
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" Core keybindings
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"==============================================================================
+"= e) Core keybindings
+"==============================================================================
 let mapleader="\<Space>"
 
 " override the keybinding for ex mode. maybe one day I'll find a use for it, but
@@ -144,8 +156,8 @@ nmap <silent> <F2> :windo set relativenumber!<CR>
 imap <silent> <F2> <ESC>:windo set relativenumber!<CR>a
 
 " quickfix list navigation
-map <silent> <leader>n :cnext<CR>
-map <silent> <leader>p :cprev<CR>
+map <silent> <C-j> :cnext<CR>
+map <silent> <C-k> :cprev<CR>
 
 " let capital Y copy from cursor to end of line, instead of entire line
 map Y y$
@@ -213,17 +225,13 @@ map <silent> <A-9> 9gt
 map <silent> <A-j> :bprevious<CR>
 map <silent> <A-k> :bnext<CR>
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" Plugin configuration
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" ack.vim
-if executable('ag')
-	let g:ackprg = 'ag --vimgrep'
-endif
-
+"==============================================================================
+"= f) Plugin configuration
+"==============================================================================
 "" vim-easy-align
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
+
 
 "" vim-airline
 let g:airline_powerline_fonts = 1
@@ -271,7 +279,6 @@ xmap <silent> <leader>ie <Plug>CamelCaseMotion_ie
 let g:ctrlp_map = ''
 
 if has("win32")
-let g:ctrlp_map = ''
 	let g:ctrlp_max_files = 0
 
 	map <C-a> :CtrlP <CR>
@@ -313,9 +320,13 @@ map <silent> <F4>k :FSAbove<CR>
 map <silent> <F4>l :FSRight<CR>
 map <silent> <F4>h :FSLeft<CR>
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" Extended behaviour
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"==============================================================================
+"= g) Extended behaviour
+"==============================================================================
+if !exists('g:strip_whitespace_on_save')
+	let g:strip_whitespace_on_save = 1
+endif
+
 function! s:warn(msg)
   echohl ErrorMsg
   echomsg a:msg
@@ -330,10 +341,6 @@ function! s:restore_cursor_position()
 		return 1
 	endif
 endfunction
-au BufReadPost * call s:restore_cursor_position()
-
-" in git commit message windows, put the cursor at the start
-au FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
 
 
 " handmade way of making my preferred indentation style for switch cases work
@@ -379,7 +386,7 @@ command! Scratch :call s:create_scratch_buffer()
 " NOTE(jesper): should probably do this by overriding syntax linter files, but
 " this seems the cleanest way of getting global highlights without having to
 " edit syntax files for every single file type i'm interested in
-function! SetCustomHighlights()
+function! s:custom_syntax()
 	syn keyword Note contained NOTE
 	syn keyword Note contained NOTE:
 
@@ -389,88 +396,87 @@ function! SetCustomHighlights()
 	syn cluster cCommentGroup contains=Note,Todo
 	syn cluster vimCommentGroup contains=Note,Todo
 endfunction()
-au BufRead,BufNewFile * call SetCustomHighlights()
 
 
 "" template insertion and formatting"
-function! s:format_template()
+function! s:format_template(template)
+	let l:file = '~/.config/nvim/templates/'.a:template
+	silent execute "0read ".fnameescape(l:file)
+
 	let author    = 'Jesper Stefansson'
 	let email     = 'jesper.stefansson@gmail.com'
 
-	exec '%s/@FILE/' . expand('%:t')
-	exec '%s/@CREATED/' . strftime('%Y-%m-%d')
-	exec '%s/@AUTHORS/' . author . ' (' . email . ')'
-	exec '%s/@COPYRIGHT_YEAR/' . strftime('%Y')
+	silent exec '%s/@FILE/' . expand('%:t')
+	silent exec '%s/@CREATED/' . strftime('%Y-%m-%d')
+	silent exec '%s/@AUTHORS/' . author . ' (' . email . ')'
+	silent exec '%s/@COPYRIGHT_YEAR/' . strftime('%Y')
 
-	exec '%s/@HEADER_DEFINE_GUARD/' . toupper(expand('%:r')) . '_H'
+	silent exec '%s/@HEADER_DEFINE_GUARD/' . toupper(expand('%:r')) . '_H'
 
 	" NOTE(jesper): by doing this substitute last we move the cursor to this position
-	exec '%s/@CURSOR//'
+	silent exec '%s/@CURSOR//'
 endfunction()
-
-au BufNewFile *.c,*.cpp 0r ~/.config/nvim/templates/template.c
-au BufNewFile *.h,*.hpp 0r ~/.config/nvim/templates/template.h
-au BufNewFile *.c,*.h,*.cpp,*.hpp call s:format_template()
-
-
-"" ctags configuration
-let s:ctags_generate_job = -1
-function! s:ctags_generate_on_output(job_id, data, event)
-	echo a:data
-endfunction()
-
-function! s:ctags_generate_on_exit(job_id, data, event)
-	let s:ctags_generate_job = -1
-	if (a:data == 0)
-		echo "ctags generated"
-	else
-		echo "ERROR: ctags not generated")
-	endif
-endfunction
-
-function! s:ctags_generate()
-	if s:ctags_generate_job != -1
-		echo 'ctags are already being generated'
-		return
-	endif
-
-	let cmd = 'ctags -R --c++-kinds=+p --fields=+iaS --extra=+q ' . t:project_dir
-	let ctags_generate_options= {
-		\'on_stdout': function('s:ctags_generate_on_output'),
-		\'on_stderr': function('s:ctags_generate_on_output'),
-		\'on_exit'  : function('s:ctags_generate_on_exit'),
-		\'detach'   : 1
-	\}
-
-	let s:ctags_generate_job = jobstart(cmd, ctags_generate_options)
-endfunction
-
-function! s:ctags_generate_cancel()
-	if s:ctags_generate_job != -1
-		jobstop(s:ctags_generate_job)
-	endif
-endfunction
-
-command! GenerateCTags :call s:ctags_generate()
-command! CancelCTagsJob :call s:ctags_generate_cancel()
 
 
 "" Project configuration
-" initialised in s:initialise_tab_variables
-let t:project_dir=""
-
 function! s:OpenProjectFunc(path)
 	let t:project_dir = a:path
 	let t:compile_cmd_cache = t:project_dir . '/' . t:compile_script
 endfunction
 command! -nargs=1 -complete=dir OpenProject call s:OpenProjectFunc(<f-args>)
 
-"" Project compilation
-" initialised in s:initialise_tab_variables
-let t:compile_job=0
-let t:compile_script=""
-let t:compile_cmd_cache=""
 
+"" Project searching
+let g:project_search_job = -1
+let g:project_search_goto_first = 0
+
+function! s:project_search_on_output(job_id, data, event)
+	cadde a:data
+	redraw!
+
+	if g:project_search_goto_first == 1
+		execute "cc"
+		let g:project_search_goto_first = 0
+	endif
+endfunction
+
+function! s:project_search_on_exit(job_id, data, event)
+	let g:project_search_job = -1
+endfunction
+
+function! s:project_search(term, folder)
+	if g:project_search_job != -1
+		echo "project search in progress"
+		return
+	endif
+
+	call setqflist([])
+
+	let search_opts = {
+		\'on_stdout': function('s:project_search_on_output'),
+		\'on_stderr': function('s:project_search_on_output'),
+		\'on_exit'  : function('s:project_search_on_exit')
+	\}
+
+	let g:project_search_goto_first = 1
+	let g:project_search_job = jobstart('ag --vimgrep "'.a:term.'" '.a:folder, search_opts)
+
+	execute "botright copen"
+endfunction
+
+function! s:project_search_cancel()
+	if g:project_search_job != -1
+		jobstop(g:project_search_job)
+		g:project_search_job = -1
+	endif
+endfunction
+
+command! SearchCancel :call s:project_search_cancel()
+command! -nargs=1 Search :call s:project_search(<q-args>, t:project_dir)
+command! -nargs=1 SearchCWD :call s:project_search(<q-args>, getcwd())
+
+
+"" Project compilation
 function! s:compile_on_output(job_id, data, event)
 	cadde a:data
 endfunction
@@ -526,9 +532,6 @@ function! s:set_comment_characters(line, start, end)
 	let b:comment_selection_start = a:start
 	let b:comment_selection_end = a:end
 endfunction
-
-au FileType vim call s:set_comment_characters('" ', '', '')
-au FileType cpp call s:set_comment_characters('\/\/', '\/*', '*\/')
 
 function! s:insert_comment_line(line_num, line)
 	if match(a:line, '\s*'.b:comment_line.'.*') == -1
@@ -683,19 +686,71 @@ map <leader>bc :Bclose<CR>
 " NOTE(jesper): HACK: when creating a new tab it seems the tab scoped variables
 " defined in this init.vim script aren't initialised for the new tab, so we
 " need to it ourselves
-function! s:init_tab_variables()
-	echo "initialising tab variables"
-
-	let t:project_dir    = getcwd()
-	let t:compile_job    = -1
-	let t:compile_script = 'build.sh'
-
-	if has('win32')
-		let t:compile_script = 'build.bat'
-	endif
-
-	let t:compile_cmd_cache = t:project_dir . '/' . t:compile_script
+let g:creating_tab = 0
+function! s:init_tab_variables_pre()
+	let g:creating_tab = 1
 endfunction
 
-au VimEnter,TabNew * :call s:init_tab_variables()
+function! s:init_tab_variables()
+	if g:creating_tab == 1
+		echo "initialising tab variables"
+
+		let t:project_dir    = getcwd()
+		let t:compile_job    = -1
+		let t:compile_script = 'build.sh'
+
+		if has('win32')
+			let t:compile_script = 'build.bat'
+		endif
+
+		let t:compile_cmd_cache = t:project_dir . '/' . t:compile_script
+
+		let g:creating_tab = 0
+	endif
+endfunction
+
+"==============================================================================
+"= h) Autocmd groups
+"==============================================================================
+augroup vim-on-save
+	autocmd!
+
+	if g:strip_whitespace_on_save == 1
+		autocmd BufWritePre * :StripWhitespace
+	endif
+augroup end
+
+augroup init-tab-variables
+	autocmd!
+	autocmd VimEnter,TabNew   * :call s:init_tab_variables_pre()
+	autocmd VimEnter,TabEnter * :call s:init_tab_variables()
+augroup end
+
+augroup vim-resize-windows
+	autocmd!
+	autocmd VimResized * :wincmd =
+augroup end
+
+augroup restore-cursor-pos
+	autocmd!
+	autocmd BufReadPost * call s:restore_cursor_position()
+	autocmd FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+augroup end
+
+augroup custom-highlights
+	autocmd!
+	autocmd BufRead,BufNewFile * call s:custom_syntax()
+augroup end
+
+augroup auto-file-templates
+	autocmd!
+	autocmd BufNewFile *.c,*.cpp call s:format_template('c.vim')
+	autocmd BufNewFile *.h,*.hpp call s:format_template('h.vim')
+augroup end
+
+augroup filetype-comment-style
+	autocmd!
+	autocmd FileType vim call s:set_comment_characters('" ', '', '')
+	autocmd FileType cpp call s:set_comment_characters('\/\/', '\/*', '*\/')
+augroup end
 

@@ -1,62 +1,13 @@
-### Vim ###
-# swap
-[._]*.s[a-w][a-z]
-[._]s[a-w][a-z]
+# (neo)vim
+neovim/local.vim
 neovim/plugged
-# session
-Session.vim
-# temporary
-.netrwhist
-*~
-# auto-generated tag files
-tags
+neovim/.netrwhist
 
-
-### Emacs ###
-# -*- mode: gitignore; -*-
-emacs/ido.last
-emacs/projectile-bookmarks.eld
-emacs/projectile.cache
-*~
-\#*\#
+# emacs
 emacs/.emacs.desktop
-emacs/.emacs.desktop.lock
-emacs/session*
-*.elc
-auto-save-list
-tramp
-.\#*
-emacs/elpa
+emacs/auto-save-list/
+emacs/elpa/
+emacs/ido.last
+emacs/projectile.cache
+emacs/projectile-bookmarks.eld
 
-# Org-mode
-.org-id-locations
-*_archive
-
-# flymake-mode
-*_flymake.*
-
-# eshell files
-/eshell/history
-/eshell/lastdir
-
-# elpa packages
-/elpa/
-
-# reftex files
-*.rel
-
-# AUCTeX auto folder
-/auto/
-
-# cask packages
-.cask/
-dist/
-
-# Flycheck
-flycheck_*.el
-
-# server auth directory
-/server/
-
-# projectiles files
-.projectile
