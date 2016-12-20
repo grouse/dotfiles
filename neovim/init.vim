@@ -53,9 +53,7 @@ call plug#begin("~/.config/nvim/plugged")
 	Plug 'machakann/vim-highlightedyank'
 call plug#end()
 
-if filereadable('~/.config/nvim/local.vim')
-	source '~/.config/nvim/local.vim'
-endif
+source ~/.config/nvim/local.vim
 
 "==============================================================================
 "= b) Appearance
@@ -322,8 +320,8 @@ map <silent> <F4>h :FSLeft<CR>
 "==============================================================================
 "= g) Extended behaviour
 "==============================================================================
-if !exists('g:strip_whitespace_on_save')
-	let g:strip_whitespace_on_save = 1
+if !exists("strip_whitespace_on_save")
+	let strip_whitespace_on_save = 1
 endif
 
 function! s:warn(msg)
@@ -714,7 +712,7 @@ endfunction
 augroup vim-on-save
 	autocmd!
 
-	if g:strip_whitespace_on_save == 1
+	if strip_whitespace_on_save == 1
 		autocmd BufWritePre * :StripWhitespace
 	endif
 augroup end
