@@ -281,6 +281,9 @@ if has("win32")
 	map <C-a> :CtrlP <CR>
 	map <C-p> :CtrlP <C-r>=t:project_dir<CR><CR>
 else
+	" change the fzf command to follow symlinks (-L)
+	let $FZF_DEFAULT_COMMAND="find -L * -path '*/\.*' -prune -o -type f -print -o -type l -print 2> /dev/null"
+
 	function! s:project_dir()
 		return t:project_dir
 	endfunction
