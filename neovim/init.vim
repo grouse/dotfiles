@@ -53,9 +53,7 @@ call plug#begin("~/.config/nvim/plugged")
 	Plug 'machakann/vim-highlightedyank'
 call plug#end()
 
-if filereadable('~/.config/nvim/local.vim')
-	source '~/.config/nvim/local.vim'
-endif
+source ~/.config/nvim/local.vim
 
 "==============================================================================
 "= b) Appearance
@@ -284,6 +282,9 @@ if has("win32")
 	map <C-a> :CtrlP <CR>
 	map <C-p> :CtrlP <C-r>=t:project_dir<CR><CR>
 else
+	" change the fzf command to follow symlinks (-L)
+	let $FZF_DEFAULT_COMMAND="find -L * -path '*/\.*' -prune -o -type f -print -o -type l -print 2> /dev/null"
+
 	function! s:project_dir()
 		return t:project_dir
 	endfunction
@@ -323,8 +324,8 @@ map <silent> <F4>h :FSLeft<CR>
 "==============================================================================
 "= g) Extended behaviour
 "==============================================================================
-if !exists('g:strip_whitespace_on_save')
-	let g:strip_whitespace_on_save = 1
+if !exists("strip_whitespace_on_save")
+	let strip_whitespace_on_save = 1
 endif
 
 function! s:warn(msg)
@@ -715,7 +716,7 @@ endfunction
 augroup vim-on-save
 	autocmd!
 
-	if g:strip_whitespace_on_save == 1
+	if strip_whitespace_on_save == 1
 		autocmd BufWritePre * :StripWhitespace
 	endif
 augroup end
