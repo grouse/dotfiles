@@ -135,17 +135,17 @@ call s:hl("HighlightedyankRegion", s:cyan, s:none, s:none)
 
 "" tools
 " diff highlighting
-call s:hl("DiffAdd",     s:green,  s:none, s:none)
-call s:hl("DiffChange",  s:yellow, s:none, s:none)
-call s:hl("DiffDelete",  s:red,    s:none, s:none)
+call s:hl("DiffAdd",     s:green, s:none, s:none)
+call s:hl("DiffChange",  s:yellow, s:none,  s:none)
+call s:hl("DiffDelete",  s:red, s:none,   s:none)
+call s:hl("DiffText",    s:blue,  s:none, s:none)
 
-call s:hl("DiffAdded",   s:green, s:none, s:none)
-call s:hl("DiffRemoved", s:red,   s:none, s:none)
+" call s:hl("DiffAdded",   s:base02, s:green, s:none)
+" call s:hl("DiffRemoved", s:base02, s:red,   s:none)
 
-call s:hl("DiffFile",    s:none, s:none, s:none)
-call s:hl("DiffNewFile", s:none, s:none, s:none)
-call s:hl("DiffLine",    s:none,  s:none, s:none)
-call s:hl("DiffText",    s:none,   s:none, s:none)
+" call s:hl("DiffFile",    s:none, s:none, s:none)
+" call s:hl("DiffNewFile", s:none, s:none, s:none)
+" call s:hl("DiffLine",    s:none,  s:none, s:none)
 
 " git highlighting
 call s:hl("gitCommitOverflow", s:none, s:none, s:none)
