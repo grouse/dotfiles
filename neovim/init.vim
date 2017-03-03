@@ -719,6 +719,8 @@ augroup end
 augroup filetype-comment-style
 	autocmd!
 	autocmd FileType vim    call s:set_comment_characters('" ')
+
+	autocmd FileType c      call s:set_comment_characters('\/\/')
 	autocmd FileType cpp    call s:set_comment_characters('\/\/')
 	autocmd FileType objcpp call s:set_comment_characters('\/\/')
 augroup end
