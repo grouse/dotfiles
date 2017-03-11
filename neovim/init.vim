@@ -302,8 +302,9 @@ else
 
 	map <C-p> :call fzf#run({
 	\   'dir': <sid>project_dir(),
-	\	'sink': 'e'
-	\	})<CR>
+	\   'sink': 'e',
+	\   'down': '30%'
+	\ })<CR>
 
 	map <A-p> :call fzf#run({
 	\   'source':  reverse(<sid>buflist()),
@@ -460,7 +461,7 @@ function! s:project_search(term, folder)
 	\}
 
 	let g:project_search_goto_first = 1
-	let g:project_search_job = jobstart('ag --vimgrep "'.a:term.'" '.a:folder, search_opts)
+	let g:project_search_job = jobstart('ag --vimgrep -s "'.a:term.'" '.a:folder, search_opts)
 
 	execute "botright copen"
 endfunction
@@ -525,13 +526,9 @@ map <leader>c :Compile <C-r>=t:compile_cmd_cache<CR>
 
 "" code commenting functions and motions
 let b:comment_line = '\/\/'
-let b:comment_selection_start = '\/*'
-let b:comment_selection_end   = '*\/'
 
-function! s:set_comment_characters(line, start, end)
-	let b:comment_line = a:line
-	let b:comment_selection_start = a:start
-	let b:comment_selection_end = a:end
+function! s:set_comment_characters(cline)
+	let b:comment_line = a:cline
 endfunction
 
 function! s:insert_comment_line(line_num, line)
@@ -546,21 +543,6 @@ function! s:remove_comment_line(line_num, line)
 		let line = substitute(a:line, '\(\s*\)'.b:comment_line.'\(.*\)', '\1\2', "M")
 		call setline(a:line_num, line)
 	endif
-endfunction
-
-function! s:insert_comment_selection(start, end, line_num)
-	let line = getline(a:line_num)
-
-	if line == ''
-		return
-	endif
-
-	let [num_left, num_middle, num_right] = [a:start, a:end - a:start, len(line) - a:end]
-	let line = substitute(line,
-				\'\(.\{'.num_left.'}\)\(.\{'.num_middle.'}\)\(.\{'.num_right.'}\)',
-				\'\1'.b:comment_selection_start.' \2 '.b:comment_selection_end.'\3', "M")
-
-	call setline(a:line_num, line)
 endfunction
 
 function! s:insert_comment(type, ...)
@@ -599,16 +581,6 @@ function! s:insert_comment(type, ...)
 					call s:insert_comment_line(line_num, line)
 				endif
 			endfor
-		elseif b:comment_selection_start != ''
-			echo "not currently supported"
-		else
-			echo "can't comment current filetype"
-		endif
-	else
-		if b:comment_selection_start != ''
-			call s:insert_comment_selection((getpos("'[")[2] - 1), (getpos("']")[2] + 1), line("'["))
-		elseif b:comment_line != ''
-			call s:insert_comment_line(line("'["))
 		else
 			echo "can't comment current filetype"
 		endif
@@ -618,10 +590,8 @@ function! s:insert_comment(type, ...)
 	let @@         = register_save
 endfunction
 
-" NOTE(jesper): probably not the best keybinds for this, but it'll do for now
-nmap <silent> <leader>/ :<C-U>set opfunc=<SID>insert_comment<CR>g@
-nmap <silent> <leader>// :<C-U>set opfunc=<SID>insert_comment<Bar>exe 'norm! 'v:count1.'g@_'<CR>
-vmap <silent> <leader>/  :<C-U>call <SID>insert_comment(visualmode(), 1)<CR>
+nmap <silent> <A-/> :<C-U>set opfunc=<SID>insert_comment<Bar>exe 'norm! 'v:count1.'g@_'<CR>
+vmap <silent> <A-/>  :<C-U>call <SID>insert_comment(visualmode(), 1)<CR>
 
 
 "" buffer management configuration
@@ -694,8 +664,6 @@ endfunction
 
 function! s:init_tab_variables()
 	if g:creating_tab == 1
-		echo "initialising tab variables"
-
 		let t:project_dir    = getcwd()
 		let t:compile_job    = -1
 		let t:compile_script = 'build.sh'
@@ -751,7 +719,10 @@ augroup end
 
 augroup filetype-comment-style
 	autocmd!
-	autocmd FileType vim call s:set_comment_characters('" ', '', '')
-	autocmd FileType cpp call s:set_comment_characters('\/\/', '\/*', '*\/')
+	autocmd FileType vim    call s:set_comment_characters('" ')
+
+	autocmd FileType c      call s:set_comment_characters('\/\/')
+	autocmd FileType cpp    call s:set_comment_characters('\/\/')
+	autocmd FileType objcpp call s:set_comment_characters('\/\/')
 augroup end
 
