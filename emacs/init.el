@@ -33,7 +33,7 @@
 		(other-window -1))
 	(progn
 	  (call-interactively 'recompile))))
-		
+
 (defun minibuffer-keyboard-quit ()
   "Abort recursive edit.
  In Delete Selection mode, if the mark is active, just deactivate it;
@@ -48,12 +48,9 @@
   (ff-get-other-file 'other-window))
 
 ;; colour scheme settings
-(require 'color-theme)
-(require 'color-theme-wombat)
-(with-eval-after-load "color-theme"
-  (color-theme-initialize)
-  (load-theme 'wombat t t)
-  (enable-theme 'wombat))
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+(load-theme 'grouse t)
+
 
 ;; compilatation configuration
 (require 'compile)
@@ -61,13 +58,6 @@
   (global-set-key (kbd "<f5>") 'my-compile)
   (global-set-key (kbd "M-n") 'next-error)
   (global-set-key (kbd "M-p") 'previous-error))
-
-;; powerline configuration
-(use-package powerline
-  :ensure powerline
-  :init
-  (progn
-    (powerline-default-theme)))
 
 ;; smart tabs configuration - indents with tab, aligns with spaces
 (use-package smart-tabs-mode
@@ -102,7 +92,7 @@
   :init
   (progn
     (smooth-scrolling-mode 1)))
-	
+
 
 ;; evil mode configuration
 (use-package evil
@@ -133,7 +123,7 @@
 (global-set-key (kbd "C-S-s") 'split-window-vertically)
 
 (global-set-key (kbd "<f4>") 'ff-get-other-file)
-(global-set-key (kbd "S-<f4>") 'ff-get-other-file-other-window) 
+(global-set-key (kbd "S-<f4>") 'ff-get-other-file-other-window)
 
 ;; give me back my escape key
 (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
@@ -163,12 +153,13 @@
 (menu-bar-mode 0)
 (scroll-bar-mode 0)
 
-(custom-set-variables '(inhibit-startup-screen t))
-
 (defvar cpp-other-file-alist
-  '(("\\.cpp\\'" (".hpp" ".h")) 
+  '(("\\.cpp\\'" (".hpp" ".h"))
     ("\\.c\\'" (".h"))
     ("\\.h\\'" (".c" ".cpp"))))
+
+(setq tab-width 4)
+(defvaralias 'c-basic-offset 'tab-width)
 
 (setq
  scroll-step 1
@@ -176,11 +167,7 @@
  mouse-wheel-scroll-amount '(2 ((shift) . 2) ((control) . nil))
  mouse-wheel-progressive-speed nil
 
- ff-other-file-alist 'cpp-other-file-alist
-
- tab-width 4
- c-default-style "linux"
- c-basic-offset 4)
+ ff-other-file-alist 'cpp-other-file-alist)
 
 ;; add custom words to highlight
 (mapc (lambda (mode)
@@ -194,3 +181,9 @@
 (defadvice split-window (after move-point-to-new-window activate)
   "Moves the cursor to the newly created window after splitting."
   (other-window 1))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
