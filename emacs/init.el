@@ -47,10 +47,19 @@
 (defun ff-get-other-file-other-window ()
   (ff-get-other-file 'other-window))
 
-;; colour scheme settings
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-(load-theme 'grouse t)
+;; custom faces and colours
+(make-face 'font-lock-note-face)
+(make-face 'font-lock-todo-face)
 
+;; add custom words to highlight
+(setq fixme-modes '(c++-mode c-mode emacs-lisp-mode))
+
+(mapc (lambda (mode)
+       (font-lock-add-keywords
+        mode
+        '(("\\<\\(TODO\\)"  1 'font-lock-todo-face  t)
+          ("\\<\\(note\\)" 1 'font-lock-note-face t))))
+ '(c++-mode c-mode emacs-lisp-mode))
 
 ;; compilatation configuration
 (require 'compile)
@@ -58,6 +67,11 @@
   (global-set-key (kbd "<f5>") 'my-compile)
   (global-set-key (kbd "M-n") 'next-error)
   (global-set-key (kbd "M-p") 'previous-error))
+
+;; colour scheme settings
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+(load-theme 'grouse t)
+
 
 ;; smart tabs configuration - indents with tab, aligns with spaces
 (use-package smart-tabs-mode
@@ -93,7 +107,6 @@
   (progn
     (smooth-scrolling-mode 1)))
 
-
 ;; evil mode configuration
 (use-package evil
   :ensure evil
@@ -110,6 +123,8 @@
     ;; to play nicely with this.
     (define-key evil-motion-state-map (kbd "C-f") 'isearch-forward)
     (define-key evil-insert-state-map (kbd "C-f") 'isearch-forward)
+
+    (define-key evil-motion-state-map (kbd ";") 'evil-ex)
 
     (define-key isearch-mode-map (kbd "C-n") 'isearch-repeat-forward)
     (define-key isearch-mode-map (kbd "C-p") 'isearch-repeat-backward)
@@ -139,16 +154,10 @@
 (define-key package-menu-mode-map (kbd "C-w") 'other-window)
 (define-key package-menu-mode-map (kbd "C-f") 'isearch-forward)
 
-;; custom faces and colours
-(make-face 'font-lock-fixme-face)
-(modify-face 'font-lock-fixme-face "#ff0000" nil nil t nil t nil nil)
-
-(make-face 'font-lock-todo-face)
-(modify-face 'font-lock-todo-face  "#00aa00" nil nil t nil t nil nil)
-
-(set-face-attribute 'region nil :background "#3a444d")
 
 ;; behaviour settings
+(setq ring-bell-function 'ignore)
+
 (tool-bar-mode 0)
 (menu-bar-mode 0)
 (scroll-bar-mode 0)
@@ -158,8 +167,17 @@
     ("\\.c\\'" (".h"))
     ("\\.h\\'" (".c" ".cpp"))))
 
-(setq tab-width 4)
-(defvaralias 'c-basic-offset 'tab-width)
+(defun my-tab-settings ()
+ (setq
+  tab-width 4
+  c-default-style "linux"
+  c-basic-offset 'tab-width))
+
+(add-hook 'text-mode-hook 'my-tab-settings)
+(add-hook 'prog-mode-hook 'my-tab-settings)
+
+(setq whitespace-style '(tabs tab-mark))
+(global-whitespace-mode t)
 
 (setq
  scroll-step 1
@@ -169,13 +187,6 @@
 
  ff-other-file-alist 'cpp-other-file-alist)
 
-;; add custom words to highlight
-(mapc (lambda (mode)
-	(font-lock-add-keywords
-	 mode
-	 '(("\\<\\(TODO\\):"  1 'font-lock-todo-face  t)
-	   ("\\<\\(FIXME\\):" 1 'font-lock-fixme-face t))))
-      '(c++-mode c-mode emacs-lisp-mode))
 
 ;; make creating a new split switch the cursor to the new split
 (defadvice split-window (after move-point-to-new-window activate)

@@ -52,6 +52,9 @@
  `(font-lock-variable-name-face        ((t (:foreground ,grouse-base05))))
  `(font-lock-warning-face              ((t (:foreground ,grouse-base05))))
 
+ `(font-lock-todo-face                 ((t (:foreground ,grouse-red))))
+ `(font-lock-fixme-face                ((t (:foreground ,grouse-yellow))))
+
 
  `(diff-added                          ((t (:foreground ,grouse-green))))
  `(diff-changed                        ((t (:foreground ,grouse-yellow))))
