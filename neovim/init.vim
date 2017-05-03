@@ -104,18 +104,18 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.a
 set wildignore+=*\\tmp\\*,*.obj,*.swp,*.exe,*.lib,*.dll
 
 "" errorformats
-" generic
-set errorformat=%f:%l:%c:%m
-" gcc/clang
-set errorformat+=%f:%l:%c:\ %trror:%m
-set errorformat+=%f:%l:%c:\ fatal\ %trror:%m
-set errorformat+=%f:%l:%c:\ %tarning:%m
-set errorformat+=%f:%l:%m
-" msvc
-set errorformat+=%f(%l):\ %trror\ %m
-set errorformat+=%f(%l):\ %tarning\ %m
-set errorformat+=%f(%l)\ :\ %tarning\ %m
-set errorformat+=%f(%l):\ fatal\ %trror\ %m
+if has("win32")
+	" msvc
+	set errorformat=%f(%l):\ %trror\ %m
+	set errorformat+=%f(%l):\ %tarning\ %m
+	set errorformat+=%f(%l)\ :\ %tarning\ %m
+else
+	" gcc/clang
+	set errorformat=%f:%l:%c:\ %trror:%m
+	set errorformat+=%f:%l:%c:\ fatal\ %trror:%m
+	set errorformat+=%f:%l:%c:\ %tarning:%m
+	set errorformat+=%f:%l:%m
+endif
 
 
 "==============================================================================
