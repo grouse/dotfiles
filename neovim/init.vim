@@ -681,6 +681,10 @@ endfunction
 "==============================================================================
 "= h) Autocmd groups
 "==============================================================================
+augroup syntax-highlight
+	autocmd BufNewFile,BufRead *.glsl set filetype=glsl
+augroup end
+
 augroup vim-on-save
 	autocmd!
 
