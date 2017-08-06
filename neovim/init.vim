@@ -82,6 +82,9 @@ let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 set nobackup nowritebackup noswapfile autoread
 set hidden " Allow buffer switching without saving
 
+set mouse=a " why do I only need to enable this on my arch machien!??!?!?
+
+
 " enable inccommand for incremental substitute, nvim you glorious bastard
 set inccommand=split
 
