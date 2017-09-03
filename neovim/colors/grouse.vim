@@ -63,9 +63,9 @@ call s:hl("VertSplit",    s:black, s:black, s:none)
 call s:hl("Visual",       s:none, s:none, s:inverse)
 call s:hl("VisualNOS",    s:none, s:none, s:inverse)
 
-call s:hl("ExtraWhitespace", s:none, s:red, s:none)
-call s:hl("NonText",      s:base03, s:none, s:none)
-call s:hl("SpecialKey",   s:base03, s:none, s:none)
+call s:hl("ExtraWhitespace", s:none,   s:none, s:none)
+call s:hl("NonText",         s:base03, s:none, s:none)
+call s:hl("SpecialKey",      s:base03, s:none, s:none)
 
 call s:hl("Bold",         s:none, s:none, s:bold)
 call s:hl("Italic",       s:none, s:none, s:italic)
