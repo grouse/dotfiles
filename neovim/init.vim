@@ -55,6 +55,14 @@ call plug#end()
 
 source ~/.config/nvim/local.vim
 
+if !exists("strip_whitespace_on_save")
+    let strip_whitespace_on_save = 1
+endif
+
+if !exists("spaces_for_tabs")
+    let spaces_for_tabs = 0
+endif
+
 "==============================================================================
 "= b) Appearance
 "==============================================================================
@@ -335,14 +343,6 @@ map <silent> <F4>h :FSLeft<CR>
 "==============================================================================
 "= g) Extended behaviour
 "==============================================================================
-if !exists("strip_whitespace_on_save")
-    let strip_whitespace_on_save = 1
-endif
-
-if !exists("spaces_for_tabs")
-    let spaces_for_tabs = 0
-endif
-
 function! s:warn(msg)
   echohl ErrorMsg
   echomsg a:msg
