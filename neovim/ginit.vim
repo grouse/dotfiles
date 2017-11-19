@@ -1,1 +1,1 @@
-Guifont DejaVu Sans Mono for Powerline Book:h11
+Guifont Ubuntu Mono:h11
