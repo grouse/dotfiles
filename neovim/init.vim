@@ -38,9 +38,12 @@ call plug#begin("~/.config/nvim/plugged")
     Plug 'tpope/vim-fugitive'
 
     "" navigation related plugins
-    Plug 'ctrlpvim/ctrlp.vim'
     Plug 'derekwyatt/vim-fswitch'
+if has("win32")
+    Plug 'ctrlpvim/ctrlp.vim'
+else
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+endif
 
     "" editing related plugins
     Plug 'vim-scripts/Smart-Tabs'
