@@ -439,8 +439,10 @@ endfunction()
 
 "" Project configuration
 function! s:OpenProjectFunc(path)
-    let t:project_dir = a:path
+    let t:project_dir = fnamemodify(a:path, ':p')
     let t:compile_cmd_cache = t:project_dir . '/' . t:compile_script
+
+    cd `=t:project_dir`
 endfunction
 command! -nargs=1 -complete=dir OpenProject call s:OpenProjectFunc(<f-args>)
 
@@ -681,7 +683,7 @@ endfunction
 
 function! s:init_tab_variables()
     if g:creating_tab == 1
-        let t:project_dir    = getcwd()
+        let t:project_dir    = fnamemodify(getcwd(), ':p')
         let t:compile_job    = -1
         let t:compile_script = 'build.sh'
 
@@ -693,9 +695,10 @@ function! s:init_tab_variables()
 
         let g:creating_tab = 0
     endif
-endfunction
 
-"==============================================================================
+    cd `=t:project_dir`
+    pwd
+endfunction
 "= h) Autocmd groups
 "==============================================================================
 augroup syntax-highlight
@@ -715,6 +718,7 @@ augroup init-tab-variables
     autocmd VimEnter,TabNew   * :call s:init_tab_variables_pre()
     autocmd VimEnter,TabEnter * :call s:init_tab_variables()
 augroup end
+
 
 augroup vim-resize-windows
     autocmd!
