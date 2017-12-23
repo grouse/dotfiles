@@ -49,6 +49,7 @@ endif
     Plug 'vim-scripts/Smart-Tabs'
     Plug 'junegunn/vim-easy-align'
     Plug 'ntpeters/vim-better-whitespace'
+    Plug 'tpope/vim-commentary'
 
     "" ui/look and feel related plugins
     Plug 'equalsraf/neovim-gui-shim'
@@ -543,76 +544,6 @@ command! CompileCancel    :call s:compile_cancel()
 map <leader>c :Compile <C-r>=t:compile_cmd_cache<CR>
 
 
-"" code commenting functions and motions
-let b:comment_line = '\/\/'
-
-function! s:set_comment_characters(cline)
-    let b:comment_line = a:cline
-endfunction
-
-function! s:insert_comment_line(line_num, line)
-    if match(a:line, '\s*'.b:comment_line.'.*') == -1
-        let line = substitute(a:line, '\(\s*\)\(.*\)', '\1'.b:comment_line.'\2', "M")
-        call setline(a:line_num, line)
-    endif
-endfunction
-
-function! s:remove_comment_line(line_num, line)
-    if match(a:line, '\s*'.b:comment_line.'.*') != -1
-        let line = substitute(a:line, '\(\s*\)'.b:comment_line.'\(.*\)', '\1\2', "M")
-        call setline(a:line_num, line)
-    endif
-endfunction
-
-function! s:insert_comment(type, ...)
-    let selection_save = &selection
-    let register_save  = @@
-
-    let &selection = "inclusive"
-
-    " TODO(jesper): want to look into making the comment_line be column aligned when several lines
-    " are commented out
-    if a:0 || a:type == 'line'
-        if a:0
-            let [line_start, line_end] = [getpos("'<")[1], getpos("'>")[1]]
-        else
-            let [line_start, line_end] = [line("'['"), line("']")]
-        endif
-
-        if b:comment_line != ''
-            let start_line = getline(line_start)
-
-            let uncomment = 0
-            if match(start_line, '\s*'.b:comment_line.'.*') != -1
-                let uncomment = 1
-            endif
-
-            for line_num in range(line_start, line_end)
-                let line = getline(line_num)
-
-                if line == ''
-                    continue
-                endif
-
-                if uncomment == 1
-                    call s:remove_comment_line(line_num, line)
-                else
-                    call s:insert_comment_line(line_num, line)
-                endif
-            endfor
-        else
-            echo "can't comment current filetype"
-        endif
-    endif
-
-    let &selection = selection_save
-    let @@         = register_save
-endfunction
-
-nmap <silent> <A-/> :<C-U>set opfunc=<SID>insert_comment<Bar>exe 'norm! 'v:count1.'g@_'<CR>
-vmap <silent> <A-/>  :<C-U>call <SID>insert_comment(visualmode(), 1)<CR>
-
-
 "" buffer management configuration
 " close the current buffer and keep the window layout
 " http://vim.wikia.com/wiki/Deleting_a_buffer_without_closing_the_window
@@ -740,14 +671,5 @@ augroup auto-file-templates
     autocmd!
     autocmd BufNewFile *.c,*.cpp call s:format_template('c.vim')
     autocmd BufNewFile *.h,*.hpp call s:format_template('h.vim')
-augroup end
-
-augroup filetype-comment-style
-    autocmd!
-    autocmd FileType vim    call s:set_comment_characters('" ')
-
-    autocmd FileType c      call s:set_comment_characters('\/\/')
-    autocmd FileType cpp    call s:set_comment_characters('\/\/')
-    autocmd FileType objcpp call s:set_comment_characters('\/\/')
 augroup end
 
