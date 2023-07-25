@@ -1,3 +1,14 @@
+require("mini.align").setup()
+require("mini.comment").setup()
+require("mini.jump").setup()
+require("mini.move").setup()
+
+if not vim.g.vscode then
+    require("mini.animate").setup()
+    require("mini.statusline").setup()
+    require("mini.tabline").setup()
+end
+
 vim.opt.clipboard='unnamedplus'
 
 vim.opt.ignorecase=true
@@ -14,11 +25,11 @@ if vim.g.vscode then
 	vim.opt.inccommand="nosplit"
 end
 
-vim.keymap.set('v', '<', '<gv')
-vim.keymap.set('v', '>', '>gv')
-vim.keymap.set('n', 'n', 'nzz')
-vim.keymap.set('n', 'N', 'Nzz')
-vim.keymap.set('n', "<CR>", ":nohlsearch<CR>")
+vim.keymap.set('v', '<', '<silent><gv')
+vim.keymap.set('v', '>', '<silent>>gv')
+vim.keymap.set('n', 'n', '<silent>nzz')
+vim.keymap.set('n', 'N', '<silent>Nzz')
+vim.keymap.set('n', "<CR>", "<silent>:nohlsearch<CR>")
 
 vim.cmd.highlight({"HighlightYank", "guifg=#5fb3b3"})
 
