@@ -1,1 +1,0 @@
-syn keyword cppModifier OVERRIDE
