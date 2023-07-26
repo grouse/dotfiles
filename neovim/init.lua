@@ -8,6 +8,20 @@ require("mini.jump").setup()
 require("mini.move").setup()
 
 if not vim.g.vscode then
+    require("toggleterm").setup({
+        start_in_insert = false,
+    })
+
+    require("vstask").setup({
+        terminal = "toggleterm",
+        term_opts = {
+            current = {
+                direction = "horizontal",
+                size = "15"
+            }
+        }
+    })
+
     require("kanagawa").setup()
     vim.cmd.colorscheme("kanagawa-wave")
 
@@ -15,6 +29,7 @@ if not vim.g.vscode then
 
     require("telescope").setup()
     require("telescope").load_extension("fzy_native")
+    require("telescope").load_extension("vstask")
 
     if not vim.g.win32 then
         require("mini.animate").setup()
@@ -56,6 +71,8 @@ vim.keymap.set('v', '>', '>gv')
 vim.keymap.set('n', 'n', 'nzz')
 vim.keymap.set('n', 'N', 'Nzz')
 vim.keymap.set('n', "<CR>", ":nohlsearch<CR>")
+vim.keymap.set("n", "<C-q>", ":bd<CR>")
+vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
 
 if not vim.g.vscode then
     local telescope = require("telescope.builtin")
