@@ -2,6 +2,8 @@
 neovim/local.vim
 neovim/plugged
 neovim/.netrwhist
+neovim/parser
+neovim/parser-info
 
 # emacs
 emacs/.emacs.desktop
