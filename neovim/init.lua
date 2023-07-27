@@ -55,35 +55,35 @@ if not vim.g.vscode then
 
     require("solarized").setup({
         styles = {
-            parameters = { italic = false     },
-            keywords   = { bold   = false     },
-            variables  = { fg     = "#d5c4a1" },
+            parameters = { italic = false },
+            keywords   = { bold   = false },
         },
         colors = {
-            base03 = '#1B2E28', -- background tone dark (main)
-            base0 = '#D5C4A1', -- content tone (foreground)
-            base01 = '#8ec07c', -- content tone (comment)
-            blue = '#d5c4a1',
-            violet = '#ceb069',
-            base02 = '#254041', -- background tone (highlight/menu/LineNr)
-            base1 = '#d36e2a', -- content tone (statusline/tabline)
-            cyan = '#689d6a',
+            base0  = '#D5C4A1', -- content tone (foreground)
+            base1  = '#d36e2a', -- content tone (statusline/tabline)
+            base2  = '#eee8d5', -- background tone light (highlight)
+            base3  = '#fdf6e3', -- background tone lighter (main)
 
-            base2 = '#eee8d5', -- background tone light (highlight)
-            base04 = '#00222b', -- background tone darker (column/nvim-tree)
-            base3 = '#fdf6e3', -- background tone lighter (main)
             base00 = '#657b83', -- content tone (winseparator)
+            base01 = '#8ec07c', -- content tone (comment)
+            base02 = '#254041', -- background tone (highlight/menu/LineNr)
+            base03 = '#1B2E28', -- background tone dark (main)
+            base04 = '#00222b', -- background tone darker (column/nvim-tree)
 
-            info = '#ddda30',
+            blue   = '#d5c4a1',
+            violet = '#ceb069',
+            cyan   = '#689d6a',
+
+            info   = '#ddda30',
         },
         highlights = {
             Function     = { fg   = "#ccb486"  },
-            Operator     = { fg   = "#fcedfc", bold = false },
+            Operator     = { fg   = "#fcedfc", },
             Type         = { fg   = "#ceb069"  },
 
             Identifier   = { fg   = "#d5c4a1"  },
 
-            Constant     = { fg   = "#e9e4c6", bold = false },
+            Constant     = { fg   = "#e9e4c6", },
             Number       = { link = "Constant" },
             Boolean      = { link = "Constant" },
             Float        = { link = "Constant" },
