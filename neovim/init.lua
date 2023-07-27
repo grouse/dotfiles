@@ -23,7 +23,7 @@ require("lazy").setup({
     { "echasnovski/mini.statusline", version = "*", enabled = not vim.g.vsode },
     { "echasnovski/mini.tabline",    version = "*", enabled = not vim.g.vsode },
     { 'echasnovski/mini.sessions',   version = '*', enabled = not vim.g.vscode },
- 	{ 'echasnovski/mini.starter',    version = '*', enabled = not vim.g.vscode },
+     { 'echasnovski/mini.starter',    version = '*', enabled = not vim.g.vscode },
 
     { "maxmx03/solarized.nvim", enabled = not vim.g.vscode },
 
@@ -103,6 +103,8 @@ if not vim.g.vscode then
             PreProc      = { link = "Define"   },
             Include      = { link = "Define"   },
             PreCondit    = { link = "Define"   },
+
+            Error = { link = "Ignore" },
         }
     })
 
@@ -138,19 +140,26 @@ end
 vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
 
 vim.opt.clipboard:append{ 'unnamedplus' }
+
 vim.opt.ignorecase=true
 vim.opt.smartcase=true
+vim.opt.gdefault=true
+
 vim.opt.cursorline=true
+vim.opt.showmode=false
+
 vim.opt.inccommand="split"
+
 vim.opt.scrolloff=5
 vim.opt.sidescrolloff=5
+
 vim.opt.expandtab=true
 vim.opt.shiftwidth=4
 vim.opt.softtabstop=0
 vim.opt.tabstop=4
 
 if vim.g.vscode then
-	vim.opt.inccommand="nosplit"
+    vim.opt.inccommand="nosplit"
 end
 
 if not vim.g.vscode then
@@ -162,18 +171,16 @@ if vim.g.neovide then
     vim.g.neovide_cursor_animate_in_insert_mode = false
     vim.g.neovide_cursor_animate_command_line = false
     vim.g.neovide_scroll_animation_length = 0
-
-    vim.keymap.set({"n", "i"}, "<C-s>", ":w<CR>")
 end
 
 
-vim.keymap.set('v', '<', '<gv')
-vim.keymap.set('v', '>', '>gv')
-vim.keymap.set('n', 'n', 'nzz')
-vim.keymap.set('n', 'N', 'Nzz')
-vim.keymap.set('n', "<CR>", ":nohlsearch<CR>")
-vim.keymap.set("n", "<C-q>", ":bd<CR>")
-vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
+vim.keymap.set('v', '<', '<gv', { silent = true })
+vim.keymap.set('v', '>', '>gv', { silent = true })
+vim.keymap.set('n', 'n', 'nzz', { silent = true })
+vim.keymap.set('n', 'N', 'Nzz', { silent = true })
+vim.keymap.set('n', "<CR>", ":nohlsearch<CR>", { silent = true })
+vim.keymap.set("n", "<C-q>", ":bd<CR>", { silent = true })
+vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { silent = true })
 
 if not vim.g.vscode then
     vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
@@ -196,39 +203,38 @@ if not vim.g.vscode then
         end
     end, {})
 
-    vim.keymap.set("n", "<M-b>", ":OverseerRun<CR>", {})
-    vim.keymap.set("n", "<M-j>", ":OverseerToggle bottom<CR>", {})
-    vim.keymap.set("n", "<M-h>", ":OverseerToggle left<CR>", {})
-    vim.keymap.set("n", "<M-l>", ":OverseerToggle right<CR>", {})
-
+    vim.keymap.set("n", "<M-b>", ":OverseerRun<CR>", { silent = true })
+    vim.keymap.set("n", "<M-j>", ":OverseerToggle bottom<CR>", { silent = true })
+    vim.keymap.set("n", "<M-h>", ":OverseerToggle left<CR>", { silent = true })
+    vim.keymap.set("n", "<M-l>", ":OverseerToggle right<CR>", { silent = true })
 end
 
 vim.cmd.highlight({"HighlightYank", "guifg=#5fb3b3"})
 vim.api.nvim_create_autocmd('TextYankPost', {
-  group = vim.api.nvim_create_augroup('highlight_yank', {}),
-  desc = 'Hightlight selection on yank',
-  pattern = '*',
-  callback = function()
-    vim.highlight.on_yank { higroup = 'HighlightYank', timeout = 500 }
-  end,
+    group = vim.api.nvim_create_augroup('highlight_yank', {}),
+    desc = 'Hightlight selection on yank',
+    pattern = '*',
+    callback = function()
+        vim.highlight.on_yank { higroup = 'HighlightYank', timeout = 500 }
+    end,
 })
 
 
 if not vim.g.vscode then
     vim.api.nvim_create_autocmd('LspAttach', {
-      group = vim.api.nvim_create_augroup('UserLspConfig', {}),
-      callback = function(ev)
-        -- Enable completion triggered by <c-x><c-o>
-        vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+        group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+        callback = function(ev)
+            -- Enable completion triggered by <c-x><c-o>
+            vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
-        local opts = { buffer = ev.buf }
-        local telescope = require("telescope.builtin")
-        vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-        vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-        vim.keymap.set('n', 'gd', telescope.lsp_definitions, opts)
-        vim.keymap.set('n', 'gi', telescope.lsp_implementations, opts)
-        vim.keymap.set('n', '<space>D', telescope.lsp_type_definitions, opts)
-        vim.keymap.set('n', 'gr', telescope.lsp_references, opts)
-      end,
+            local opts = { buffer = ev.buf }
+            local telescope = require("telescope.builtin")
+            vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+            vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+            vim.keymap.set('n', 'gd', telescope.lsp_definitions, opts)
+            vim.keymap.set('n', 'gi', telescope.lsp_implementations, opts)
+            vim.keymap.set('n', '<space>D', telescope.lsp_type_definitions, opts)
+            vim.keymap.set('n', 'gr', telescope.lsp_references, opts)
+        end,
     })
 end
