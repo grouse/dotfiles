@@ -25,12 +25,12 @@ require("lazy").setup({
     { 'echasnovski/mini.sessions',   version = '*', enabled = not vim.g.vscode },
  	{ 'echasnovski/mini.starter',    version = '*', enabled = not vim.g.vscode },
 
+    { "maxmx03/solarized.nvim", enabled = not vim.g.vscode },
 
     { "neovim/nvim-lspconfig",                    enabled = not vim.g.vsode },
     { "williamboman/mason.nvim",                  enabled = not vim.g.vsode },
     { "williamboman/mason-lspconfig.nvim",        enabled = not vim.g.vsode },
 
-    { "rebelot/kanagawa.nvim",                    enabled = not vim.g.vsode },
     { "nvim-lualine/lualine.nvim",                enabled = not vim.g.vsode },
     { "stevearc/overseer.nvim",                   enabled = not vim.g.vscode, opts = {} },
     { "nvim-treesitter/nvim-treesitter",          enabled = not vim.g.vsode,  build = ":TSUpdate" },
@@ -44,7 +44,7 @@ require("mini.jump").setup()
 require("mini.move").setup()
 
 if not vim.g.vscode then
-    require("overseer").setup({ })
+    require("overseer").setup()
     require("mason").setup()
     require("mason-lspconfig").setup({
         ensure_installed = { "clangd" }
@@ -53,8 +53,58 @@ if not vim.g.vscode then
     local lsp = require("lspconfig")
     lsp.clangd.setup({})
 
-    require("kanagawa").setup()
-    vim.cmd.colorscheme("kanagawa")
+    require("solarized").setup({
+        styles = {
+            parameters = { italic = false     },
+            keywords   = { bold   = false     },
+            variables  = { fg     = "#d5c4a1" },
+        },
+        colors = {
+            base03 = '#1B2E28', -- background tone dark (main)
+            base0 = '#D5C4A1', -- content tone (foreground)
+            base01 = '#8ec07c', -- content tone (comment)
+            blue = '#d5c4a1',
+            violet = '#ceb069',
+            base02 = '#254041', -- background tone (highlight/menu/LineNr)
+            base1 = '#d36e2a', -- content tone (statusline/tabline)
+            cyan = '#689d6a',
+
+            base2 = '#eee8d5', -- background tone light (highlight)
+            base04 = '#00222b', -- background tone darker (column/nvim-tree)
+            base3 = '#fdf6e3', -- background tone lighter (main)
+            base00 = '#657b83', -- content tone (winseparator)
+
+            info = '#ddda30',
+        },
+        highlights = {
+            Function     = { fg   = "#ccb486"  },
+            Operator     = { fg   = "#fcedfc", bold = false },
+            Type         = { fg   = "#ceb069"  },
+
+            Identifier   = { fg   = "#d5c4a1"  },
+
+            Constant     = { fg   = "#e9e4c6", bold = false },
+            Number       = { link = "Constant" },
+            Boolean      = { link = "Constant" },
+            Float        = { link = "Constant" },
+
+            Structure    = { link = "Keyword"  },
+            Statement    = { link = 'Keyword'  },
+            Conditional  = { link = 'Keyword'  },
+            Label        = { link = 'Keyword'  },
+            Exception    = { link = 'Keyword'  },
+            StorageClass = { link = 'Keyword'  },
+            Typedef      = { link = 'Keyword'  },
+            Repeat       = { link = "Keyword"  },
+
+            Macro        = { fg = "#84a89a"   },
+
+            Define       = { link = "Keyword"  },
+            PreProc      = { link = "Define"   },
+            Include      = { link = "Define"   },
+            PreCondit    = { link = "Define"   },
+        }
+    })
 
     require("lualine").setup()
 
