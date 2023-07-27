@@ -28,7 +28,6 @@ require("lazy").setup({
     { "neovim/nvim-lspconfig",                    enabled = not vim.g.vsode },
     { "williamboman/mason.nvim",                  enabled = not vim.g.vsode },
     { "williamboman/mason-lspconfig.nvim",        enabled = not vim.g.vsode },
-    { "akinsho/nvim-toggleterm.lua",              enabled = not vim.g.vsode },
     { "rebelot/kanagawa.nvim",                    enabled = not vim.g.vsode },
     { "nvim-lualine/lualine.nvim",                enabled = not vim.g.vsode },
     { "nvim-treesitter/nvim-treesitter",          enabled = not vim.g.vsode,  build = ":TSUpdate" },
@@ -50,20 +49,6 @@ if not vim.g.vscode then
     local lsp = require("lspconfig")
     lsp.clangd.setup({})
 
-    require("toggleterm").setup({
-        start_in_insert = false,
-    })
-
-    -- require("vstask").setup({
-    --     terminal = "toggleterm",
-    --     term_opts = {
-    --         current = {
-    --             direction = "horizontal",
-    --             size = "15"
-    --         }
-    --     }
-    -- })
-
     require("kanagawa").setup()
     vim.cmd.colorscheme("kanagawa-wave")
 
@@ -71,7 +56,6 @@ if not vim.g.vscode then
 
     require("telescope").setup()
     require("telescope").load_extension("fzy_native")
-    -- require("telescope").load_extension("vstask")
 
     if not vim.g.win32 then
         --require("mini.animate").setup()
@@ -115,9 +99,11 @@ if vim.g.vscode then
 	vim.opt.inccommand="nosplit"
 end
 
-if vim.g.neovide then
+if not vim.g.vscode then
     vim.o.guifont = "UbuntuMono Nerd Font:h14"
+end
 
+if vim.g.neovide then
     vim.g.neovide_cursor_animation_length = 0
     vim.g.neovide_cursor_animate_in_insert_mode = false
     vim.g.neovide_cursor_animate_command_line = false
@@ -135,8 +121,11 @@ vim.keymap.set("n", "<C-q>", ":bd<CR>")
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
 
 if not vim.g.vscode then
-    local telescope = require("telescope.builtin")
-    vim.keymap.set('n', '<C-p>', telescope.find_files, {})
+    local builtin = require("telescope.builtin")
+    vim.keymap.set('n', '<C-p>', builtin.find_files, {})
+    vim.keymap.set("n", "<C-f>", builtin.live_grep, {})
+    vim.keymap.set("n", "<C-:>", builtin.command_history, {})
+    vim.keymap.set("n", "<C-l>", builtin.builtin, {})
 end
 
 vim.cmd.highlight({"HighlightYank", "guifg=#5fb3b3"})
@@ -150,7 +139,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 
-
 if not vim.g.vscode then
     vim.api.nvim_create_autocmd('LspAttach', {
       group = vim.api.nvim_create_augroup('UserLspConfig', {}),
@@ -159,13 +147,13 @@ if not vim.g.vscode then
         vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
         local opts = { buffer = ev.buf }
-        local builtin = require("telescope.builtin")
+        local telescope = require("telescope.builtin")
         vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
         vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-        vim.keymap.set('n', 'gd', builtin.lsp_definitions, opts)
-        vim.keymap.set('n', 'gi', builtin.lsp_implementations, opts)
-        vim.keymap.set('n', '<space>D', builtin.lsp_type_definitions, opts)
-        vim.keymap.set('n', 'gr', builtin.lsp_references, opts)
+        vim.keymap.set('n', 'gd', telescope.lsp_definitions, opts)
+        vim.keymap.set('n', 'gi', telescope.lsp_implementations, opts)
+        vim.keymap.set('n', '<space>D', telescope.lsp_type_definitions, opts)
+        vim.keymap.set('n', 'gr', telescope.lsp_references, opts)
       end,
     })
 end
