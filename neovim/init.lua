@@ -25,11 +25,14 @@ require("lazy").setup({
     { 'echasnovski/mini.sessions',   version = '*', enabled = not vim.g.vscode },
  	{ 'echasnovski/mini.starter',    version = '*', enabled = not vim.g.vscode },
 
+
     { "neovim/nvim-lspconfig",                    enabled = not vim.g.vsode },
     { "williamboman/mason.nvim",                  enabled = not vim.g.vsode },
     { "williamboman/mason-lspconfig.nvim",        enabled = not vim.g.vsode },
+
     { "rebelot/kanagawa.nvim",                    enabled = not vim.g.vsode },
     { "nvim-lualine/lualine.nvim",                enabled = not vim.g.vsode },
+    { "stevearc/overseer.nvim",                   enabled = not vim.g.vscode, opts = {} },
     { "nvim-treesitter/nvim-treesitter",          enabled = not vim.g.vsode,  build = ":TSUpdate" },
     { "nvim-telescope/telescope.nvim",            enabled = not vim.g.vscode, tag = "0.1.2", dependencies = { "nvim-lua/plenary.nvim" } },
     { "nvim-telescope/telescope-fzy-native.nvim", enabled = not vim.g.vsode },
@@ -41,6 +44,7 @@ require("mini.jump").setup()
 require("mini.move").setup()
 
 if not vim.g.vscode then
+    require("overseer").setup({ })
     require("mason").setup()
     require("mason-lspconfig").setup({
         ensure_installed = { "clangd" }
@@ -50,7 +54,7 @@ if not vim.g.vscode then
     lsp.clangd.setup({})
 
     require("kanagawa").setup()
-    vim.cmd.colorscheme("kanagawa-wave")
+    vim.cmd.colorscheme("kanagawa")
 
     require("lualine").setup()
 
@@ -112,6 +116,7 @@ if vim.g.neovide then
     vim.keymap.set({"n", "i"}, "<C-s>", ":w<CR>")
 end
 
+
 vim.keymap.set('v', '<', '<gv')
 vim.keymap.set('v', '>', '>gv')
 vim.keymap.set('n', 'n', 'nzz')
@@ -121,11 +126,31 @@ vim.keymap.set("n", "<C-q>", ":bd<CR>")
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
 
 if not vim.g.vscode then
+    vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
+    vim.keymap.set('n', '<C-j>', vim.diagnostic.goto_prev)
+    vim.keymap.set('n', '<C-k>', vim.diagnostic.goto_next)
+
     local builtin = require("telescope.builtin")
     vim.keymap.set('n', '<C-p>', builtin.find_files, {})
     vim.keymap.set("n", "<C-f>", builtin.live_grep, {})
     vim.keymap.set("n", "<C-:>", builtin.command_history, {})
     vim.keymap.set("n", "<C-l>", builtin.builtin, {})
+
+    vim.keymap.set("n", "<C-b>", function()
+        local overseer = require("overseer")
+        local tasks = overseer.list_tasks({ recent_first = true })
+        if vim.tbl_isempty(tasks) then
+            vim.cmd.OverseerRun()
+        else
+            overseer.run_action(tasks[1], "restart")
+        end
+    end, {})
+
+    vim.keymap.set("n", "<M-b>", ":OverseerRun<CR>", {})
+    vim.keymap.set("n", "<M-j>", ":OverseerToggle bottom<CR>", {})
+    vim.keymap.set("n", "<M-h>", ":OverseerToggle left<CR>", {})
+    vim.keymap.set("n", "<M-l>", ":OverseerToggle right<CR>", {})
+
 end
 
 vim.cmd.highlight({"HighlightYank", "guifg=#5fb3b3"})
