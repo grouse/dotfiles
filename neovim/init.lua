@@ -23,7 +23,12 @@ require("lazy").setup({
     { "echasnovski/mini.statusline", version = "*", enabled = not vim.g.vsode },
     { "echasnovski/mini.tabline",    version = "*", enabled = not vim.g.vsode },
     { 'echasnovski/mini.sessions',   version = '*', enabled = not vim.g.vscode },
-     { 'echasnovski/mini.starter',    version = '*', enabled = not vim.g.vscode },
+    { 'echasnovski/mini.starter',    version = '*', enabled = not vim.g.vscode },
+    { 'hrsh7th/cmp-nvim-lsp' },
+
+    { "saadparwaiz1/cmp_luasnip", enabled = not vim.g.vscode  },
+    { "hrsh7th/nvim-cmp",         enabled = not vim.g.vscode  },      
+    { "L3MON4D3/LuaSnip",         enabled = not vim.g.vscode, version = "2.*", build = "make install_jsregexp" },
 
     { "maxmx03/solarized.nvim", enabled = not vim.g.vscode },
 
@@ -43,15 +48,85 @@ require("mini.comment").setup()
 require("mini.jump").setup()
 require("mini.move").setup()
 
+
+
 if not vim.g.vscode then
+    local cmp = require("cmp")
+    local luasnip = require("luasnip")
+    
+    local function cmp_select_or_fallback(fallback)
+        if cmp.visible() and cmp.get_active_entry() then
+            cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+        else
+            fallback()
+        end
+    end
+
+    cmp.setup({
+        completion = { autocomplete = false, },
+        experimental = { ghost_text = true, },
+        snippet = {
+            expand = function(args)
+                luasnip.lsp_expand(args.body) 
+            end,
+        },
+        mapping = cmp.mapping.preset.insert({
+            ['<C-Space>'] = cmp.mapping(function(fallback)
+                cmp.complete()
+                cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+            end),
+            ['<Esc>'] = cmp.mapping(function(fallback)
+                if cmp.visible() then
+                    cmp.abort()
+                else
+                    fallback()
+                end
+            end),
+            ["<Tab>"] = cmp.mapping(function(fallback)
+                if cmp.visible() then
+                    cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+                elseif luasnip.expand_or_jumpable() then
+                    luasnip.expand_or_jump()
+                elseif has_words_before() then
+                    cmp.complete()
+                else
+                    fallback()
+                end
+            end, { "i", "s" }),
+            ["<S-Tab>"] = cmp.mapping(function(fallback)
+                if cmp.visible() then
+                    cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+                elseif luasnip.jumpable(-1) then
+                    luasnip.jump(-1)
+                else
+                    fallback()
+                end
+            end, { "i", "s" }),
+            ["("] = cmp.mapping(cmp_select_or_fallback),
+            ["."] = cmp.mapping(cmp_select_or_fallback),
+            ["::"] = cmp.mapping(cmp_select_or_fallback),
+            ["<CR>"] = cmp.mapping({
+                i = cmp_select_or_fallback,
+                s = cmp.mapping.confirm({ select = true }),
+                c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+            }),
+        }),
+        sources = cmp.config.sources(
+            {
+                { name = 'nvim_lsp' },
+                { name = 'luasnip' }, -- For luasnip users.
+            }, {{ name = 'buffer' }})
+    })
+
     require("overseer").setup()
     require("mason").setup()
     require("mason-lspconfig").setup({
         ensure_installed = { "clangd" }
     })
 
+    local cmp_caps = require("cmp_nvim_lsp").default_capabilities()
     local lsp = require("lspconfig")
-    lsp.clangd.setup({})
+    lsp.clangd.setup({ capabilities = cmp_caps })
 
     require("solarized").setup({
         styles = {
