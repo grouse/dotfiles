@@ -150,6 +150,8 @@ if not vim.g.vscode then
             info   = '#ddda30',
         },
         highlights = {
+            MatchParen = { fg   = "#fcedfc", bg = "none" },
+
             Function     = { fg   = "#ccb486"  },
             Operator     = { fg   = "#fcedfc", },
             Type         = { fg   = "#ceb069"  },
