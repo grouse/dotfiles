@@ -45,7 +45,7 @@ require("lazy").setup({
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
 vim.opt.clipboard:append{ 'unnamedplus' }
-vim.opt.swap=false
+vim.opt.swapfile=false
 
 vim.opt.inccommand="split"
 vim.opt.ignorecase=true
@@ -56,6 +56,9 @@ vim.opt.cursorline=true
 vim.opt.showmode=false
 vim.opt.scrolloff=5
 vim.opt.sidescrolloff=5
+vim.opt.linebreak=true
+vim.opt.breakindent=true
+vim.opt.breakindentopt="shift:8"
 
 vim.opt.expandtab=true
 vim.opt.shiftwidth=4
