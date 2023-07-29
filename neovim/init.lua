@@ -46,18 +46,22 @@ require("lazy").setup({
     { "L3MON4D3/LuaSnip",         enabled = not vim.g.vscode, version = "2.*", build = "make install_jsregexp" },
 
     { "maxmx03/solarized.nvim", enabled = not vim.g.vscode },
-    { "akinsho/bufferline.nvim", enabled = not vim.g.vscode, version = "*", dependencies = 'nvim-tree/nvim-web-devicons'},
+    { "akinsho/bufferline.nvim", enabled = not vim.g.vscode, version = "*", dependencies = "nvim-tree/nvim-web-devicons" },
+    { "nvim-lualine/lualine.nvim",                enabled = not vim.g.vsode },
+    { "nvim-tree/nvim-tree.lua", enabled = not vim.g.vscode, version = "*", dependencies = "nvim-tree/nvim-web-devicons" },
 
     { "neovim/nvim-lspconfig",                    enabled = not vim.g.vsode },
     { "williamboman/mason.nvim",                  enabled = not vim.g.vsode },
     { "williamboman/mason-lspconfig.nvim",        enabled = not vim.g.vsode },
 
-    { "nvim-lualine/lualine.nvim",                enabled = not vim.g.vsode },
     { "stevearc/overseer.nvim",                   enabled = not vim.g.vscode, opts = {} },
     { "nvim-treesitter/nvim-treesitter",          enabled = not vim.g.vsode,  build = ":TSUpdate" },
     { "nvim-telescope/telescope.nvim",            enabled = not vim.g.vscode, tag = "0.1.2", dependencies = { "nvim-lua/plenary.nvim" } },
     { "nvim-telescope/telescope-fzy-native.nvim", enabled = not vim.g.vsode },
 })
+
+vim.g.loaded_netrw = 1 -- see nvim-tree
+vim.g.loaded_netrwPlugin = 1
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
 vim.opt.clipboard:append{ 'unnamedplus' }
@@ -174,6 +178,23 @@ if not vim.g.vscode then
         }
 
     }})
+
+    require("nvim-tree").setup({
+        disable_netrw = true,
+        renderer = {
+            icons = {
+                show = {
+                    file = false,
+                    git = false,
+                }
+            }
+        },
+        actions = {
+            open_file = {
+                quit_on_open = true,
+            }
+        }
+    })
 
     local cmp = require("cmp")
     local luasnip = require("luasnip")
@@ -294,8 +315,8 @@ if not vim.g.vscode then
     vim.keymap.set("n", "<C-:>", builtin.command_history, {})
     vim.keymap.set("n", "<C-l>", builtin.builtin, {})
 
+    local overseer = require("overseer")
     vim.keymap.set("n", "<C-b>", function()
-        local overseer = require("overseer")
         local tasks = overseer.list_tasks({ recent_first = true })
         if vim.tbl_isempty(tasks) then
             vim.cmd.OverseerRun()
@@ -306,8 +327,11 @@ if not vim.g.vscode then
 
     vim.keymap.set("n", "<M-b>", ":OverseerRun<CR>", { silent = true })
     vim.keymap.set("n", "<M-j>", ":OverseerToggle bottom<CR>", { silent = true })
-    vim.keymap.set("n", "<M-h>", ":OverseerToggle left<CR>", { silent = true })
     vim.keymap.set("n", "<M-l>", ":OverseerToggle right<CR>", { silent = true })
+
+    local nvim_tree = require("nvim-tree.api")
+    vim.keymap.set("n", "<M-h>", nvim_tree.tree.toggle, {})
+
 end
 
 vim.cmd.highlight({"HighlightYank", "guifg=#5fb3b3"})
