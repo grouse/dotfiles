@@ -66,6 +66,7 @@ vim.g.loaded_netrwPlugin = 1
 vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
 vim.opt.clipboard:append{ 'unnamedplus' }
 vim.opt.swapfile=false
+vim.opt.undofile=true
 vim.opt.termguicolors=true -- see bufferline.nvim
 vim.opt.mousemoveevent=true
 
@@ -303,6 +304,10 @@ vim.keymap.set('n', 'N', 'Nzz', { silent = true })
 vim.keymap.set('n', "<CR>", ":nohlsearch<CR>", { silent = true })
 vim.keymap.set("n", "<C-q>", ":bd<CR>", { silent = true })
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { silent = true })
+
+-- NOTE(jesper): not actually sure if these work. They don't in neovide or nvim-qt, but I think that might be a client limitation, not having implemented the events properly
+vim.keymap.set("n", "<X1Mouse>", "<C-i>", {})
+vim.keymap.set("n", "<X2Mouse>", "<C-o>", {})
 
 if not vim.g.vscode then
     vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
