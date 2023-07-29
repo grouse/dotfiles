@@ -43,12 +43,44 @@ require("lazy").setup({
     { "nvim-telescope/telescope-fzy-native.nvim", enabled = not vim.g.vsode },
 })
 
+vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
+vim.opt.clipboard:append{ 'unnamedplus' }
+vim.opt.swap=false
+
+vim.opt.inccommand="split"
+vim.opt.ignorecase=true
+vim.opt.smartcase=true
+vim.opt.gdefault=true
+
+vim.opt.cursorline=true
+vim.opt.showmode=false
+vim.opt.scrolloff=5
+vim.opt.sidescrolloff=5
+
+vim.opt.expandtab=true
+vim.opt.shiftwidth=4
+vim.opt.softtabstop=0
+vim.opt.tabstop=4
+
+if vim.g.vscode then
+    vim.opt.inccommand="nosplit"
+end
+
+if not vim.g.vscode then
+    vim.o.guifont = "UbuntuMono Nerd Font:h14"
+end
+
+if vim.g.neovide then
+    vim.g.neovide_cursor_animation_length = 0
+    vim.g.neovide_cursor_animate_in_insert_mode = false
+    vim.g.neovide_cursor_animate_command_line = false
+    vim.g.neovide_scroll_animation_length = 0
+end
+
 require("mini.align").setup()
 require("mini.comment").setup()
 require("mini.jump").setup()
 require("mini.move").setup()
-
-
 
 if not vim.g.vscode then
     local cmp = require("cmp")
@@ -211,43 +243,6 @@ if not vim.g.vscode then
     }
     require("nvim-treesitter").setup()
 end
-
-vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
-
-vim.opt.clipboard:append{ 'unnamedplus' }
-
-vim.opt.ignorecase=true
-vim.opt.smartcase=true
-vim.opt.gdefault=true
-
-vim.opt.cursorline=true
-vim.opt.showmode=false
-
-vim.opt.inccommand="split"
-
-vim.opt.scrolloff=5
-vim.opt.sidescrolloff=5
-
-vim.opt.expandtab=true
-vim.opt.shiftwidth=4
-vim.opt.softtabstop=0
-vim.opt.tabstop=4
-
-if vim.g.vscode then
-    vim.opt.inccommand="nosplit"
-end
-
-if not vim.g.vscode then
-    vim.o.guifont = "UbuntuMono Nerd Font:h14"
-end
-
-if vim.g.neovide then
-    vim.g.neovide_cursor_animation_length = 0
-    vim.g.neovide_cursor_animate_in_insert_mode = false
-    vim.g.neovide_cursor_animate_command_line = false
-    vim.g.neovide_scroll_animation_length = 0
-end
-
 
 vim.keymap.set('v', '<', '<gv', { silent = true })
 vim.keymap.set('v', '>', '>gv', { silent = true })
