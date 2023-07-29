@@ -166,7 +166,67 @@ if not vim.g.vscode then
         }
     })
 
-    require("lualine").setup()
+    require("lualine").setup({
+        sections = {
+            lualine_a = {'mode'},
+            lualine_b = {'diagnostics'},
+            lualine_c = {
+                { 
+                    'filename', 
+                    symbols = {
+                        modified = "●",
+                        readonly = "",
+                        unnamed = '[No Name]', 
+                        newfile = '[New]',    
+                    }
+                }
+            },
+            lualine_x = {
+                'encoding', 
+                {
+                    'fileformat', 
+                    symbols = {
+                        unix = "LF",
+                        dos = "CRLF",
+                        mac = "CR"
+                    }
+                },
+                'filetype'
+            },
+            lualine_y = {},
+            lualine_z = {'location'}
+        },
+        inactive_sections = {
+            lualine_a = {},
+            lualine_b = {},
+            lualine_c = {
+                { 
+                    'filename', 
+                    symbols = {
+                        modified = "●",
+                        readonly = "",
+                        unnamed = '[No Name]', 
+                        newfile = '[New]',    
+                    }
+                }
+            },
+            lualine_x = {
+                'encoding', 
+                {
+                    'fileformat', 
+                    symbols = {
+                        unix = "LF",
+                        dos = "CRLF",
+                        mac = "CR"
+                    }
+                },
+                'filetype',
+            },
+            lualine_y = {},
+            lualine_z = {'location'}
+        }
+    })
+
     require("bufferline").setup({ options = {
         right_mouse_command = false,
         indicator = { style = "underline" },
