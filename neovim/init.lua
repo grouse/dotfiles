@@ -11,6 +11,23 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+function ReloadConfig()
+    local hls_status = vim.v.hlsearch
+    for name,_ in pairs(package.loaded) do
+        if name:match('^cnull') then
+            package.loaded[name] = nil
+        end
+    end
+
+    dofile(vim.env.MYVIMRC)
+    if hls_status == 0 then
+        vim.opt.hlsearch = false
+    end
+end
+
+vim.cmd("command! Reload lua ReloadConfig()")
+
+
 if vim.loop.os_uname().sysname == "Windows_NT" then
     vim.g.win32 = true
 end
@@ -20,8 +37,6 @@ require("lazy").setup({
     { "echasnovski/mini.comment",    version = "*" },
     { "echasnovski/mini.jump",       version = "*" },
     { "echasnovski/mini.move",       version = "*" },
-    { "echasnovski/mini.statusline", version = "*", enabled = not vim.g.vsode },
-    { "echasnovski/mini.tabline",    version = "*", enabled = not vim.g.vsode },
     { 'echasnovski/mini.sessions',   version = '*', enabled = not vim.g.vscode },
     { 'echasnovski/mini.starter',    version = '*', enabled = not vim.g.vscode },
     { 'hrsh7th/cmp-nvim-lsp' },
@@ -31,6 +46,7 @@ require("lazy").setup({
     { "L3MON4D3/LuaSnip",         enabled = not vim.g.vscode, version = "2.*", build = "make install_jsregexp" },
 
     { "maxmx03/solarized.nvim", enabled = not vim.g.vscode },
+    { "akinsho/bufferline.nvim", enabled = not vim.g.vscode, version = "*", dependencies = 'nvim-tree/nvim-web-devicons'},
 
     { "neovim/nvim-lspconfig",                    enabled = not vim.g.vsode },
     { "williamboman/mason.nvim",                  enabled = not vim.g.vsode },
@@ -46,6 +62,8 @@ require("lazy").setup({
 vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
 vim.opt.clipboard:append{ 'unnamedplus' }
 vim.opt.swapfile=false
+vim.opt.termguicolors=true -- see bufferline.nvim
+vim.opt.mousemoveevent=true
 
 vim.opt.inccommand="split"
 vim.opt.ignorecase=true
@@ -86,6 +104,77 @@ require("mini.jump").setup()
 require("mini.move").setup()
 
 if not vim.g.vscode then
+    require("solarized").setup({
+        styles = {
+            parameters = { italic = false },
+            keywords   = { bold   = false },
+        },
+        colors = {
+            base0  = '#D5C4A1', -- content tone (foreground)
+            base1  = '#d36e2a', -- content tone (statusline/tabline)
+            base2  = '#eee8d5', -- background tone light (highlight)
+            base3  = '#fdf6e3', -- background tone lighter (main)
+
+            base00 = '#657b83', -- content tone (winseparator)
+            base01 = '#8ec07c', -- content tone (comment)
+            base02 = '#254041', -- background tone (highlight/menu/LineNr)
+            base03 = '#1B2E28', -- background tone dark (main)
+            base04 = '#00222b', -- background tone darker (column/nvim-tree)
+
+            blue   = '#d5c4a1',
+            violet = '#ceb069',
+            cyan   = '#689d6a',
+
+            info   = '#ddda30',
+        },
+        highlights = {
+            MatchParen = { fg   = "#fcedfc", bg = "none" },
+
+            Function     = { fg   = "#ccb486"  },
+            Operator     = { fg   = "#fcedfc", },
+            Type         = { fg   = "#ceb069"  },
+
+            Identifier   = { fg   = "#d5c4a1"  },
+
+            Constant     = { fg   = "#e9e4c6", },
+            Number       = { link = "Constant" },
+            Boolean      = { link = "Constant" },
+            Float        = { link = "Constant" },
+
+            Structure    = { link = "Keyword"  },
+            Statement    = { link = 'Keyword'  },
+            Conditional  = { link = 'Keyword'  },
+            Label        = { link = 'Keyword'  },
+            Exception    = { link = 'Keyword'  },
+            StorageClass = { link = 'Keyword'  },
+            Typedef      = { link = 'Keyword'  },
+            Repeat       = { link = "Keyword"  },
+
+            Macro        = { fg = "#84a89a"   },
+
+            Define       = { link = "Keyword"  },
+            PreProc      = { link = "Define"   },
+            Include      = { link = "Define"   },
+            PreCondit    = { link = "Define"   },
+
+            Error = { link = "Ignore" },
+        }
+    })
+
+    require("lualine").setup()
+    require("bufferline").setup({ options = {
+        right_mouse_command = false,
+        indicator = { style = "underline" },
+        show_buffer_icons = false,
+        separator_style = "slant",
+        hover = {
+            enabled = true,
+            delay = 0,
+            reveal = { "close" }
+        }
+
+    }})
+
     local cmp = require("cmp")
     local luasnip = require("luasnip")
     
@@ -161,65 +250,6 @@ if not vim.g.vscode then
     local lsp = require("lspconfig")
     lsp.clangd.setup({ capabilities = cmp_caps })
 
-    require("solarized").setup({
-        styles = {
-            parameters = { italic = false },
-            keywords   = { bold   = false },
-        },
-        colors = {
-            base0  = '#D5C4A1', -- content tone (foreground)
-            base1  = '#d36e2a', -- content tone (statusline/tabline)
-            base2  = '#eee8d5', -- background tone light (highlight)
-            base3  = '#fdf6e3', -- background tone lighter (main)
-
-            base00 = '#657b83', -- content tone (winseparator)
-            base01 = '#8ec07c', -- content tone (comment)
-            base02 = '#254041', -- background tone (highlight/menu/LineNr)
-            base03 = '#1B2E28', -- background tone dark (main)
-            base04 = '#00222b', -- background tone darker (column/nvim-tree)
-
-            blue   = '#d5c4a1',
-            violet = '#ceb069',
-            cyan   = '#689d6a',
-
-            info   = '#ddda30',
-        },
-        highlights = {
-            MatchParen = { fg   = "#fcedfc", bg = "none" },
-
-            Function     = { fg   = "#ccb486"  },
-            Operator     = { fg   = "#fcedfc", },
-            Type         = { fg   = "#ceb069"  },
-
-            Identifier   = { fg   = "#d5c4a1"  },
-
-            Constant     = { fg   = "#e9e4c6", },
-            Number       = { link = "Constant" },
-            Boolean      = { link = "Constant" },
-            Float        = { link = "Constant" },
-
-            Structure    = { link = "Keyword"  },
-            Statement    = { link = 'Keyword'  },
-            Conditional  = { link = 'Keyword'  },
-            Label        = { link = 'Keyword'  },
-            Exception    = { link = 'Keyword'  },
-            StorageClass = { link = 'Keyword'  },
-            Typedef      = { link = 'Keyword'  },
-            Repeat       = { link = "Keyword"  },
-
-            Macro        = { fg = "#84a89a"   },
-
-            Define       = { link = "Keyword"  },
-            PreProc      = { link = "Define"   },
-            Include      = { link = "Define"   },
-            PreCondit    = { link = "Define"   },
-
-            Error = { link = "Ignore" },
-        }
-    })
-
-    require("lualine").setup()
-
     require("telescope").setup()
     require("telescope").load_extension("fzy_native")
 
@@ -227,8 +257,6 @@ if not vim.g.vscode then
         --require("mini.animate").setup()
     end
 
-    require("mini.statusline").setup()
-    require("mini.tabline").setup()
     require("mini.sessions").setup({
         directory = vim.fn.stdpath("data") .. "/session",
         file = "",
