@@ -305,68 +305,86 @@ if not vim.g.vscode then
 
     local cmp = require("cmp")
     local luasnip = require("luasnip")
-    
-    local function cmp_select_or_fallback(fallback)
-        if cmp.visible() and cmp.get_active_entry() then
-            cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
-        else
-            fallback()
-        end
-    end
 
     cmp.setup({
-        completion = { autocomplete = false, },
+        --completion = { autocomplete = false, },
         experimental = { ghost_text = true, },
         snippet = {
             expand = function(args)
                 luasnip.lsp_expand(args.body) 
             end,
         },
-        mapping = cmp.mapping.preset.insert({
-            ['<C-Space>'] = cmp.mapping(function(fallback)
-                cmp.complete()
-                cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
-            end),
-            ['<Esc>'] = cmp.mapping(function(fallback)
-                if cmp.visible() then
-                    cmp.abort()
-                else
-                    fallback()
-                end
-            end),
+        mapping = {
+            ['<C-Space>'] = cmp.mapping.complete(),
+            ['<Esc>'] = cmp.mapping.abort(),
+            ["<C-j>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+            ["<C-k>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
             ["<Tab>"] = cmp.mapping(function(fallback)
                 if cmp.visible() then
-                    cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+                    cmp.confirm()
                 elseif luasnip.expand_or_jumpable() then
                     luasnip.expand_or_jump()
                 else
                     fallback()
                 end
             end, { "i", "s" }),
-            ["<S-Tab>"] = cmp.mapping(function(fallback)
-                if cmp.visible() then
-                    cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
-                elseif luasnip.jumpable(-1) then
-                    luasnip.jump(-1)
-                else
-                    fallback()
-                end
-            end, { "i", "s" }),
-            ["("] = cmp.mapping(cmp_select_or_fallback),
-            ["."] = cmp.mapping(cmp_select_or_fallback),
-            ["::"] = cmp.mapping(cmp_select_or_fallback),
-            ["<CR>"] = cmp.mapping({
-                i = cmp_select_or_fallback,
-                s = cmp.mapping.confirm({ select = true }),
-                c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
-            }),
-        }),
-        sources = cmp.config.sources(
-            {
-                { name = 'nvim_lsp' },
-                { name = 'luasnip' }, -- For luasnip users.
-            }, {{ name = 'buffer' }})
+            ["<CR>"] = cmp.mapping.confirm({ select = true }),
+        },  
+        confirmation = {
+            default_behavior = cmp.ConfirmBehavior.Replace,
+        },
+        sources = {
+            { name = 'nvim_lsp' },
+            { name = 'luasnip' }, 
+            { name = "buffer" },
+            { name = "path" }
+        },
+        formatting = {
+            fields = { "kind", "abbr", "menu" },
+            format = function(entry, vim_item)
+                local kind_icons = {
+                    Text = "󰉿",
+                    Method = "󰆧",
+                    Function = "󰊕",
+                    Constructor = "",
+                    Field = " ",
+                    Variable = "󰀫",
+                    Class = "󰠱",
+                    Interface = "",
+                    Module = "",
+                    Property = "󰜢",
+                    Unit = "󰑭",
+                    Value = "󰎠",
+                    Enum = "",
+                    Keyword = "󰌋",
+                    Snippet = "",
+                    Color = "󰏘",
+                    File = "󰈙",
+                    Reference = "",
+                    Folder = "󰉋",
+                    EnumMember = "",
+                    Constant = "󰏿",
+                    Struct = "",
+                    Event = "",
+                    Operator = "󰆕",
+                    TypeParameter = " ",
+                    Misc = " "
+                }
+
+                vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
+                vim_item.menu = ({
+                    nvim_lsp = "[LSP]",
+                    luasnip  = "[Snippet]",
+                    buffer   = "[Buffer]",
+                    path     = "[Path]",
+                })[entry.source.name]
+
+                return vim_item
+            end,
+        },  
     })
+
+
 
     require("overseer").setup()
     require("mason").setup()
