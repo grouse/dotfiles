@@ -92,15 +92,29 @@ if vim.g.vscode then
     vim.opt.inccommand="nosplit"
 end
 
-if not vim.g.vscode then
-    vim.o.guifont = "UbuntuMono Nerd Font:h14"
-end
+vim.o.guifont = "UbuntuMono Nerd Font:h14"
 
 if vim.g.neovide then
     vim.g.neovide_cursor_animation_length = 0
     vim.g.neovide_cursor_animate_in_insert_mode = false
     vim.g.neovide_cursor_animate_command_line = false
     vim.g.neovide_scroll_animation_length = 0
+
+
+    local increment_scale_factor = function(delta)
+        vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + delta
+    end
+
+    vim.keymap.set("n", "<C-ScrollWheelUp>", function() increment_scale_factor(1/16) end, {});
+    vim.keymap.set("n", "<C-ScrollWheelDown>", function() increment_scale_factor(-1/16) end, {});
+end
+
+if vim.g.fvim_loaded then
+    vim.o.guifont = "Ubuntu Mono:h18"
+
+    vim.keymap.set({"n", "i"}, "<C-ScrollWheelUp>", ":set guifont=+<CR>", { silent = true })
+    vim.keymap.set({"n", "i"}, "<C-ScrollWheelDown>", ":set guifont=-<CR>", { silent = true })
+    vim.keymap.set({"n", "i"}, "<M-CR>", ":FVimToggleFullScreen<CR>", { silent = true })
 end
 
 require("mini.align").setup()
