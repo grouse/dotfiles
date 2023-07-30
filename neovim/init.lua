@@ -147,6 +147,8 @@ if not vim.g.vscode then
                     cyan   = '#689d6a',
 
                     info   = '#ddda30',
+
+                    tmp = "#ff0000"
                 }
             else
                 return {}
@@ -183,6 +185,9 @@ if not vim.g.vscode then
                     Repeat       = { link = "Keyword"  },
 
                     Error = { link = "Ignore" },
+
+                    TelescopeNormal = { bg = colors.base03 },
+                    TelescopeBorder = { bg = colors.base03 },
                 }
             else
                 return {
@@ -207,6 +212,9 @@ if not vim.g.vscode then
                     Repeat       = { link = "Keyword"  },
                     
                     Error = { link = "Ignore" },
+
+                    TelescopeNormal = { bg = colors.base03 },
+                    TelescopeBorder = { bg = colors.base03 },
                 }
             end
         end
@@ -396,7 +404,13 @@ if not vim.g.vscode then
     local lsp = require("lspconfig")
     lsp.clangd.setup({ capabilities = cmp_caps })
 
-    require("telescope").setup()
+
+    local actions = require("telescope.actions")
+    require("telescope").setup({
+        pickers = {
+            find_files = { theme = "ivy", },
+        },
+    })
     require("telescope").load_extension("fzy_native")
 
     if not vim.g.win32 then
@@ -441,8 +455,6 @@ if not vim.g.vscode then
     local builtin = require("telescope.builtin")
     vim.keymap.set('n', '<C-p>', builtin.find_files, {})
     vim.keymap.set("n", "<C-f>", builtin.live_grep, {})
-    vim.keymap.set("n", "<C-:>", builtin.command_history, {})
-    vim.keymap.set("n", "<C-l>", builtin.builtin, {})
 
     local overseer = require("overseer")
     vim.keymap.set("n", "<C-b>", function()
