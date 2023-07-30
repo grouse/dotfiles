@@ -114,56 +114,84 @@ if not vim.g.vscode then
             parameters = { italic = false },
             keywords   = { bold   = false },
         },
-        colors = {
-            base0  = '#D5C4A1', -- content tone (foreground)
-            base1  = '#d36e2a', -- content tone (statusline/tabline)
-            base2  = '#eee8d5', -- background tone light (highlight)
-            base3  = '#fdf6e3', -- background tone lighter (main)
+        colors = function() 
+            if vim.o.background == "dark" then
+                return {
+                    base0  = '#D5C4A1', -- content tone (foreground)
+                    base1  = '#d36e2a', -- content tone (statusline/tabline)
+                    base2  = '#eee8d5', -- background tone light (highlight)
+                    base3  = '#fdf6e3', -- background tone lighter (main)
 
-            base00 = '#657b83', -- content tone (winseparator)
-            base01 = '#8ec07c', -- content tone (comment)
-            base02 = '#254041', -- background tone (highlight/menu/LineNr)
-            base03 = '#1B2E28', -- background tone dark (main)
-            base04 = '#00222b', -- background tone darker (column/nvim-tree)
+                    base00 = '#657b83', -- content tone (winseparator)
+                    base01 = '#8ec07c', -- content tone (comment)
+                    base02 = '#254041', -- background tone (highlight/menu/LineNr)
+                    base03 = '#1B2E28', -- background tone dark (main)
+                    base04 = '#00222b', -- background tone darker (column/nvim-tree)
 
-            blue   = '#d5c4a1',
-            violet = '#ceb069',
-            cyan   = '#689d6a',
+                    blue   = '#d5c4a1',
+                    violet = '#ceb069',
+                    cyan   = '#689d6a',
 
-            info   = '#ddda30',
-        },
-        highlights = {
-            MatchParen = { fg   = "#fcedfc", bg = "none" },
+                    info   = '#ddda30',
+                }
+            else
+                return {}
+            end
+        end,
+        highlights = function(colors, colorhelper)
+            if vim.o.background == "dark" then
+                return {
+                    MatchParen = { fg   = "#fcedfc", bg = "none" },
 
-            Function     = { fg   = "#ccb486"  },
-            Operator     = { fg   = "#fcedfc", },
-            Type         = { fg   = "#ceb069"  },
+                    Function     = { fg   = "#ccb486"  },
+                    Operator     = { fg   = "#fcedfc", },
+                    Type         = { fg   = "#ceb069"  },
 
-            Identifier   = { fg   = "#d5c4a1"  },
+                    Identifier   = { fg   = "#d5c4a1"  },
 
-            Constant     = { fg   = "#e9e4c6", },
-            Number       = { link = "Constant" },
-            Boolean      = { link = "Constant" },
-            Float        = { link = "Constant" },
+                    Constant     = { fg   = "#e9e4c6", },
 
-            Structure    = { link = "Keyword"  },
-            Statement    = { link = 'Keyword'  },
-            Conditional  = { link = 'Keyword'  },
-            Label        = { link = 'Keyword'  },
-            Exception    = { link = 'Keyword'  },
-            StorageClass = { link = 'Keyword'  },
-            Typedef      = { link = 'Keyword'  },
-            Repeat       = { link = "Keyword"  },
+                    Macro        = { fg = "#84a89a"   },
 
-            Macro        = { fg = "#84a89a"   },
-
-            Define       = { link = "Keyword"  },
-            PreProc      = { link = "Define"   },
-            Include      = { link = "Define"   },
-            PreCondit    = { link = "Define"   },
-
-            Error = { link = "Ignore" },
-        }
+                    PreProc      = { link = "Define"   },
+                    Include      = { link = "Define"   },
+                    PreCondit    = { link = "Define"   },
+                    Number       = { link = "Constant" },
+                    Boolean      = { link = "Constant" },
+                    Float        = { link = "Constant" },
+                    Define       = { link = "Keyword"  },
+                    Structure    = { link = "Keyword"  },
+                    Statement    = { link = 'Keyword'  },
+                    Conditional  = { link = 'Keyword'  },
+                    Label        = { link = 'Keyword'  },
+                    Exception    = { link = 'Keyword'  },
+                    StorageClass = { link = 'Keyword'  },
+                    Typedef      = { link = 'Keyword'  },
+                    Repeat       = { link = "Keyword"  },
+                    Error = { link = "Ignore" },
+                }
+            else
+                return {
+                    MatchParen = { fg   = "#000000", bg = "none" },
+                    PreProc      = { link = "Define"   },
+                    Include      = { link = "Define"   },
+                    PreCondit    = { link = "Define"   },
+                    Number       = { link = "Constant" },
+                    Boolean      = { link = "Constant" },
+                    Float        = { link = "Constant" },
+                    Define       = { link = "Keyword"  },
+                    Structure    = { link = "Keyword"  },
+                    Statement    = { link = 'Keyword'  },
+                    Conditional  = { link = 'Keyword'  },
+                    Label        = { link = 'Keyword'  },
+                    Exception    = { link = 'Keyword'  },
+                    StorageClass = { link = 'Keyword'  },
+                    Typedef      = { link = 'Keyword'  },
+                    Repeat       = { link = "Keyword"  },
+                    Error = { link = "Ignore" },
+                }
+            end
+        end
     })
 
     require("lualine").setup({

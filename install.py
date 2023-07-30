@@ -5,10 +5,10 @@ from sys import platform
 
 parser = argparse.ArgumentParser("install.py", description="installs user configuration and environment")
 parser.add_argument("-c", "--configure", choices=["all", "neovim"], help="install configuration files for specified application")
+parser.add_argument("-i", "--install", choices=["all", "deps"], help="install application(s)")
 args = parser.parse_args();
 
 root = os.path.dirname(os.path.abspath(__file__))
-
 
 if platform == "win32":
     local_config = os.path.realpath(os.path.expandvars("%appdata%/../local"))
@@ -30,4 +30,8 @@ def symlink(path, target):
 
 if args.configure == "all" or args.configure == "neovim":
     symlink("{}/nvim".format(local_config), "{}/neovim".format(root));
+
+if args.install == "all" or args.install == "deps":
+    if platform == "linux":
+        os.system("sudo apt install gcc")
         
