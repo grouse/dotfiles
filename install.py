@@ -33,5 +33,5 @@ if args.configure == "all" or args.configure == "neovim":
 
 if args.install == "all" or args.install == "deps":
     if platform == "linux":
-        os.system("sudo apt install gcc")
+        os.system("sudo apt install gcc ripgrep")
         
