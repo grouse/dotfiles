@@ -146,20 +146,19 @@ if not vim.g.vscode then
                     Function     = { fg   = "#ccb486"  },
                     Operator     = { fg   = "#fcedfc", },
                     Type         = { fg   = "#ceb069"  },
-
                     Identifier   = { fg   = "#d5c4a1"  },
-
                     Constant     = { fg   = "#e9e4c6", },
-
                     Macro        = { fg = "#84a89a"   },
 
+                    Define       = { link = "Keyword"  },
                     PreProc      = { link = "Define"   },
                     Include      = { link = "Define"   },
                     PreCondit    = { link = "Define"   },
+
                     Number       = { link = "Constant" },
                     Boolean      = { link = "Constant" },
                     Float        = { link = "Constant" },
-                    Define       = { link = "Keyword"  },
+                    
                     Structure    = { link = "Keyword"  },
                     Statement    = { link = 'Keyword'  },
                     Conditional  = { link = 'Keyword'  },
@@ -168,18 +167,22 @@ if not vim.g.vscode then
                     StorageClass = { link = 'Keyword'  },
                     Typedef      = { link = 'Keyword'  },
                     Repeat       = { link = "Keyword"  },
+
                     Error = { link = "Ignore" },
                 }
             else
                 return {
                     MatchParen = { fg   = "#000000", bg = "none" },
+                    
+                    Define       = { link = "Keyword"  },
                     PreProc      = { link = "Define"   },
                     Include      = { link = "Define"   },
                     PreCondit    = { link = "Define"   },
+
                     Number       = { link = "Constant" },
                     Boolean      = { link = "Constant" },
                     Float        = { link = "Constant" },
-                    Define       = { link = "Keyword"  },
+
                     Structure    = { link = "Keyword"  },
                     Statement    = { link = 'Keyword'  },
                     Conditional  = { link = 'Keyword'  },
@@ -188,6 +191,7 @@ if not vim.g.vscode then
                     StorageClass = { link = 'Keyword'  },
                     Typedef      = { link = 'Keyword'  },
                     Repeat       = { link = "Keyword"  },
+                    
                     Error = { link = "Ignore" },
                 }
             end
