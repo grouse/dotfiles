@@ -315,7 +315,7 @@ if not vim.g.vscode then
     local luasnip = require("luasnip")
 
     cmp.setup({
-        --completion = { autocomplete = false, },
+        completion = { autocomplete = false, },
         experimental = { ghost_text = true, },
         snippet = {
             expand = function(args)
@@ -324,12 +324,16 @@ if not vim.g.vscode then
         },
         mapping = {
             ['<C-Space>'] = cmp.mapping.complete(),
-            ['<Esc>'] = cmp.mapping.abort(),
+            ['<Esc>'] = cmp.mapping(function(fallback)
+                cmp.abort()
+                fallback()
+            end),
+            ['<C-e>'] = cmp.mapping.abort(),
             ["<C-j>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
             ["<C-k>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
             ["<Tab>"] = cmp.mapping(function(fallback)
                 if cmp.visible() then
-                    cmp.confirm()
+                    cmp.confirm({ select = true })
                 elseif luasnip.expand_or_jumpable() then
                     luasnip.expand_or_jump()
                 else
