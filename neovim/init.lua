@@ -54,7 +54,7 @@ require("lazy").setup({
     { "williamboman/mason.nvim",                  enabled = not vim.g.vsode },
     { "williamboman/mason-lspconfig.nvim",        enabled = not vim.g.vsode },
 
-    { "stevearc/overseer.nvim",                   enabled = not vim.g.vscode, opts = {} },
+    { "grouse/overseer.nvim",                   enabled = not vim.g.vscode, opts = {} },
     { "nvim-treesitter/nvim-treesitter",          enabled = not vim.g.vsode,  build = ":TSUpdate" },
     { "nvim-telescope/telescope.nvim",            enabled = not vim.g.vscode, tag = "0.1.2", dependencies = { "nvim-lua/plenary.nvim" } },
     { "nvim-telescope/telescope-fzy-native.nvim", enabled = not vim.g.vsode },
