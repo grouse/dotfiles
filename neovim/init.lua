@@ -449,8 +449,8 @@ vim.keymap.set("n", "<X2Mouse>", "<C-o>", {})
 
 if not vim.g.vscode then
     vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
-    vim.keymap.set('n', '<C-j>', vim.diagnostic.goto_prev)
-    vim.keymap.set('n', '<C-k>', vim.diagnostic.goto_next)
+    vim.keymap.set('n', '<C-j>', ":cnext<CR>", { silent = true })
+    vim.keymap.set('n', '<C-k>', ":cprev<CR>", { silent = true })
 
     local builtin = require("telescope.builtin")
     vim.keymap.set('n', '<C-p>', builtin.find_files, {})
