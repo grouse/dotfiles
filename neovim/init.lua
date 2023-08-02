@@ -39,8 +39,8 @@ require("lazy").setup({
     { "echasnovski/mini.move",       version = "*" },
     { 'echasnovski/mini.sessions',   version = '*', enabled = not vim.g.vscode },
     { 'echasnovski/mini.starter',    version = '*', enabled = not vim.g.vscode },
-    { 'hrsh7th/cmp-nvim-lsp' },
 
+    { 'hrsh7th/cmp-nvim-lsp' },
     { "saadparwaiz1/cmp_luasnip", enabled = not vim.g.vscode  },
     { "hrsh7th/nvim-cmp",         enabled = not vim.g.vscode  },      
     { "L3MON4D3/LuaSnip",         enabled = not vim.g.vscode, version = "2.*", build = "make install_jsregexp" },
@@ -444,7 +444,7 @@ vim.keymap.set('v', '>', '>gv', { silent = true })
 vim.keymap.set('n', 'n', 'nzz', { silent = true })
 vim.keymap.set('n', 'N', 'Nzz', { silent = true })
 vim.keymap.set('n', "<CR>", ":nohlsearch<CR>", { silent = true })
-vim.keymap.set("n", "<C-q>", ":bd<CR>", { silent = true })
+vim.keymap.set("n", "<C-q>", ":close<CR>", { silent = true })
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { silent = true })
 
 -- NOTE(jesper): not actually sure if these work. They don't in neovide or nvim-qt, but I think that might be a client limitation, not having implemented the events properly
