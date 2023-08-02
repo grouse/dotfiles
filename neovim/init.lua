@@ -398,7 +398,22 @@ if not vim.g.vscode then
 
 
 
-    require("overseer").setup()
+    require("overseer").setup({
+        component_aliases = {
+            default = {
+              { "display_duration", detail_level = 1 },
+              "on_output_summarize",
+              "on_exit_set_status",
+              "on_complete_notify",
+              "on_complete_dispose",
+              "on_result_diagnostics_quickfix",
+            },
+            default_vscode = {
+                "default",
+                { "on_result_diagnostics", remove_on_restart = true },
+            }
+        }
+    })
     require("mason").setup()
     require("mason-lspconfig").setup({
         ensure_installed = { "clangd" }
