@@ -75,6 +75,10 @@ vim.opt.ignorecase=true
 vim.opt.smartcase=true
 vim.opt.gdefault=true
 
+vim.opt.cindent = true
+vim.opt.copyindent = true
+vim.opt.cinoptions = "(0,u0,U0,:0,l1,g0"
+
 vim.opt.cursorline=true
 vim.opt.showmode=false
 vim.opt.scrolloff=5
