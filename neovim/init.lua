@@ -33,31 +33,185 @@ if vim.loop.os_uname().sysname == "Windows_NT" then
 end
 
 require("lazy").setup({
+
+    { 
+        "maxmx03/solarized.nvim", 
+        enabled = not vim.g.vscode,
+        priority = 1000,
+        lazy = false,
+        opts = {
+            styles = {
+                parameters = { italic = false },
+                keywords   = { bold   = false },
+            },
+            colors = function() 
+                if vim.o.background == "dark" then
+                    return {
+                        base0  = '#D5C4A1', -- content tone (foreground)
+                        base1  = '#d36e2a', -- content tone (statusline/tabline)
+                        base2  = '#eee8d5', -- background tone light (highlight)
+                        base3  = '#fdf6e3', -- background tone lighter (main)
+
+                        base00 = '#657b83', -- content tone (winseparator)
+                        base01 = '#8ec07c', -- content tone (comment)
+                        base02 = '#254041', -- background tone (highlight/menu/LineNr)
+                        base03 = '#1B2E28', -- background tone dark (main)
+                        base04 = '#00222b', -- background tone darker (column/nvim-tree)
+
+                        blue   = '#d5c4a1',
+                        violet = '#ceb069',
+                        cyan   = '#689d6a',
+
+                        info   = '#ddda30',
+
+                        tmp = "#ff0000"
+                    }
+                else
+                    return {}
+                end
+            end,
+            highlights = function(colors, colorhelper)
+                if vim.o.background == "dark" then
+                    return {
+                        MatchParen = { fg   = "#fcedfc", bg = "none" },
+
+                        Function     = { fg   = "#ccb486"  },
+                        Operator     = { fg   = "#fcedfc", },
+                        Type         = { fg   = "#ceb069"  },
+                        Identifier   = { fg   = "#d5c4a1"  },
+                        Constant     = { fg   = "#e9e4c6", },
+                        Macro        = { fg = "#84a89a"   },
+
+                        Define       = { link = "Keyword"  },
+                        PreProc      = { link = "Define"   },
+                        Include      = { link = "Define"   },
+                        PreCondit    = { link = "Define"   },
+
+                        Number       = { link = "Constant" },
+                        Boolean      = { link = "Constant" },
+                        Float        = { link = "Constant" },
+                        
+                        Structure    = { link = "Keyword"  },
+                        Statement    = { link = 'Keyword'  },
+                        Conditional  = { link = 'Keyword'  },
+                        Label        = { link = 'Keyword'  },
+                        Exception    = { link = 'Keyword'  },
+                        StorageClass = { link = 'Keyword'  },
+                        Typedef      = { link = 'Keyword'  },
+                        Repeat       = { link = "Keyword"  },
+
+                        Error = { link = "Ignore" },
+
+                        TelescopeNormal = { bg = colors.base03 },
+                        TelescopeBorder = { bg = colors.base03 },
+                    }
+                else
+                    return {
+                        MatchParen = { fg   = "#000000", bg = "none" },
+                        
+                        Define       = { link = "Keyword"  },
+                        PreProc      = { link = "Define"   },
+                        Include      = { link = "Define"   },
+                        PreCondit    = { link = "Define"   },
+
+                        Number       = { link = "Constant" },
+                        Boolean      = { link = "Constant" },
+                        Float        = { link = "Constant" },
+
+                        Structure    = { link = "Keyword"  },
+                        Statement    = { link = 'Keyword'  },
+                        Conditional  = { link = 'Keyword'  },
+                        Label        = { link = 'Keyword'  },
+                        Exception    = { link = 'Keyword'  },
+                        StorageClass = { link = 'Keyword'  },
+                        Typedef      = { link = 'Keyword'  },
+                        Repeat       = { link = "Keyword"  },
+                        
+                        Error = { link = "Ignore" },
+
+                        TelescopeNormal = { bg = colors.base03 },
+                        TelescopeBorder = { bg = colors.base03 },
+                    }
+                end
+            end
+        }
+    },
+
     { "echasnovski/mini.align",      version = "*" },
     { "echasnovski/mini.comment",    version = "*" },
     { "echasnovski/mini.jump",       version = "*" },
     { "echasnovski/mini.move",       version = "*" },
     { 'echasnovski/mini.sessions',   version = '*', enabled = not vim.g.vscode },
-    { 'echasnovski/mini.starter',    version = '*', enabled = not vim.g.vscode },
+    { 
+        "folke/which-key.nvim",
+        init = function() 
+            vim.o.timeout = true
+            vim.o.timeoutlen = 300
+        end
+    },
 
-    { 'hrsh7th/cmp-nvim-lsp' },
-    { "saadparwaiz1/cmp_luasnip", enabled = not vim.g.vscode  },
-    { "hrsh7th/nvim-cmp",         enabled = not vim.g.vscode  },      
+    -- Completion
+    { 
+        "hrsh7th/nvim-cmp",         
+        enabled = not vim.g.vscode,
+        dependencies = {
+            "hrsh7th/cmp-nvim-lsp",
+            "hrsh7th/cmp-buffer",
+            "hrsh7th/cmp-path",
+            "saadparwaiz1/cmp_luasnip",
+        }
+    },      
     { "L3MON4D3/LuaSnip",         enabled = not vim.g.vscode, version = "2.*", build = "make install_jsregexp" },
 
-    { "maxmx03/solarized.nvim", enabled = not vim.g.vscode },
-    { "akinsho/bufferline.nvim", enabled = not vim.g.vscode, version = "*", dependencies = "nvim-tree/nvim-web-devicons" },
-    { "nvim-lualine/lualine.nvim",                enabled = not vim.g.vsode },
-    { "nvim-tree/nvim-tree.lua", enabled = not vim.g.vscode, version = "*", dependencies = "nvim-tree/nvim-web-devicons" },
+    -- UI 
+    { 'echasnovski/mini.starter',  version = '*',              enabled = not vim.g.vscode },
+    { "akinsho/bufferline.nvim",   enabled = not vim.g.vscode, version = "*", dependencies = "nvim-tree/nvim-web-devicons" },
+    { "nvim-lualine/lualine.nvim", enabled = not vim.g.vsode },
+    { "nvim-tree/nvim-tree.lua",   enabled = not vim.g.vscode, version = "*", dependencies = "nvim-tree/nvim-web-devicons" },
+    { "rcarriga/nvim-notify",      enabled = not vim.g.vscode },
+    { "stevearc/dressing.nvim",    enabled = not vim.g.vscode },
+    { 
+        "folke/noice.nvim", 
+        enabled = not vim.g.vscode ,
+        event = "VeryLazy",
+        dependencies = {
+            "MunifTanjim/nui.nvim",
+            "rcarriga/nvim-notify",
+        }
+    },
 
+    -- LSP
+    { "folke/neodev.nvim", opts = {} },
     { "neovim/nvim-lspconfig",                    enabled = not vim.g.vsode },
-    { "williamboman/mason.nvim",                  enabled = not vim.g.vsode },
+    {
+        "williamboman/mason.nvim",
+        enabled = not vim.g.vscode,
+        cmd = "Mason",
+        build = ":MasonUpdate",
+    },
     { "williamboman/mason-lspconfig.nvim",        enabled = not vim.g.vsode },
+    { 
+        "SmiteshP/nvim-navic", 
+        enabled = not vim.g.vscode, 
+        dependencies = { "neovim/nvim-lspconfig" },
+        lazy = true,
+        init = function()
+            vim.g.navic_silence = true
+        end,
+        opts = function()
+            return {
+                separator = " ",
+                highlight = true,
+                depth_limit = 5,
+            }
+        end,
+    },
 
     { "grouse/overseer.nvim",                   enabled = not vim.g.vscode, opts = {} },
     { "nvim-treesitter/nvim-treesitter",          enabled = not vim.g.vsode,  build = ":TSUpdate" },
     { "nvim-telescope/telescope.nvim",            enabled = not vim.g.vscode, tag = "0.1.2", dependencies = { "nvim-lua/plenary.nvim" } },
     { "nvim-telescope/telescope-fzy-native.nvim", enabled = not vim.g.vsode },
+    { "nvim-telescope/telescope-ui-select.nvim", enabled = not vim.g.vscode },
 })
 
 vim.g.loaded_netrw = 1 -- see nvim-tree
@@ -127,128 +281,30 @@ require("mini.jump").setup()
 require("mini.move").setup()
 
 if not vim.g.vscode then
-    require("solarized").setup({
-        styles = {
-            parameters = { italic = false },
-            keywords   = { bold   = false },
-        },
-        colors = function() 
-            if vim.o.background == "dark" then
-                return {
-                    base0  = '#D5C4A1', -- content tone (foreground)
-                    base1  = '#d36e2a', -- content tone (statusline/tabline)
-                    base2  = '#eee8d5', -- background tone light (highlight)
-                    base3  = '#fdf6e3', -- background tone lighter (main)
-
-                    base00 = '#657b83', -- content tone (winseparator)
-                    base01 = '#8ec07c', -- content tone (comment)
-                    base02 = '#254041', -- background tone (highlight/menu/LineNr)
-                    base03 = '#1B2E28', -- background tone dark (main)
-                    base04 = '#00222b', -- background tone darker (column/nvim-tree)
-
-                    blue   = '#d5c4a1',
-                    violet = '#ceb069',
-                    cyan   = '#689d6a',
-
-                    info   = '#ddda30',
-
-                    tmp = "#ff0000"
-                }
-            else
-                return {}
-            end
-        end,
-        highlights = function(colors, colorhelper)
-            if vim.o.background == "dark" then
-                return {
-                    MatchParen = { fg   = "#fcedfc", bg = "none" },
-
-                    Function     = { fg   = "#ccb486"  },
-                    Operator     = { fg   = "#fcedfc", },
-                    Type         = { fg   = "#ceb069"  },
-                    Identifier   = { fg   = "#d5c4a1"  },
-                    Constant     = { fg   = "#e9e4c6", },
-                    Macro        = { fg = "#84a89a"   },
-
-                    Define       = { link = "Keyword"  },
-                    PreProc      = { link = "Define"   },
-                    Include      = { link = "Define"   },
-                    PreCondit    = { link = "Define"   },
-
-                    Number       = { link = "Constant" },
-                    Boolean      = { link = "Constant" },
-                    Float        = { link = "Constant" },
-                    
-                    Structure    = { link = "Keyword"  },
-                    Statement    = { link = 'Keyword'  },
-                    Conditional  = { link = 'Keyword'  },
-                    Label        = { link = 'Keyword'  },
-                    Exception    = { link = 'Keyword'  },
-                    StorageClass = { link = 'Keyword'  },
-                    Typedef      = { link = 'Keyword'  },
-                    Repeat       = { link = "Keyword"  },
-
-                    Error = { link = "Ignore" },
-
-                    TelescopeNormal = { bg = colors.base03 },
-                    TelescopeBorder = { bg = colors.base03 },
-                }
-            else
-                return {
-                    MatchParen = { fg   = "#000000", bg = "none" },
-                    
-                    Define       = { link = "Keyword"  },
-                    PreProc      = { link = "Define"   },
-                    Include      = { link = "Define"   },
-                    PreCondit    = { link = "Define"   },
-
-                    Number       = { link = "Constant" },
-                    Boolean      = { link = "Constant" },
-                    Float        = { link = "Constant" },
-
-                    Structure    = { link = "Keyword"  },
-                    Statement    = { link = 'Keyword'  },
-                    Conditional  = { link = 'Keyword'  },
-                    Label        = { link = 'Keyword'  },
-                    Exception    = { link = 'Keyword'  },
-                    StorageClass = { link = 'Keyword'  },
-                    Typedef      = { link = 'Keyword'  },
-                    Repeat       = { link = "Keyword"  },
-                    
-                    Error = { link = "Ignore" },
-
-                    TelescopeNormal = { bg = colors.base03 },
-                    TelescopeBorder = { bg = colors.base03 },
-                }
-            end
-        end
+    require("notify").setup({
+        fps = 60,
+        timeout = 2000,
+        render = "compact",
+        stages = "slide",
     })
 
+    require("dressing").setup({})
+
     require("lualine").setup({
+        theme = "auto",
         sections = {
             lualine_a = {'mode'},
             lualine_b = {'diagnostics'},
             lualine_c = {
-                { 
-                    'filename', 
-                    symbols = {
-                        modified = "●",
-                        readonly = "",
-                        unnamed = '[No Name]', 
-                        newfile = '[New]',    
-                    }
+                { 'filename', symbols = { modified = "●", readonly = "", unnamed = '[No Name]', newfile = '[New]' } },
+                {
+                    function() return require("nvim-navic").get_location() end,
+                    cond = function() return package.loaded["nvim-navic"] and require("nvim-navic").is_available() end,
                 }
             },
             lualine_x = {
                 'encoding', 
-                {
-                    'fileformat', 
-                    symbols = {
-                        unix = "LF",
-                        dos = "CRLF",
-                        mac = "CR"
-                    }
-                },
+                { 'fileformat', symbols = { unix = "LF", dos = "CRLF", mac = "CR" } },
                 'filetype'
             },
             lualine_y = {},
@@ -258,26 +314,15 @@ if not vim.g.vscode then
             lualine_a = {},
             lualine_b = {},
             lualine_c = {
-                { 
-                    'filename', 
-                    symbols = {
-                        modified = "●",
-                        readonly = "",
-                        unnamed = '[No Name]', 
-                        newfile = '[New]',    
-                    }
+                { 'filename', symbols = { modified = "●", readonly = "", unnamed = '[No Name]', newfile = '[New]' } },
+                {
+                    function() return require("nvim-navic").get_location() end,
+                    cond = function() return package.loaded["nvim-navic"] and require("nvim-navic").is_available() end,
                 }
             },
             lualine_x = {
                 'encoding', 
-                {
-                    'fileformat', 
-                    symbols = {
-                        unix = "LF",
-                        dos = "CRLF",
-                        mac = "CR"
-                    }
-                },
+                { 'fileformat', symbols = { unix = "LF", dos = "CRLF", mac = "CR" } },
                 'filetype',
             },
             lualine_y = {},
@@ -319,7 +364,10 @@ if not vim.g.vscode then
     local luasnip = require("luasnip")
 
     cmp.setup({
-        completion = { autocomplete = false, },
+        completion = { 
+            autocomplete = false,
+            completeopt = "menu,menuone,noinsert",
+        },
         experimental = { ghost_text = true, },
         snippet = {
             expand = function(args)
@@ -344,21 +392,31 @@ if not vim.g.vscode then
                     fallback()
                 end
             end, { "i", "s" }),
-            ["<CR>"] = cmp.mapping.confirm({ select = true }),
+            ["<CR>"] = cmp.mapping({
+                i = function(fallback)
+                    if cmp.visible() and cmp.get_active_entry() then
+                        cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+                    else
+                        fallback()
+                    end
+                end,
+                s = cmp.mapping.confirm({ select = true }),
+                c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+            })
         },  
         confirmation = {
             default_behavior = cmp.ConfirmBehavior.Replace,
         },
-        sources = {
+        sources = cmp.config.sources({
             { name = 'nvim_lsp' },
             { name = 'luasnip' }, 
             { name = "buffer" },
             { name = "path" }
-        },
+        }),
         formatting = {
             fields = { "kind", "abbr", "menu" },
-            format = function(entry, vim_item)
-                local kind_icons = {
+            format = function(_, item)
+                local icons = {
                     Text = "󰉿",
                     Method = "󰆧",
                     Function = "󰊕",
@@ -386,21 +444,13 @@ if not vim.g.vscode then
                     TypeParameter = " ",
                     Misc = " "
                 }
-
-                vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
-                vim_item.menu = ({
-                    nvim_lsp = "[LSP]",
-                    luasnip  = "[Snippet]",
-                    buffer   = "[Buffer]",
-                    path     = "[Path]",
-                })[entry.source.name]
-
-                return vim_item
+                if icons[item.kind] then
+                    item.kind = icons[item.kind]
+                end
+                return item 
             end,
         },  
     })
-
-
 
     require("overseer").setup({
         component_aliases = {
@@ -423,9 +473,19 @@ if not vim.g.vscode then
         ensure_installed = { "clangd" }
     })
 
-    local cmp_caps = require("cmp_nvim_lsp").default_capabilities()
+
     local lsp = require("lspconfig")
-    lsp.clangd.setup({ capabilities = cmp_caps })
+    local navic = require("nvim-navic")
+    navic.setup()
+
+    local cmp_caps = require("cmp_nvim_lsp").default_capabilities()
+
+    lsp.clangd.setup({ 
+        capabilities = cmp_caps ,
+        on_attach = function(client, bufnr)
+            navic.attach(client, bufnr)
+        end
+    })
 
 
     local actions = require("telescope.actions")
@@ -433,12 +493,35 @@ if not vim.g.vscode then
         pickers = {
             find_files = { theme = "ivy", },
         },
+        extensions = {
+            ["ui-select"] = {
+                require("telescope.themes").get_dropdown()
+            }
+        }
     })
+    require("telescope").load_extension("ui-select")
     require("telescope").load_extension("fzy_native")
 
-    if not vim.g.win32 then
-        --require("mini.animate").setup()
-    end
+    require("noice").setup({
+        lsp = {
+            override = {
+                ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+                ["vim.lsp.util.stylize_markdown"] = true,
+                ["cmp.entry.get_documentation"] = true,
+            },
+        },
+        presets = {
+            bottom_search = true, 
+            command_palette = true, 
+            long_message_to_split = true, 
+            inc_rename = false, 
+            lsp_doc_border = false, 
+        },
+        cmdline = {
+            view = "cmdline"
+        }
+    })
+
 
     require("mini.sessions").setup({
         directory = vim.fn.stdpath("data") .. "/session",
@@ -472,8 +555,8 @@ vim.keymap.set("n", "<X2Mouse>", "<C-o>", {})
 
 if not vim.g.vscode then
     vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
-    vim.keymap.set('n', '<C-j>', ":cnext<CR>", { silent = true })
-    vim.keymap.set('n', '<C-k>', ":cprev<CR>", { silent = true })
+    vim.keymap.set('n', '<C-j>', ":cnext!<CR>", { silent = true })
+    vim.keymap.set('n', '<C-k>', ":cprev!<CR>", { silent = true })
 
     local builtin = require("telescope.builtin")
     vim.keymap.set('n', '<C-p>', builtin.find_files, {})
