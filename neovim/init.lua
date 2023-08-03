@@ -58,16 +58,17 @@ vim.opt.cinoptions = "(0,u0,U0,:0,l1,g0"
 
 vim.opt.cursorline=true
 vim.opt.showmode=false
+vim.opt.pumheight=5
 vim.opt.scrolloff=5
 vim.opt.sidescrolloff=5
-vim.opt.linebreak=true
-vim.opt.breakindent=true
-vim.opt.breakindentopt="shift:8"
 
 vim.opt.expandtab=true
 vim.opt.shiftwidth=4
 vim.opt.softtabstop=0
 vim.opt.tabstop=4
+vim.opt.linebreak=true
+vim.opt.breakindent=true
+vim.opt.breakindentopt="shift:8"
 
 if vim.g.vscode then
     vim.opt.inccommand="nosplit"
@@ -193,7 +194,6 @@ require("lazy").setup(
             file = "",
         }
     },
-
     { 
         "hrsh7th/nvim-cmp",         
         enabled = not vim.g.vscode,
@@ -460,7 +460,6 @@ if not vim.g.vscode then
 
     cmp.setup({
         completion = { 
-            autocomplete = false,
             completeopt = "menu,menuone,noinsert",
         },
         experimental = { ghost_text = true, },
@@ -518,6 +517,15 @@ if not vim.g.vscode then
                 elseif icons[item.kind] then
                     item.kind = icons[item.kind]
                 end
+
+                item.menu = ({
+                    buffer = "[Buffer]",
+                    nvim_lsp = "[LSP]",
+                    luasnip = "[LuaSnip]",
+                    nvim_lua = "[Lua]",
+                    latex_symbols = "[LaTeX]",
+                })[entry.source.name]
+
                 return item 
             end,
         },  
