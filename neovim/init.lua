@@ -384,6 +384,15 @@ require("lazy").setup(
             telescope.load_extension("ui-select")
         end
     },
+    {
+        "uga-rosa/ccc.nvim",
+        opts = {
+            highlighter = {
+                auto_enable = true,
+                lsp = true,
+            },
+        }
+    }
 },
 {
     dev = {
