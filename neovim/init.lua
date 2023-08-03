@@ -1,3 +1,6 @@
+vim.g.loaded_netrw = 1 -- see nvim-tree
+vim.g.loaded_netrwPlugin = 1
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -24,16 +27,56 @@ function ReloadConfig()
         vim.opt.hlsearch = false
     end
 end
-
 vim.cmd("command! Reload lua ReloadConfig()")
-
 
 if vim.loop.os_uname().sysname == "Windows_NT" then
     vim.g.win32 = true
 end
 
-require("lazy").setup({
+local project_path;
+if vim.g.win32 then
+    project_path = "D:\\projects"
+else
+    project_path = "~/projects"
+end
 
+vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
+vim.opt.clipboard:append{ 'unnamedplus' }
+vim.opt.swapfile=false
+vim.opt.undofile=true
+vim.opt.termguicolors=true -- see bufferline.nvim
+vim.opt.mousemoveevent=true
+
+vim.opt.inccommand="split"
+vim.opt.ignorecase=true
+vim.opt.smartcase=true
+vim.opt.gdefault=true
+
+vim.opt.cindent = true
+vim.opt.copyindent = true
+vim.opt.cinoptions = "(0,u0,U0,:0,l1,g0"
+
+vim.opt.cursorline=true
+vim.opt.showmode=false
+vim.opt.scrolloff=5
+vim.opt.sidescrolloff=5
+vim.opt.linebreak=true
+vim.opt.breakindent=true
+vim.opt.breakindentopt="shift:8"
+
+vim.opt.expandtab=true
+vim.opt.shiftwidth=4
+vim.opt.softtabstop=0
+vim.opt.tabstop=4
+
+if vim.g.vscode then
+    vim.opt.inccommand="nosplit"
+end
+
+vim.o.guifont = "UbuntuMono Nerd Font:h14"
+
+require("lazy").setup(
+{
     { 
         "maxmx03/solarized.nvim", 
         enabled = not vim.g.vscode,
@@ -137,20 +180,20 @@ require("lazy").setup({
         }
     },
 
-    { "echasnovski/mini.align",      version = "*" },
-    { "echasnovski/mini.comment",    version = "*" },
-    { "echasnovski/mini.jump",       version = "*" },
-    { "echasnovski/mini.move",       version = "*" },
-    { 'echasnovski/mini.sessions',   version = '*', enabled = not vim.g.vscode },
+    { "echasnovski/mini.align",   version = "*", opts = {}},
+    { "echasnovski/mini.comment", version = "*", opts = {}},
+    { "echasnovski/mini.move",    version = "*", opts = {}},
+    { "echasnovski/mini.starter", version = "*", opts = {}},
     { 
-        "folke/which-key.nvim",
-        init = function() 
-            vim.o.timeout = true
-            vim.o.timeoutlen = 300
-        end
+        'echasnovski/mini.sessions',   
+        version = '*', 
+        enabled = not vim.g.vscode,
+        opts = {
+            directory = vim.fn.stdpath("data") .. "/session",
+            file = "",
+        }
     },
 
-    -- Completion
     { 
         "hrsh7th/nvim-cmp",         
         enabled = not vim.g.vscode,
@@ -163,94 +206,192 @@ require("lazy").setup({
     },      
     { "L3MON4D3/LuaSnip",         enabled = not vim.g.vscode, version = "2.*", build = "make install_jsregexp" },
 
-    -- UI 
     { 'echasnovski/mini.starter',  version = '*',              enabled = not vim.g.vscode },
-    { "akinsho/bufferline.nvim",   enabled = not vim.g.vscode, version = "*", dependencies = "nvim-tree/nvim-web-devicons" },
-    { "nvim-lualine/lualine.nvim", enabled = not vim.g.vsode },
-    { "nvim-tree/nvim-tree.lua",   enabled = not vim.g.vscode, version = "*", dependencies = "nvim-tree/nvim-web-devicons" },
-    { "rcarriga/nvim-notify",      enabled = not vim.g.vscode },
-    { "stevearc/dressing.nvim",    enabled = not vim.g.vscode },
     { 
-        "folke/noice.nvim", 
-        enabled = not vim.g.vscode ,
-        event = "VeryLazy",
-        dependencies = {
-            "MunifTanjim/nui.nvim",
-            "rcarriga/nvim-notify",
+        "akinsho/bufferline.nvim",   
+        enabled = not vim.g.vscode, 
+        version = "*", 
+        dependencies = "nvim-tree/nvim-web-devicons",
+        opts = { options = {
+            right_mouse_command = false,
+            indicator = { style = "underline" },
+            show_buffer_icons = false,
+            separator_style = "slant",
+            hover = {
+                enabled = true,
+                delay = 0,
+                reveal = { "close" }
+            }
+        }}
+    },
+    { 
+        "nvim-lualine/lualine.nvim", 
+        enabled = not vim.g.vsode,
+        opts = {
+            theme = "auto",
+            sections = {
+                lualine_a = {'mode'},
+                lualine_b = {'diagnostics'},
+                lualine_c = {
+                    { 'filename', symbols = { modified = "●", readonly = "", unnamed = '[No Name]', newfile = '[New]' } },
+                    { "navic" },
+                },
+                lualine_x = {
+                    'encoding', 
+                    { 'fileformat', symbols = { unix = "LF", dos = "CRLF", mac = "CR" } },
+                    'filetype'
+                },
+                lualine_y = {},
+                lualine_z = {'location'}
+            },
+            inactive_sections = {
+                lualine_a = {},
+                lualine_b = {},
+                lualine_c = {
+                    { 'filename', symbols = { modified = "●", readonly = "", unnamed = '[No Name]', newfile = '[New]' } },
+                },
+                lualine_x = {
+                    'encoding', 
+                    { 'fileformat', symbols = { unix = "LF", dos = "CRLF", mac = "CR" } },
+                    'filetype',
+                },
+                lualine_y = {},
+                lualine_z = {'location'}
+            }
         }
     },
-
-    -- LSP
+    { 
+        "nvim-tree/nvim-tree.lua",  
+        enabled = not vim.g.vscode, 
+        version = "*",
+        dependencies = "nvim-tree/nvim-web-devicons",
+        opts = {
+            disable_netrw = true,
+            renderer = {
+                icons = {
+                    show = {
+                        file = false,
+                        git = false,
+                    }
+                }
+            },
+            actions = {
+                open_file = {
+                    quit_on_open = true,
+                }
+            }
+        }
+    },
+    { 
+        "rcarriga/nvim-notify",      
+        enabled = not vim.g.vscode,
+        opts = {
+            fps = 60,
+            timeout = 2000,
+            render = "compact",
+            stages = "slide",
+        },
+        init = function()
+            vim.notify = require("notify")
+        end
+    },
+    { "stevearc/dressing.nvim", enabled = not vim.g.vscode, opts = {} },
     { "folke/neodev.nvim", opts = {} },
-    { "neovim/nvim-lspconfig",                    enabled = not vim.g.vsode },
+
     {
         "williamboman/mason.nvim",
         enabled = not vim.g.vscode,
         cmd = "Mason",
         build = ":MasonUpdate",
+        opts = {}
     },
-    { "williamboman/mason-lspconfig.nvim",        enabled = not vim.g.vsode },
+    { 
+        "williamboman/mason-lspconfig.nvim",
+        dependencies = {
+            "williamboman/mason.nvim",
+        },
+        enabled = not vim.g.vsode,
+        opts = {
+            ensure_installed = { "clangd" }
+        }
+    },
+    { 
+        "neovim/nvim-lspconfig",                    
+        dependencies = {
+            "williamboman/mason.nvim",
+            "hrsh7th/cmp-nvim-lsp",
+            "SmiteshP/nvim-navic", 
+        },
+        enabled = not vim.g.vsode,
+        init = function()
+            require("lspconfig").clangd.setup({ 
+                capabilities = require("cmp_nvim_lsp").default_capabilities(),
+                on_attach = function(client, bufnr) 
+                    require("nvim-navic").attach(client, bufnr) 
+                end
+            })
+        end
+    },
     { 
         "SmiteshP/nvim-navic", 
         enabled = not vim.g.vscode, 
         dependencies = { "neovim/nvim-lspconfig" },
-        lazy = true,
+        opts = {
+            separator = ">",
+            highlight = false,
+            depth_limit = 5,
+            depth_limit_indicator = "..",
+            icons = icons,
+        },
         init = function()
             vim.g.navic_silence = true
-        end,
-        opts = function()
-            return {
-                separator = " ",
-                highlight = true,
-                depth_limit = 5,
-            }
-        end,
+        end
     },
 
-    { "grouse/overseer.nvim",                   enabled = not vim.g.vscode, opts = {} },
-    { "nvim-treesitter/nvim-treesitter",          enabled = not vim.g.vsode,  build = ":TSUpdate" },
-    { "nvim-telescope/telescope.nvim",            enabled = not vim.g.vscode, tag = "0.1.2", dependencies = { "nvim-lua/plenary.nvim" } },
-    { "nvim-telescope/telescope-fzy-native.nvim", enabled = not vim.g.vsode },
-    { "nvim-telescope/telescope-ui-select.nvim", enabled = not vim.g.vscode },
+    { 
+        "grouse/overseer.nvim",                   
+        enabled = not vim.g.vscode, 
+        opts = {
+            component_aliases = {
+                default = {
+                    { "display_duration", detail_level = 1 },
+                    "on_output_summarize",
+                    "on_exit_set_status",
+                    "on_complete_notify",
+                    "on_complete_dispose",
+                    "on_result_diagnostics_quickfix",
+                },
+                default_vscode = {
+                    "default",
+                    { "on_result_diagnostics", remove_on_restart = true },
+                }
+            }
+        }
+    },
+    { "nvim-treesitter/nvim-treesitter", enabled = not vim.g.vsode, build = ":TSUpdate" },
+    { 
+        "nvim-telescope/telescope.nvim",            
+        enabled = not vim.g.vscode, 
+        tag = "0.1.2", 
+        dependencies = { 
+            "nvim-lua/plenary.nvim",
+            "nvim-telescope/telescope-fzy-native.nvim",
+            "nvim-telescope/telescope-ui-select.nvim",
+        },
+        init = function()
+            local telescope = require("telescope")
+            telescope.load_extension("fzy_native")
+            telescope.load_extension("ui-select")
+        end
+    },
+},
+{
+    dev = {
+        path = project_path,
+        patterns = { "grouse" },
+        fallback =  true,
+    }
 })
-
-vim.g.loaded_netrw = 1 -- see nvim-tree
-vim.g.loaded_netrwPlugin = 1
-
-vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
-vim.opt.clipboard:append{ 'unnamedplus' }
-vim.opt.swapfile=false
-vim.opt.undofile=true
-vim.opt.termguicolors=true -- see bufferline.nvim
-vim.opt.mousemoveevent=true
-
-vim.opt.inccommand="split"
-vim.opt.ignorecase=true
-vim.opt.smartcase=true
-vim.opt.gdefault=true
-
-vim.opt.cindent = true
-vim.opt.copyindent = true
-vim.opt.cinoptions = "(0,u0,U0,:0,l1,g0"
-
-vim.opt.cursorline=true
-vim.opt.showmode=false
-vim.opt.scrolloff=5
-vim.opt.sidescrolloff=5
-vim.opt.linebreak=true
-vim.opt.breakindent=true
-vim.opt.breakindentopt="shift:8"
-
-vim.opt.expandtab=true
-vim.opt.shiftwidth=4
-vim.opt.softtabstop=0
-vim.opt.tabstop=4
-
-if vim.g.vscode then
-    vim.opt.inccommand="nosplit"
-end
-
-vim.o.guifont = "UbuntuMono Nerd Font:h14"
 
 if vim.g.neovide then
     vim.g.neovide_cursor_animation_length = 0
@@ -275,91 +416,45 @@ if vim.g.fvim_loaded then
     vim.keymap.set({"n", "i"}, "<M-CR>", ":FVimToggleFullScreen<CR>", { silent = true })
 end
 
-require("mini.align").setup()
-require("mini.comment").setup()
-require("mini.jump").setup()
-require("mini.move").setup()
+local icons = {
+    Array         = "",
+    Boolean       = "◩",
+    Class         = '',
+    Color         = "󰏘",
+    Constant      = "",
+    Constructor   = "",
+    Enum          = "",
+    EnumMember    = '',
+    Event         = '',
+    Field         = "",
+    File          = '',
+    Folder        = "󰉋",
+    Function      = "",
+    Interface     = "練",
+    Key           = '',
+    Keyword       = "󰌋",
+    Method        = "",
+    Misc          = "",
+    Module        = "",
+    Namespace     = '',
+    Null          = "ﳠ",
+    Number        = "",
+    Object        = '',
+    Operator      = '',
+    Package       = '',
+    Property      = "󰜢",
+    Reference     = "",
+    Snippet       = "",
+    String        = '',
+    Struct        = "",
+    Text          = "󰉿",
+    TypeParameter = '',
+    Unit          = "󰑭",
+    Value         = "󰎠",
+    Variable      = "󰀫",
+}
 
 if not vim.g.vscode then
-    require("notify").setup({
-        fps = 60,
-        timeout = 2000,
-        render = "compact",
-        stages = "slide",
-    })
-
-    require("dressing").setup({})
-
-    require("lualine").setup({
-        theme = "auto",
-        sections = {
-            lualine_a = {'mode'},
-            lualine_b = {'diagnostics'},
-            lualine_c = {
-                { 'filename', symbols = { modified = "●", readonly = "", unnamed = '[No Name]', newfile = '[New]' } },
-                {
-                    function() return require("nvim-navic").get_location() end,
-                    cond = function() return package.loaded["nvim-navic"] and require("nvim-navic").is_available() end,
-                }
-            },
-            lualine_x = {
-                'encoding', 
-                { 'fileformat', symbols = { unix = "LF", dos = "CRLF", mac = "CR" } },
-                'filetype'
-            },
-            lualine_y = {},
-            lualine_z = {'location'}
-        },
-        inactive_sections = {
-            lualine_a = {},
-            lualine_b = {},
-            lualine_c = {
-                { 'filename', symbols = { modified = "●", readonly = "", unnamed = '[No Name]', newfile = '[New]' } },
-                {
-                    function() return require("nvim-navic").get_location() end,
-                    cond = function() return package.loaded["nvim-navic"] and require("nvim-navic").is_available() end,
-                }
-            },
-            lualine_x = {
-                'encoding', 
-                { 'fileformat', symbols = { unix = "LF", dos = "CRLF", mac = "CR" } },
-                'filetype',
-            },
-            lualine_y = {},
-            lualine_z = {'location'}
-        }
-    })
-
-    require("bufferline").setup({ options = {
-        right_mouse_command = false,
-        indicator = { style = "underline" },
-        show_buffer_icons = false,
-        separator_style = "slant",
-        hover = {
-            enabled = true,
-            delay = 0,
-            reveal = { "close" }
-        }
-
-    }})
-
-    require("nvim-tree").setup({
-        disable_netrw = true,
-        renderer = {
-            icons = {
-                show = {
-                    file = false,
-                    git = false,
-                }
-            }
-        },
-        actions = {
-            open_file = {
-                quit_on_open = true,
-            }
-        }
-    })
-
     local cmp = require("cmp")
     local luasnip = require("luasnip")
 
@@ -415,36 +510,12 @@ if not vim.g.vscode then
         }),
         formatting = {
             fields = { "kind", "abbr", "menu" },
-            format = function(_, item)
-                local icons = {
-                    Text = "󰉿",
-                    Method = "󰆧",
-                    Function = "󰊕",
-                    Constructor = "",
-                    Field = " ",
-                    Variable = "󰀫",
-                    Class = "󰠱",
-                    Interface = "",
-                    Module = "",
-                    Property = "󰜢",
-                    Unit = "󰑭",
-                    Value = "󰎠",
-                    Enum = "",
-                    Keyword = "󰌋",
-                    Snippet = "",
-                    Color = "󰏘",
-                    File = "󰈙",
-                    Reference = "",
-                    Folder = "󰉋",
-                    EnumMember = "",
-                    Constant = "󰏿",
-                    Struct = "",
-                    Event = "",
-                    Operator = "󰆕",
-                    TypeParameter = " ",
-                    Misc = " "
-                }
-                if icons[item.kind] then
+            format = function(entry, item)
+                local icon, hl_group = require('nvim-web-devicons').get_icon(entry:get_completion_item().label)
+                if icon then
+                    item.kind = icon
+                    item.kind_hl_group = hl_group
+                elseif icons[item.kind] then
                     item.kind = icons[item.kind]
                 end
                 return item 
@@ -452,87 +523,20 @@ if not vim.g.vscode then
         },  
     })
 
-    require("overseer").setup({
-        component_aliases = {
-            default = {
-              { "display_duration", detail_level = 1 },
-              "on_output_summarize",
-              "on_exit_set_status",
-              "on_complete_notify",
-              "on_complete_dispose",
-              "on_result_diagnostics_quickfix",
-            },
-            default_vscode = {
-                "default",
-                { "on_result_diagnostics", remove_on_restart = true },
-            }
-        }
-    })
-    require("mason").setup()
-    require("mason-lspconfig").setup({
-        ensure_installed = { "clangd" }
-    })
-
-
-    local lsp = require("lspconfig")
-    local navic = require("nvim-navic")
-    navic.setup()
-
-    local cmp_caps = require("cmp_nvim_lsp").default_capabilities()
-
-    lsp.clangd.setup({ 
-        capabilities = cmp_caps ,
-        on_attach = function(client, bufnr)
-            navic.attach(client, bufnr)
-        end
-    })
-
-
-    local actions = require("telescope.actions")
     require("telescope").setup({
-        pickers = {
-            find_files = { theme = "ivy", },
+        pickers = { 
+            find_files = { theme = "ivy", }, 
         },
         extensions = {
-            ["ui-select"] = {
-                require("telescope.themes").get_dropdown()
-            }
-        }
-    })
-    require("telescope").load_extension("ui-select")
-    require("telescope").load_extension("fzy_native")
-
-    require("noice").setup({
-        lsp = {
-            override = {
-                ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-                ["vim.lsp.util.stylize_markdown"] = true,
-                ["cmp.entry.get_documentation"] = true,
-            },
-        },
-        presets = {
-            bottom_search = true, 
-            command_palette = true, 
-            long_message_to_split = true, 
-            inc_rename = false, 
-            lsp_doc_border = false, 
-        },
-        cmdline = {
-            view = "cmdline"
+            ["ui-select"] = { require("telescope.themes").get_dropdown() }
         }
     })
 
-
-    require("mini.sessions").setup({
-        directory = vim.fn.stdpath("data") .. "/session",
-        file = "",
-    })
-    require("mini.starter").setup()
 
     require("nvim-treesitter.install").prefer_git = false
     require("nvim-treesitter.configs").setup {
         ensure_installed = { "comment", "c", "cpp", "bash", "vim", "lua" },
-        auto_install = false,
+        auto_install = true,
         highlight = {
             enable = true,
         },
