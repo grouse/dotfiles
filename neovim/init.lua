@@ -576,8 +576,30 @@ vim.keymap.set("n", "<X2Mouse>", "<C-o>", {})
 
 if not vim.g.vscode then
     vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
-    vim.keymap.set('n', '<C-j>', ":cnext!<CR>", { silent = true })
-    vim.keymap.set('n', '<C-k>', ":cprev!<CR>", { silent = true })
+    vim.keymap.set('n', '<C-j>', 
+    function() 
+        local size = #vim.fn.getqflist()
+        if size == 0 then return end
+
+        local current = vim.fn.getqflist({ id = 0 }).id
+        if current == size-1 then
+            vim.cmd("clast!")
+        else
+            vim.cmd("cnext!")
+        end
+    end)
+    vim.keymap.set('n', '<C-k>', 
+    function() 
+        local size = #vim.fn.getqflist()
+        if size == 0 then return end
+
+        local current = vim.fn.getqflist({ id = 0 }).id
+        if current == size-1 then
+            vim.cmd("cfirst!")
+        else
+            vim.cmd("cprev!")
+        end
+    end)
 
     local builtin = require("telescope.builtin")
     vim.keymap.set('n', '<C-p>', builtin.find_files, {})
