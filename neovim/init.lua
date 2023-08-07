@@ -615,15 +615,16 @@ if not vim.g.vscode then
 
     local overseer = require("overseer")
     vim.keymap.set("n", "<C-b>", function()
+        vim.cmd(":wa")
         local tasks = overseer.list_tasks({ recent_first = true })
         if vim.tbl_isempty(tasks) then
-            vim.cmd.OverseerRun()
+            overseer.run_template()
         else
             overseer.run_action(tasks[1], "restart")
         end
     end, {})
 
-    vim.keymap.set("n", "<M-b>", ":OverseerRun<CR>", { silent = true })
+    vim.keymap.set("n", "<M-b>", ":wa<CR>:OverseerRun<CR>", { silent = true })
     vim.keymap.set("n", "<M-j>", ":OverseerToggle bottom<CR>", { silent = true })
     vim.keymap.set("n", "<M-l>", ":OverseerToggle right<CR>", { silent = true })
 
