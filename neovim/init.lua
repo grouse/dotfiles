@@ -54,7 +54,7 @@ vim.opt.gdefault=true
 
 vim.opt.cindent = true
 vim.opt.copyindent = true
-vim.opt.cinoptions = "(0,u0,U0,:0,l1,g0"
+vim.opt.cinoptions = ">s,(0,u0,Us,Ws,:0,l1,is,g0,E-s"
 
 vim.opt.cursorline=true
 vim.opt.showmode=false
