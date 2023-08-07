@@ -312,7 +312,7 @@ require("lazy").setup(
         },
         enabled = not vim.g.vsode,
         opts = {
-            ensure_installed = { "clangd" }
+            ensure_installed = { "clangd", "rust_analyzer" }
         }
     },
     { 
@@ -326,9 +326,18 @@ require("lazy").setup(
         init = function()
             require("lspconfig").clangd.setup({ 
                 capabilities = require("cmp_nvim_lsp").default_capabilities(),
-                on_attach = function(client, bufnr) 
-                    require("nvim-navic").attach(client, bufnr) 
-                end
+                on_attach = function(client, bufnr) require("nvim-navic").attach(client, bufnr) end
+            })
+            require("lspconfig").rust_analyzer.setup({
+                capabilities = require("cmp_nvim_lsp").default_capabilities(),
+                on_attach = function(client, bufnr) require("nvim-navic").attach(client, bufnr) end,
+                settings = {
+                    ['rust-analyzer'] = {
+                        diagnostics = {
+                            enable = false;
+                        }
+                    }
+                }
             })
         end
     },
@@ -548,7 +557,6 @@ if not vim.g.vscode then
             ["ui-select"] = { require("telescope.themes").get_dropdown() }
         }
     })
-
 
     require("nvim-treesitter.install").prefer_git = false
     require("nvim-treesitter.configs").setup {
