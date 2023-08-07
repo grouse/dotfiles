@@ -590,7 +590,7 @@ if not vim.g.vscode then
         if size == 0 then return end
 
         local current = vim.fn.getqflist({ id = 0 }).id
-        if current == size-1 then
+        if current == size-1 or size == 1 then
             vim.cmd("clast!")
         else
             vim.cmd("cnext!")
@@ -602,7 +602,7 @@ if not vim.g.vscode then
         if size == 0 then return end
 
         local current = vim.fn.getqflist({ id = 0 }).id
-        if current == size-1 then
+        if current == size-1 or size == 1 then
             vim.cmd("cfirst!")
         else
             vim.cmd("cprev!")
