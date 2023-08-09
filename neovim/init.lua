@@ -384,13 +384,40 @@ require("lazy").setup(
         tag = "0.1.2", 
         dependencies = { 
             "nvim-lua/plenary.nvim",
+            "FeiyouG/command_center.nvim",
             "nvim-telescope/telescope-fzy-native.nvim",
             "nvim-telescope/telescope-ui-select.nvim",
         },
-        init = function()
+        config = function()
             local telescope = require("telescope")
+            local themes = require("telescope.themes")
+            local command_center = require("command_center")
+
+            telescope.setup({
+                pickers = {
+                    find_files = { theme = "ivy" },
+                },
+                extensions = {
+                    ["ui-select"] = { themes.get_dropdown() },
+                    command_center = {
+                        components = {
+                            command_center.component.DESC,
+                            command_center.component.KEYS,
+                            command_center.component.CATEGORY,
+                        },
+                        sort_by = {
+                            command_center.component.DESC,
+                            command_center.component.KEYS,
+                            command_center.component.CATEGORY,
+                        },
+                        theme = themes.get_ivy
+                    }
+                }
+            })
+
             telescope.load_extension("fzy_native")
             telescope.load_extension("ui-select")
+            telescope.load_extension("command_center")
         end
     },
     {
@@ -401,7 +428,7 @@ require("lazy").setup(
                 lsp = true,
             },
         }
-    }
+    },
 },
 {
     dev = {
@@ -410,6 +437,36 @@ require("lazy").setup(
         fallback =  true,
     }
 })
+
+local function keymap_set(desc, category, mode, key, cmd, opts)
+    if not vim.g.vscode then
+        local command_center = require("command_center")
+        command_center.add({
+            {
+                desc = desc,
+                cmd = cmd,
+                keys = { mode, key, opts },
+                cat = category,
+            }
+        })
+    else
+        vim.keymap.set(mode, key, cmd, opts)
+    end
+end
+
+local function command_add(desc, category, cmd, opts)
+    if not vim.g.vscode then
+        local command_center = require("command_center")
+        command_center.add(
+            {
+                { desc = desc, cat = category, cmd = cmd, },
+            },
+            { mode = command_center.mode.ADD })
+    end
+end
+
+command_add("Save file", "file", ":w",  { silent = true })
+command_add("Save all",  "file", ":wa", { silent = true })
 
 if vim.g.neovide then
     vim.g.neovide_cursor_animation_length = 0
@@ -422,8 +479,8 @@ if vim.g.neovide then
         vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + delta
     end
 
-    vim.keymap.set("n", "<C-ScrollWheelUp>", function() increment_scale_factor(1/16) end, {});
-    vim.keymap.set("n", "<C-ScrollWheelDown>", function() increment_scale_factor(-1/16) end, {});
+    keymap_set("Zoom in",  "editor", "n", "<C-ScrollWheelUp>",   function() increment_scale_factor(1/16) end,  {});
+    keymap_set("Zoom out", "editor", "n", "<C-ScrollWheelDown>", function() increment_scale_factor(-1/16) end, {});
 end
 
 if vim.g.fvim_loaded then
@@ -549,15 +606,6 @@ if not vim.g.vscode then
         },  
     })
 
-    require("telescope").setup({
-        pickers = { 
-            find_files = { theme = "ivy", }, 
-        },
-        extensions = {
-            ["ui-select"] = { require("telescope.themes").get_dropdown() }
-        }
-    })
-
     require("nvim-treesitter.install").prefer_git = false
     require("nvim-treesitter.configs").setup {
         ensure_installed = { "comment", "c", "cpp", "bash", "vim", "lua" },
@@ -570,21 +618,27 @@ if not vim.g.vscode then
     require("nvim-treesitter").setup()
 end
 
-vim.keymap.set('v', '<', '<gv', { silent = true })
-vim.keymap.set('v', '>', '>gv', { silent = true })
-vim.keymap.set('n', 'n', 'nzz', { silent = true })
-vim.keymap.set('n', 'N', 'Nzz', { silent = true })
+
+keymap_set("Decrease increment", "format", 'v', '<', '<gv', { silent = true })
+keymap_set("Increase increment", "format", 'v', '>', '>gv', { silent = true })
+keymap_set("Next search result", "editor", 'n', 'n', 'nzz', { silent = true })
+keymap_set("Prev search result", "editor", 'n', 'N', 'Nzz', { silent = true })
 vim.keymap.set('n', "<CR>", ":nohlsearch<CR>", { silent = true })
-vim.keymap.set("n", "<C-q>", ":close<CR>", { silent = true })
+keymap_set("Close window", "editor", "n", "<C-q>", ":close<CR>", { silent = true })
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { silent = true })
 
 -- NOTE(jesper): not actually sure if these work. They don't in neovide or nvim-qt, but I think that might be a client limitation, not having implemented the events properly
-vim.keymap.set("n", "<X1Mouse>", "<C-i>", {})
-vim.keymap.set("n", "<X2Mouse>", "<C-o>", {})
+
+
+keymap_set("Jump next", "editor", "n", "<X1Mouse>", "<C-i>", {})
+keymap_set("Jump prev", "editor", "n", "<X2Mouse>", "<C-o>", {})
 
 if not vim.g.vscode then
-    vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
-    vim.keymap.set('n', '<C-j>', 
+    local telescope = require("telescope")
+    keymap_set("Command palette", "editor", "n", "<C-S-p>", telescope.extensions.command_center.command_center)
+
+    keymap_set("Open diagnostic", "diagnostic", 'n', '<space>e', vim.diagnostic.open_float)
+    keymap_set("Next diagnostic", "diagnostic", 'n', '<C-j>', 
     function() 
         local size = #vim.fn.getqflist()
         if size == 0 then return end
@@ -596,7 +650,7 @@ if not vim.g.vscode then
             vim.cmd("cnext!")
         end
     end)
-    vim.keymap.set('n', '<C-k>', 
+    keymap_set("Prev diagnostic", "diagnostic", 'n', '<C-k>', 
     function() 
         local size = #vim.fn.getqflist()
         if size == 0 then return end
@@ -610,11 +664,11 @@ if not vim.g.vscode then
     end)
 
     local builtin = require("telescope.builtin")
-    vim.keymap.set('n', '<C-p>', builtin.find_files, {})
-    vim.keymap.set("n", "<C-f>", builtin.live_grep, {})
+    keymap_set("Find file", "project", 'n', '<C-p>', builtin.find_files)
+    keymap_set("Grep files", "project", "n", "<C-f>", builtin.live_grep)
 
     local overseer = require("overseer")
-    vim.keymap.set("n", "<C-b>", function()
+    keymap_set("Build last", "project", "n", "<C-b>", function()
         vim.cmd(":wa")
         local tasks = overseer.list_tasks({ recent_first = true })
         if vim.tbl_isempty(tasks) then
@@ -624,12 +678,11 @@ if not vim.g.vscode then
         end
     end, {})
 
-    vim.keymap.set("n", "<M-b>", ":wa<CR>:OverseerRun<CR>", { silent = true })
-    vim.keymap.set("n", "<M-j>", ":OverseerToggle bottom<CR>", { silent = true })
-    vim.keymap.set("n", "<M-l>", ":OverseerToggle right<CR>", { silent = true })
+    keymap_set("Build select", "project", "n", "<M-b>", ":wa<CR>:OverseerRun<CR>", { silent = true })
+    keymap_set("Toggle build output", "project", "n", "<M-j>", ":OverseerToggle bottom<CR>", { silent = true })
 
     local nvim_tree = require("nvim-tree.api")
-    vim.keymap.set("n", "<M-h>", nvim_tree.tree.toggle, {})
+    keymap_set("File explorer", "project", "n", "<M-h>", nvim_tree.tree.toggle, {})
 
 end
 
@@ -653,12 +706,15 @@ if not vim.g.vscode then
 
             local opts = { buffer = ev.buf }
             local telescope = require("telescope.builtin")
-            vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-            vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-            vim.keymap.set('n', 'gd', telescope.lsp_definitions, opts)
-            vim.keymap.set('n', 'gi', telescope.lsp_implementations, opts)
-            vim.keymap.set('n', '<space>D', telescope.lsp_type_definitions, opts)
-            vim.keymap.set('n', 'gr', telescope.lsp_references, opts)
+            keymap_set("Go to declaration",       "LSP", 'n', 'gD',       vim.lsp.buf.declaration,        opts)
+            keymap_set("Preview declaration",     "LSP", 'n', 'K',        vim.lsp.buf.hover,              opts)
+            keymap_set("Find definition(s)",      "LSP", 'n', 'gd',       telescope.lsp_definitions,      opts)
+            keymap_set("Find implementation(s)",  "LSP", 'n', 'gi',       telescope.lsp_implementations,  opts)
+            keymap_set("Find type definition(s)", "LSP", 'n', '<space>D', telescope.lsp_type_definitions, opts)
+            keymap_set("Find references",         "LSP", 'n', 'gr',       telescope.lsp_references,       opts)
+
+            command_add("Rename symbol", "LSP", vim.lsp.buf.rename,      opts)
+            command_add("Code action",   "LSP", vim.lsp.buf.code_action, opts)
         end,
     })
 end
