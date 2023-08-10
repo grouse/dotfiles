@@ -104,14 +104,14 @@ function M.setup(opts, c)
         PreCondit      = { link = 'Define' }, -- preprocessor #if, #else, #endif, etc.
         Macro          = { fg   = c.base03 }, 
         Type           = { fg   = util.blend(c.base00, c.base01, 0.4) }, -- int, long, char, etc.
-        Special        = { fg   = c.red }, -- special symbol
+        Special        = { fg   = c.cyan }, -- special symbol
         SpecialChar    = { link = 'Special' }, -- special character in a constant
         Tag            = { link = 'Special' }, -- you can use CTRL-] on this
         SpecialComment = { link = 'Special' }, -- special things inside a comment
         Debug          = { link = 'Special' }, -- debugging statements
         Delimiter      = { fg   = util.lighten(c.base00, 0.5) }, -- character that needs attention
         Underlined     = { fg   = c.violet }, --text that stands out, HTML links
-        Error          = { fg   = c.error, bold = true }, --any erroneous construct
+        Error          = {},
         Todo           = { fg   = c.magenta, bold = true }, --anything that needs extra attention; mostly the keywords TODO FIXME and XXX
 
         --- treesitter highlights
