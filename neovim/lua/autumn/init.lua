@@ -4,17 +4,18 @@ M.config = {}
 
 local defaults = {
     palette = "auto", -- dark, light, or auto (uses vim.o.background)
-    styles = {
-        comments = "italic",
-    },
     colors = {
         dark = {
-            base00  = "#D5C4A1", -- fg main
-            base01  = "#d36e2a", -- fg accent0, basis for syntax keywords
-            base02  = "#8ec07c", -- fg accent1, basis for comments, text, strings
-            base03  = "#84a89a", -- fg accent2, basis for macros, annotations, pre-processor identifiers
+            base00 = "#D5C4A1", -- fg main
+            base01 = "#d36e2a", -- fg accent0, syntax keywords
+            base02 = "#8ec07c", -- fg accent1, comments, text, strings
+            base03 = "#84a89a", -- fg accent2, macros, annotations, pre-processor identifiers
 
-            base10  = "#1B2E28", -- bg main
+            base10 = "#1B2E28", -- bg main
+            base11 = "#657b83", -- bg accent0, visual
+            base12 = "#254041", -- bg accent1, window accents, sidebars, cursorline, popup/floating background, 
+            base13 = "#d36e2a", -- bg accent2, insert, selected menu item 
+            base14 = "#8ec07c", -- bg accent3, command
 
             -- colors
             yellow  = "#b58900",
@@ -38,12 +39,16 @@ local defaults = {
             error   = "#dc322f",
         },
         light = {
-            base00  = "#D5C4A1", -- fg main
-            base01  = "#d36e2a", -- fg accent0, syntax keywords
-            base02  = "#8ec07c", -- fg accent1, comments, text, strings
-            base03  = "#84a89a", -- fg accent2, macros, annotations, pre-processor identifiers
+            base00 = "#1B2E28", -- fg main
+            base01 = "#d36e2a", -- fg accent0, syntax keywords
+            base02 = "#8ec07c", -- fg accent1, comments, text, strings
+            base03 = "#84a89a", -- fg accent2, macros, annotations, pre-processor identifiers
 
-            base10  = "#1B2E28", -- bg main
+            base10 = "#D5C4A1", -- bg main
+            base11 = "#657b83", -- bg accent0, visual
+            base12 = "#254041", -- bg accent1, window accents, sidebars, cursorline, popup/floating background, 
+            base13 = "#d36e2a", -- bg accent2, insert, selected menu item 
+            base14 = "#8ec07c", -- bg accent3, command
 
             -- colors
             yellow  = "#b58900",
