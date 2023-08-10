@@ -143,10 +143,12 @@ end
 
 vim.o.guifont = "UbuntuMono Nerd Font:h14"
 
+-- require("autumn").setup()
+
 require("lazy").setup(
 {
-    { 
-        "maxmx03/solarized.nvim", 
+    {
+        "maxmx03/solarized.nvim",
         enabled = not vim.g.vscode,
         priority = 1000,
         lazy = false,
@@ -155,7 +157,7 @@ require("lazy").setup(
                 parameters = { italic = false },
                 keywords   = { bold   = false },
             },
-            colors = function() 
+            colors = function()
                 if vim.o.background == "dark" then
                     return {
                         base0  = '#D5C4A1', -- content tone (foreground)
@@ -219,7 +221,7 @@ require("lazy").setup(
                 else
                     return {
                         MatchParen = { fg   = "#000000", bg = "none" },
-                        
+
                         Define       = { link = "Keyword"  },
                         PreProc      = { link = "Define"   },
                         Include      = { link = "Define"   },
@@ -237,7 +239,7 @@ require("lazy").setup(
                         StorageClass = { link = 'Keyword'  },
                         Typedef      = { link = 'Keyword'  },
                         Repeat       = { link = "Keyword"  },
-                        
+
                         Error = { link = "Ignore" },
 
                         TelescopeNormal = { bg = colors.base03 },
