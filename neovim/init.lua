@@ -67,7 +67,7 @@ else
 end
 
 local icons = {
-    Array         = ""
+    Array         = "",
     Boolean       = "◩",
     Class         = '',
     Color         = "󰏘",
