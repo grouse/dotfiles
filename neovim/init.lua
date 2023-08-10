@@ -40,9 +40,8 @@ local function keymap_set(desc, category, mode, key, cmd, opts)
                 cat = category,
             }
         })
-    else
-        vim.keymap.set(mode, key, cmd, opts)
     end
+    vim.keymap.set(mode, key, cmd, opts)
 end
 
 local function command_add(desc, category, cmd)
@@ -68,11 +67,11 @@ else
 end
 
 local icons = {
-    Array         = "",
+    Array         = ""
     Boolean       = "◩",
     Class         = '',
     Color         = "󰏘",
-    Constant      = "",
+    Constant      = "",
     Constructor   = "",
     Enum          = "",
     EnumMember    = '',
@@ -80,16 +79,16 @@ local icons = {
     Field         = "",
     File          = '',
     Folder        = "󰉋",
-    Function      = "",
-    Interface     = "練",
+    Function      = "󰊕",
+    Interface     = "",
     Key           = '',
     Keyword       = "󰌋",
-    Method        = "",
+    Method        = "󰊕",
     Misc          = "",
     Module        = "",
     Namespace     = '',
     Null          = "ﳠ",
-    Number        = "",
+    Number        = "",
     Object        = '',
     Operator      = '',
     Package       = '',
@@ -97,7 +96,7 @@ local icons = {
     Reference     = "",
     Snippet       = "",
     String        = '',
-    Struct        = "",
+    Struct        = "",
     Text          = "󰉿",
     TypeParameter = '',
     Unit          = "󰑭",
@@ -490,11 +489,15 @@ require("lazy").setup(
 
 			local function on_attach(client, bufnr)
                 local telescope = require("telescope.builtin")
-			    require("nvim-navic").attach(client, bufnr)
 
-                vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+                if client.name ~= "lua_ls" then
+                    -- disabling this in lua cause it is all sorts of funky in giant require blocks, for example
+                    require("nvim-navic").attach(client, bufnr)
+                end
 
-                local opts = { buffer = ev.buf }
+                vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
+
+                local opts = { buffer = bufnr }
                 keymap_set("Go to declaration",       "LSP", 'n', 'gD',       vim.lsp.buf.declaration,        opts)
                 keymap_set("Preview declaration",     "LSP", 'n', 'K',        vim.lsp.buf.hover,              opts)
                 keymap_set("Find definition(s)",      "LSP", 'n', 'gd',       telescope.lsp_definitions,      opts)
@@ -506,18 +509,22 @@ require("lazy").setup(
                 command_add("Code action",   "LSP", vim.lsp.buf.code_action)
             end
 
+            vim.api.nvim_create_autocmd('LspAttach', {
+                group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+                callback = function(args)
+                    local buffer = args.buf
+                    local client = vim.lsp.get_client_by_id(args.data.client_id)
+                    on_attach(client, buffer)
+                end,
+            })
+
             require("lspconfig").lua_ls.setup({
                 log_level = vim.lsp.protocol.MessageType.Error,
                 capabilities = capabilities,
-                on_attach = on_attach,
                 settings = {
                     Lua = {
-                        completion = {
-                            callSnippet = "Replace"
-                        },
-                        diagnostics = {
-							globals = { "vim" },
-						},
+                        completion = { callSnippet = "Replace" },
+                        diagnostics = { globals = { "vim" }, },
                         workspace = {
                             library = {
                                 [vim.fn.expand("$VIMRUNTIME/lua")] = true,
@@ -530,12 +537,10 @@ require("lazy").setup(
 
             require("lspconfig").clangd.setup({
                 capabilities = capabilities,
-                on_attach = on_attach,
             })
 
             require("lspconfig").rust_analyzer.setup({
                 capabilities = capabilities,
-                on_attach = on_attach,
                 settings = {
                     ['rust-analyzer'] = {
                         diagnostics = {
@@ -748,7 +753,7 @@ if not vim.g.vscode then
 
     local telescope = require("telescope")
     local builtin = require("telescope.builtin")
-    keymap_set("Command palette", "editor", "n", "<C-S-p>", telescope.extensions.command_center.command_center)
+    keymap_set("Command palette", "editor", "n", "<C-l>", telescope.extensions.command_center.command_center)
     keymap_set("Find file", "project", 'n', '<C-p>', builtin.find_files)
     keymap_set("Grep files", "project", "n", "<C-f>", builtin.live_grep)
 end
@@ -762,3 +767,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
         vim.highlight.on_yank { higroup = 'HighlightYank', timeout = 500 }
     end,
 })
+
+if not vim.g.vscode then
+end
+
