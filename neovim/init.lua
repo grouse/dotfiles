@@ -515,12 +515,22 @@ require("lazy").setup(
         },
         config = function()
             local telescope = require("telescope")
+            local actions = require("telescope.actions")
             local themes = require("telescope.themes")
             local command_center = require("command_center")
 
             telescope.setup({
+                defaults = {
+                    mappings = {
+                        i = {
+                            ["<C-j>"] = actions.move_selection_next,
+                            ["<C-k>"] = actions.move_selection_previous,
+                        }
+                    }
+                },
                 pickers = {
                     find_files = { theme = "ivy" },
+                    live_grep = { theme = "ivy" },
                 },
                 extensions = {
                     ["ui-select"] = { themes.get_dropdown() },
@@ -656,7 +666,6 @@ if not vim.g.vscode then
     keymap_set("Grep files", "project", "n", "<C-f>", builtin.live_grep)
 end
 
-vim.cmd.highlight({"HighlightYank", "guifg=#5fb3b3"})
 vim.api.nvim_create_autocmd('TextYankPost', {
     group = vim.api.nvim_create_augroup('highlight_yank', {}),
     desc = 'Hightlight selection on yank',
