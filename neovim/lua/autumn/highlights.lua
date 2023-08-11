@@ -7,10 +7,17 @@ function M.setup(opts, c)
         Foo    = { bg = c.magenta, fg = c.base00 },
         Ignore = {},
 
+        NormalFg = { fg = c.base00 },
+
         --- core editor highlights
+        HighlightYank = { fg = util.lighten(c.cyan, 0.2) },
+        CurSearch = { fg = c.base13, underline = true },
+        IncSearch = { fg = c.orange, standout = true }, -- 'incsearch' highlighting, also for the text replaced
+        Substitute = { link = 'IncSearch' }, -- :substitute replacement text highlight
+        Search = { bg = c.base13 }, -- Last search pattern highlighting
+
         ColorColumn = { bg = c.base12 }, 
         Conceal = { fg = c.blue }, 
-        CurSearch = { bg = util.lighten(c.base10, 0.5) }, 
         Cursor = { bg = c.base00, fg = c.base10 }, 
         lCursor = { link = 'Cursor' }, 
         CursorIM = { link = 'Cursor' }, 
@@ -29,8 +36,6 @@ function M.setup(opts, c)
         Folded = { fg = c.base00, bg = c.base12, underline = true, bold = true }, -- Line used for closed folds
         FoldColumn = { fg = c.base00, bg = c.base12, bold = true }, -- 'foldcolumn'
         SignColumn = { fg = c.base00, bg = c.base12, }, -- Column were signs are displayed
-        IncSearch = { fg = c.orange, standout = true }, -- 'incsearch' highlighting, also for the text replaced
-        Substitute = { link = 'IncSearch' }, -- :substitute replacement text highlight
         LineNr = { fg = c.base00 }, -- Line number for ":number" and ":#" commands
         LineNrAbove = { link = 'LineNr' }, -- Line number, above the cursor line
         LineNrBelow = { link = 'LineNr' }, -- Line number, below the cursor
@@ -39,8 +44,8 @@ function M.setup(opts, c)
         CursorLineSign = { link = 'SignColumn' }, -- Like SignColumn when 'cursorline' is set
         MatchParen = { fg = util.lighten(c.base00, 0.9), bold = true }, -- Character under the cursor or just before it
         ModeMsg = { fg = c.blue }, -- 'showmode' message (e.g., "-- INSERT --")
-        MsgArea = { link = 'Normal' }, -- 'Area for messages and cmdline'
-        MsgSeparator = { link = 'Normal' }, -- Separator for scrolled messages msgsep.
+        MsgArea = { link = "NormalFg" }, -- 'Area for messages and cmdline'
+        MsgSeparator = { link = "NormalFg" }, -- Separator for scrolled messages msgsep.
         MoreMsg = { fg = c.blue }, -- more-prompt
         NonText = { fg = c.base01, bold = true }, -- '@' at the end of the window
         Normal = { fg = c.base00, bg = c.base10 }, -- Normal text
@@ -48,7 +53,7 @@ function M.setup(opts, c)
         NormalFloat = { fg = c.base00, bg = c.base10 }, -- Normal text in floating windows
         FloatBorder = { }, -- Border of floating windows.
         FloatTitle = { fg = c.orange }, -- Title of float windows.
-        NormalNC = { link = 'Normal' }, -- Normal text in non-current windows.
+        NormalNC = { link = "NormalFg" }, -- Normal text in non-current windows.
         Pmenu = { fg = c.base00, bg = c.base12 }, -- Popup menu: Normal item
         PmenuSel = { fg = c.base00, bg = c.base13 }, -- Popup menu: Selected item
         PmenuKind = { link = 'Pmenu' }, -- Popup menu: Normal item kind
@@ -59,7 +64,6 @@ function M.setup(opts, c)
         PmenuThumb = { fg = c.base10, bg = c.base01 }, -- Popup menu: Thumb of the scrollbar
         Question = { fg = c.cyan, bold = true }, -- hit-enter prompt and yes/no questions.
         QuickFixLine = { bg = c.base13 }, -- Current quickfix item in the quickfix window
-        Search = { fg = c.yellow, reverse = true }, -- Last search pattern highlighting
         SpecialKey = { fg = c.red, reverse = true }, -- Unprintable characters: Text displayed differently from what it really is.
         SpellBad = { sp = c.red, undercurl = true }, -- Word that is not recognized by the spellchecker.
         SpellCap = { sp = c.violet, undercurl = true }, -- Word that should start with a capital
@@ -80,16 +84,25 @@ function M.setup(opts, c)
         WinBarNC = { link = 'WinBar' }, -- Window bar of not-current windows.
 
         --- syntax highlights
-        Comment        = { fg   = c.base02, italic = true },  -- any comment
-        Constant       = { fg   = util.lighten(c.green, 0.8) },  -- any constant
-        String         = { fg   = util.darken(c.base02, 0.2) }, -- a string constant: "this is a string"
+        Identifier = { fg = c.base00 },  
+        Function   = { fg = util.darken(c.base00, 0.08) },  
+        Operator   = { fg = util.lighten(c.base00, 0.2) }, 
+        Type       = { fg = util.blend(c.base00, c.base01, 0.7) }, 
+        Delimiter  = { fg = util.lighten(c.base00, 0.5) }, 
+        Keyword    = { fg = c.base01 }, 
+        Define     = { fg = util.lighten(c.base01, 0.2) }, 
+        Comment    = { fg = c.base02, italic = true },  
+        Constant   = { fg = util.lighten(c.base02, 0.4) },  
+        String     = { fg = util.darken(c.base02, 0.25) }, 
+        Macro      = { fg = c.base03 },
+        Special    = { fg = c.cyan }, 
+        Underlined = { underline = true }, 
+        Error      = {},
+        Todo       = { fg = c.red, bold = true }, 
         Character      = { link = 'String' }, -- a character constant: 'c', '\n'
         Number         = { link = "Constant" },  -- a number constant: 234, 0xff
         Boolean        = { link = 'Constant' }, -- a boolean constant: TRUE, false
         Float          = { link = 'Constant' }, -- a floating point constant: 2.3e10
-        Identifier     = { fg   = c.base00 },  -- any variable name
-        Function       = { fg   = util.blend(c.base00, c.yellow, 0.3) },  -- function name (also: methods for classes)
-        Keyword        = { fg   = c.base01 }, -- any other keyword
         Statement      = { link = "Keyword" }, -- any statement
         Conditional    = { link = "Keyword" }, -- if, then, else, endif, switch, etc.
         Repeat         = { link = 'Keyword' }, -- for, do, while, etc.
@@ -98,22 +111,13 @@ function M.setup(opts, c)
         StorageClass   = { link = "Keyword" }, -- static, register, volatile, etc.
         Structure      = { link = "Keyword" }, -- struct, union, enum, etc.
         Typedef        = { link = "Keyword" }, -- A typedef
-        Operator       = { fg   = util.lighten(c.base00, 0.2) }, -- "sizeof", "+", "*", etc.
-        Define         = { fg = util.lighten(c.base01, 0.2) }, -- preprocessor #define
         PreProc        = { link = "Define" }, -- generic Preprocessor
         Include        = { link = 'Define' }, -- preprocessor #include
         PreCondit      = { link = 'Define' }, -- preprocessor #if, #else, #endif, etc.
-        Macro          = { fg   = c.base03 }, 
-        Type           = { fg   = util.blend(c.base00, c.orange, 0.35) }, -- int, long, char, etc.
-        Special        = { fg   = c.cyan }, -- special symbol
         SpecialChar    = { link = 'Special' }, -- special character in a constant
         Tag            = { link = 'Special' }, -- you can use CTRL-] on this
         SpecialComment = { link = 'Special' }, -- special things inside a comment
         Debug          = { link = 'Special' }, -- debugging statements
-        Delimiter      = { fg   = util.lighten(c.base00, 0.5) }, -- character that needs attention
-        Underlined     = { fg   = c.violet }, --text that stands out, HTML links
-        Error          = {},
-        Todo           = { fg   = c.red, bold = true }, --anything that needs extra attention; mostly the keywords TODO FIXME and XXX
 
         --- treesitter highlights
         ['@comment']               = { link = 'Comment' }, -- line and block comments
@@ -155,11 +159,11 @@ function M.setup(opts, c)
         ['@keyword']           = { link = 'Keyword' }, -- various keywords
         ['@keyword.coroutine'] = { link = 'Statement' }, -- keywords related to coroutines (e.g. `go` in Go, `async/await` in Python)
         ['@keyword.function']  = { link = 'Keyword' }, -- keywords that define a function (e.g. `func` in Go, `def` in Python)
-        ['@keyword.operator']  = { link = 'Operator' }, -- operators that are English words (e.g. `and` / `or`)
+        ['@keyword.operator']  = { link = 'Keyword' }, -- operators that are English words (e.g. `and` / `or`)
         ['@keyword.return']    = { link = 'Statement' }, -- keywords like `return` and `yield`
 
         ['@conditional']         = { link = 'Conditional' }, -- keywords related to conditionals (e.g. `if` / `else`)
-        ['@conditional.ternary'] = { link = 'Conditional' }, -- ternary operator (e.g. `?` / `:`)
+        ['@conditional.ternary'] = { link = 'Operator' }, -- ternary operator (e.g. `?` / `:`)
 
         ['@repeat']    = { link = 'Repeat' }, -- keywords related to loops (e.g. `for` / `while`)
         ['@debug']     = { link = 'Debug' }, -- keywords related to debugging
@@ -188,13 +192,13 @@ function M.setup(opts, c)
         ['@symbol']    = { fg = c.violet }, -- symbols or atoms
 
         ['@text'] = { fg = c.base00 }, -- non-structured text
-        ['@text.strong'] = { fg = c.yellow }, -- bold text
-        ['@text.emphasis'] = { link = '@text.strong' }, -- text with emphasis
+        ['@text.strong'] = { bold = true  }, -- bold text
+        ['@text.emphasis'] = { italic = true }, -- text with emphasis
         ['@text.underline'] = { link = 'Underlined' }, -- underlined text
         ['@text.strike'] = { strikethrough = true }, -- strikethrough text
         ['@text.title'] = { link = 'Title' }, -- text that is part of a title
         ['@text.quote'] = { fg = c.cyan }, -- text quotations
-        ['@text.uri'] = { link = 'Underlined' }, -- URIs (e.g. hyperlinks)
+        ['@text.uri'] = { fg = c.blue, underline = true }, -- URIs (e.g. hyperlinks)
         ['@text.math'] = { link = 'Number' }, -- math environments (e.g. `$ ... $` in LaTeX)
         ['@text.environment'] = { }, -- text environments of markup languages
         ['@text.environment.name'] = { link = 'Keyword' }, -- text indicating the type of an environment
@@ -216,28 +220,28 @@ function M.setup(opts, c)
         ['@tag.delimiter'] = { }, -- XML tag delimiters
 
         --- semantic highlights
-        ["@lsp.type.class"]         = { link = 'Type' }, -- Type
-        ["@lsp.type.decorator"]     = { link = 'Function' }, -- Function
-        ["@lsp.type.enum"]          = { link = 'Type' }, -- Type
-        ["@lsp.type.enumMember"]    = { link = 'Constant' }, -- Constant
-        ["@lsp.type.function"]      = { link = 'Function' }, -- Function
-        ["@lsp.type.interface"]     = { link = 'Type' }, -- Type
-        ["@lsp.type.macro"]         = { link = 'Macro' }, -- Keyword
-        ["@lsp.type.method"]        = { link = 'Function' }, -- Function
-        ["@lsp.type.namespace"]     = { link = '@namespace' }, -- Namespace
-        ["@lsp.type.parameter"]     = { fg   = c.base00 },
-        ["@lsp.type.property"]      = { link = '@field' }, -- Property
-        ["@lsp.type.struct"]        = { link = 'Structure' }, -- Structure
-        ["@lsp.type.type"]          = { link = 'Type' }, -- Type
-        ["@lsp.type.typeParameter"] = { link = 'Type' }, -- Type
-        ["@lsp.type.variable"]      = { link = 'Identifier' }, -- Identifier
+        ["@lsp.type.class"]         = { link = 'Type' }, 
+        ["@lsp.type.decorator"]     = { link = 'Function' }, 
+        ["@lsp.type.enum"]          = { link = 'Type' }, 
+        ["@lsp.type.enumMember"]    = { link = 'Constant' },
+        ["@lsp.type.function"]      = { link = 'Function' }, 
+        ["@lsp.type.interface"]     = { link = 'Type' }, 
+        ["@lsp.type.macro"]         = { link = 'Macro' }, 
+        ["@lsp.type.method"]        = { link = 'Function' }, 
+        ["@lsp.type.namespace"]     = { link = '@namespace' }, 
+        ["@lsp.type.parameter"]     = { link = "NormalFg" },
+        ["@lsp.type.property"]      = { link = '@field' }, 
+        ["@lsp.type.struct"]        = { link = 'Structure' }, 
+        ["@lsp.type.type"]          = { link = 'Type' }, 
+        ["@lsp.type.typeParameter"] = { link = 'Type' }, 
+        ["@lsp.type.variable"]      = { link = 'Identifier' }, 
 
         -- Extra highlight
-        ["@lsp.typemod.variable.readonly"]     = { link = 'Constant' }, -- Constant variables ex: const hello = 'Hello World'
-        ["@lsp.typemod.variable.global"]       = { link = 'Constant' }, -- Global variables ex: HELLO         = 'Hello World'
-        ["@lsp.typemod.keyword.documentation"] = { link = 'Keyword' }, -- documentation comments
-        ["@lsp.typemod.class.documentation"]   = { link = 'Type' }, -- documentation comments
-        ["@lsp.typemod.property.readonly"]     = { link = 'Constant' }, -- Ex: System."out".println()
+        ["@lsp.typemod.variable.readonly"]     = { link = '@variable' }, 
+        ["@lsp.typemod.variable.global"]       = { link = '@variable' }, 
+        ["@lsp.typemod.keyword.documentation"] = { fg = c.base03 }, 
+        ["@lsp.typemod.class.documentation"]   = { link = 'Type' }, 
+        ["@lsp.typemod.property.readonly"]     = { link = '@variable' }, 
 
         --- notify
         NotifyBackground  = { bg   = c.base12 },
@@ -256,11 +260,11 @@ function M.setup(opts, c)
         NotifyINFOTitle   = { link = 'NotifyINFOBorder' },
         NotifyDEBUGTitle  = { link = 'NotifyDEBUGTitle' },
         NotifyTRACETitle  = { link = 'NotifyTRACEBorder' },
-        NotifyERRORBody   = { link = 'Normal' },
-        NotifyWARNBody    = { link = 'Normal' },
-        NotifyINFOBody    = { link = 'Normal' },
-        NotifyDEBUGBody   = { link = 'Normal' },
-        NotifyTRACEBody   = { link = 'Normal' },
+        NotifyERRORBody   = { link = "NormalFg" },
+        NotifyWARNBody    = { link = "NormalFg" },
+        NotifyINFOBody    = { link = "NormalFg" },
+        NotifyDEBUGBody   = { link = "NormalFg" },
+        NotifyTRACEBody   = { link = "NormalFg" },
 
 
         --- cmp
