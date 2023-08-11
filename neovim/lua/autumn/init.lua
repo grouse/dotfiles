@@ -11,7 +11,7 @@ local colors = {
         violet  = "#6c71c4",
         blue    = "#006992",
         cyan    = "#2aa198",
-        green   = "#2C6E49",
+        green   = "#2C8E49",
     },
     light = {
         yellow  = "#FFEC51",
@@ -21,7 +21,7 @@ local colors = {
         violet  = "#6c71c4",
         blue    = "#006992",
         cyan    = "#2aa198",
-        green   = "#2C6E49",
+        green   = "#2C8E49",
     }
 }
 
