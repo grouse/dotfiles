@@ -44,6 +44,7 @@ function M.setup(opts, c)
         MoreMsg = { fg = c.blue }, -- more-prompt
         NonText = { fg = c.base01, bold = true }, -- '@' at the end of the window
         Normal = { fg = c.base00, bg = c.base10 }, -- Normal text
+        NormalSB = { fg = c.base00, bg = c.base12 }, -- Normal text
         NormalFloat = { fg = c.base00, bg = c.base10 }, -- Normal text in floating windows
         FloatBorder = { }, -- Border of floating windows.
         FloatTitle = { fg = c.orange }, -- Title of float windows.
@@ -70,7 +71,7 @@ function M.setup(opts, c)
         TabLineFill = { bg = util.darken(c.base10, 0.3) }, -- Tab pages line, where there are no labels.
         TabLineSel = { fg = c.base02, bg = c.base01, sp = c.base00, underline = true }, -- Tab pages line, active tab page label.
         Title = { fg = c.orange, bold = true }, -- Titles for output from ":set all", ":autocmd" etc.
-        Visual = { bg = c.base11, standout = true }, -- Visual mode selection.
+        Visual = { reverse = true }, -- Visual mode selection.
         VisualNOS = { link = 'Visual' }, -- Visual mode selection when vim is "Not Owning the Selection".
         WarningMsg = { fg = c.warning, bold = true }, -- Warning messages.
         Whitespace = { fg = c.base03 }, -- "nbsp", "space", "tab", "multispace", "lead" and "trail" in 'listchars'.
@@ -80,14 +81,14 @@ function M.setup(opts, c)
 
         --- syntax highlights
         Comment        = { fg   = c.base02, italic = true },  -- any comment
-        Constant       = { fg   = util.lighten(c.base00, 0.7) },  -- any constant
+        Constant       = { fg   = util.lighten(c.green, 0.8) },  -- any constant
         String         = { fg   = util.darken(c.base02, 0.2) }, -- a string constant: "this is a string"
         Character      = { link = 'String' }, -- a character constant: 'c', '\n'
         Number         = { link = "Constant" },  -- a number constant: 234, 0xff
         Boolean        = { link = 'Constant' }, -- a boolean constant: TRUE, false
         Float          = { link = 'Constant' }, -- a floating point constant: 2.3e10
         Identifier     = { fg   = c.base00 },  -- any variable name
-        Function       = { fg   = util.blend(c.base00, c.base01, 0.1) },  -- function name (also: methods for classes)
+        Function       = { fg   = util.blend(c.base00, c.yellow, 0.3) },  -- function name (also: methods for classes)
         Keyword        = { fg   = c.base01 }, -- any other keyword
         Statement      = { link = "Keyword" }, -- any statement
         Conditional    = { link = "Keyword" }, -- if, then, else, endif, switch, etc.
@@ -103,7 +104,7 @@ function M.setup(opts, c)
         Include        = { link = 'Define' }, -- preprocessor #include
         PreCondit      = { link = 'Define' }, -- preprocessor #if, #else, #endif, etc.
         Macro          = { fg   = c.base03 }, 
-        Type           = { fg   = util.blend(c.base00, c.base01, 0.4) }, -- int, long, char, etc.
+        Type           = { fg   = util.blend(c.base00, c.orange, 0.35) }, -- int, long, char, etc.
         Special        = { fg   = c.cyan }, -- special symbol
         SpecialChar    = { link = 'Special' }, -- special character in a constant
         Tag            = { link = 'Special' }, -- you can use CTRL-] on this
@@ -112,7 +113,7 @@ function M.setup(opts, c)
         Delimiter      = { fg   = util.lighten(c.base00, 0.5) }, -- character that needs attention
         Underlined     = { fg   = c.violet }, --text that stands out, HTML links
         Error          = {},
-        Todo           = { fg   = c.magenta, bold = true }, --anything that needs extra attention; mostly the keywords TODO FIXME and XXX
+        Todo           = { fg   = c.red, bold = true }, --anything that needs extra attention; mostly the keywords TODO FIXME and XXX
 
         --- treesitter highlights
         ['@comment']               = { link = 'Comment' }, -- line and block comments
@@ -172,7 +173,7 @@ function M.setup(opts, c)
         ['@type.qualifier']  = { link = 'Keyword' }, -- type qualifiers (e.g. `const`)
 
         ['@storageclass'] = { link = 'StorageClass' }, -- modifiers that affect storage in memory or life-time
-        ['@attribute']    = { link = 'Function' }, -- attribute annotations (e.g. Python decorators)
+        ['@attribute']    = { fg = c.base03 }, -- attribute annotations (e.g. Python decorators)
         ['@field']        = { fg   = c.base00 }, -- object and struct fields
         ['@property']     = { link = '@field' }, -- similar to `@field`
 
@@ -347,20 +348,23 @@ function M.setup(opts, c)
         NvimTreeWinSeparator              = { link = "WinSeparator" },
         NvimTreeCursorLine = { fg = c.base00, bg = c.base13 },
 
+        --- Trouble
+        TroubleNormal = { fg = c.base00, bg = c.base12 },
+
         --- telescope
         TelescopeSelection      = { fg   = c.base10, bg = c.base13 },
         TelescopeSelectionCaret = { link = 'TelescopeSelection' },
         TelescopeMultiSelection = { link = 'Type' },
         TelescopeMultiIcon      = { fg   = c.cyan },
         TelescopeNormal         = { fg   = c.base00, bg = c.base12 },
-        TelescopePreviewNormal  = { link = 'TelescopeNormal' },
-        TelescopePromptNormal   = { link = 'TelescopeNormal' },
+        TelescopePreviewNormal  = { bg = c.base10 },
+        TelescopePromptNormal   = { bg = util.lighten(c.base12, 0.05) },
         TelescopeResultsNormal  = { link = 'TelescopeNormal' },
-        TelescopeBorder         = { link = 'WinSeparator' },
+        TelescopeBorder         = { link = "WinSeparator" },
         TelescopePromptBorder   = { link = 'TelescopeBorder' },
         TelescopeResultsBorder  = { link = 'TelescopeBorder' },
-        TelescopePreviewBorder  = { link = 'TelescopeBorder' },
-        TelescopeTitle          = { fg   = c.blue, reverse = true },
+        TelescopePreviewBorder  = { fg = c.base10, bg = c.base10 },
+        TelescopeTitle          = { fg   = c.base02 },
         TelescopePromptTitle    = { link = 'TelescopeTitle' },
         TelescopeResultsTitle   = { link = 'TelescopeTitle' },
         TelescopePreviewTitle   = { link = 'TelescopeTitle' },
