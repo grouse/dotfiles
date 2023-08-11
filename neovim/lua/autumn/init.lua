@@ -4,24 +4,24 @@ M.config = {}
 
 local colors = {
     dark = {
-        yellow  = "#cccc44",
-        orange  = "#cc8800",
-        red     = "#dc322f",
+        yellow  = "#FFEC51",
+        orange  = "#F2AF29",
+        red     = "#D95D39",
         magenta = "#d33682",
         violet  = "#6c71c4",
-        blue    = "#268bd2",
+        blue    = "#006992",
         cyan    = "#2aa198",
-        green   = "#859900",
+        green   = "#2C6E49",
     },
     light = {
-        yellow  = "#cccc44",
-        orange  = "#cc8800",
-        red     = "#dc322f",
+        yellow  = "#FFEC51",
+        orange  = "#F2AF29",
+        red     = "#D95D39",
         magenta = "#d33682",
         violet  = "#6c71c4",
-        blue    = "#268bd2",
+        blue    = "#006992",
         cyan    = "#2aa198",
-        green   = "#859900",
+        green   = "#2C6E49",
     }
 }
 
@@ -32,14 +32,14 @@ local defaults = {
     },
     colors = {
         dark = {
-            base00 = "#D5C4A1", -- fg main
+            base00 = "#EDD9A3", -- fg main
             base01 = "#d36e2a", -- fg accent0, syntax keywords
             base02 = "#8ec07c", -- fg accent1, comments, text, strings
             base03 = "#84a89a", -- fg accent2, macros, annotations, pre-processor identifiers
 
-            base10 = "#1e3327", -- bg main
+            base10 = "#233329", -- bg main
             base11 = "#1d6656", -- bg accent0, visual
-            base12 = "#11473e", -- bg accent1, window accents, sidebars, cursorline, popup/floating background, 
+            base12 = "#3A5543", -- bg accent1, window accents, sidebars, cursorline, popup/floating background, 
             base13 = "#d36e2a", -- bg accent2, insert, selected menu item 
             base14 = "#8ec07c", -- bg accent3, command
 
