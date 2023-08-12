@@ -67,41 +67,41 @@ else
 end
 
 local icons = {
-    Array         = "",
-    Boolean       = "◩",
-    Class         = '',
-    Color         = "󰏘",
-    Constant      = "",
-    Constructor   = "",
-    Enum          = "",
-    EnumMember    = '',
-    Event         = '',
-    Field         = "",
-    File          = '',
-    Folder        = "󰉋",
-    Function      = "󰊕",
-    Interface     = "",
-    Key           = '',
-    Keyword       = "󰌋",
-    Method        = "󰊕",
-    Misc          = "",
-    Module        = "",
-    Namespace     = '',
-    Null          = "ﳠ",
-    Number        = "",
-    Object        = '',
-    Operator      = '',
-    Package       = '',
-    Property      = "󰜢",
-    Reference     = "",
-    Snippet       = "",
-    String        = '',
-    Struct        = "",
-    Text          = "󰉿",
-    TypeParameter = '',
-    Unit          = "󰑭",
-    Value         = "󰎠",
-    Variable      = "󰀫",
+    Array         = " ",
+    Boolean       = "◩ ",
+    Class         = ' ',
+    Color         = "󰏘 ",
+    Constant      = " ",
+    Constructor   = " ",
+    Enum          = " ",
+    EnumMember    = ' ',
+    Event         = ' ',
+    Field         = " ",
+    File          = ' ',
+    Folder        = "󰉋 ",
+    Function      = "󰊕 ",
+    Interface     = " ",
+    Key           = ' ',
+    Keyword       = "󰌋 ",
+    Method        = "󰊕 ",
+    Misc          = " ",
+    Module        = " ",
+    Namespace     = ' ',
+    Null          = "ﳠ ",
+    Number        = " ",
+    Object        = ' ',
+    Operator      = ' ',
+    Package       = ' ',
+    Property      = "󰜢 ",
+    Reference     = " ",
+    Snippet       = " ",
+    String        = ' ',
+    Struct        = " ",
+    Text          = "󰉿 ",
+    TypeParameter = ' ',
+    Unit          = "󰑭 ",
+    Value         = "󰎠 ",
+    Variable      = "󰀫 ",
 }
 
 -- Annoyingly this is mostly for neovim's luas throwing me tons of warnings and "tips" that I haven't figured out how to disable and I cba
@@ -166,6 +166,7 @@ require("lazy").setup(
             "hrsh7th/cmp-nvim-lsp",
             "hrsh7th/cmp-buffer",
             "hrsh7th/cmp-path",
+            "hrsh7th/cmp-nvim-lsp-signature-help",
             "saadparwaiz1/cmp_luasnip",
         },
         init = function()
@@ -173,8 +174,10 @@ require("lazy").setup(
             local luasnip = require("luasnip")
 
             cmp.setup({
-                completion = {
-                    completeopt = "menu,menuone,noinsert",
+                window = {
+                    documentation = {
+                        winhighlight = 'Normal:CppDocNormal,FloatBorder:CppDocBorder,CursorLine:CppDocSel,Search:None',
+                    }
                 },
                 experimental = { ghost_text = true, },
                 snippet = {
@@ -217,6 +220,7 @@ require("lazy").setup(
                 },
                 sources = cmp.config.sources({
                     { name = 'nvim_lsp' },
+                    { name = "nvim_lsp_signature_help" },
                     { name = 'luasnip' },
                     { name = "buffer" },
                     { name = "path" }
@@ -244,7 +248,6 @@ require("lazy").setup(
                     end,
                 },
             })
-
         end
     },
     { "L3MON4D3/LuaSnip",         enabled = not vim.g.vscode, version = "2.*", build = "make install_jsregexp" },
@@ -454,7 +457,7 @@ require("lazy").setup(
         enabled = not vim.g.vscode,
         dependencies = { "neovim/nvim-lspconfig" },
         opts = {
-            separator = ">",
+            separator = "  ",
             highlight = false,
             depth_limit = 5,
             depth_limit_indicator = "..",
