@@ -28,7 +28,7 @@ local colors = {
 local defaults = {
     palette = "auto", -- dark, light, or auto (uses vim.o.background)
     sidebars = {
-        "help", "qf", "OverseerList", 
+        "help", "qf", "OverseerList", "Trouble",
     },
     colors = {
         dark = {
@@ -41,7 +41,8 @@ local defaults = {
             base11 = "#1d6656", -- bg accent0, visual
             base12 = "#3A5543", -- bg accent1, window accents, sidebars, cursorline, popup/floating background, 
             base13 = "#d36e2a", -- bg accent2, insert, selected menu item 
-            base14 = "#8ec07c", -- bg accent3, command
+
+            base20 = "#132319",
 
             -- colors
             yellow  = colors.dark.yellow,
@@ -145,7 +146,7 @@ function M.setup(opts)
     local function set_whl()
         local win = vim.api.nvim_get_current_win()
         local whl = vim.split(vim.wo[win].winhighlight, ",")
-        vim.list_extend(whl, { "Normal:NormalSB", "SignColumn:SignColumnSB" })
+        vim.list_extend(whl, { "Normal:NormalSB", "CursorLine:CursorLineSB", "SignColumn:SignColumnSB" })
         whl = vim.tbl_filter(function(hl)
             return hl ~= ""
         end, whl)

@@ -23,6 +23,7 @@ function M.setup(opts, c)
         CursorIM = { link = 'Cursor' }, 
         CursorColumn = { link = 'ColorColumn' }, 
         CursorLine = { bg = c.base12 },
+        CursorLineSB = { bg = util.darken(c.base12, 0.2) },
         Directory = { fg = c.blue }, 
         DiffAdd = { fg = c.add, reverse = true }, 
         DiffChange = { fg = c.change, reverse = true }, 
@@ -32,7 +33,7 @@ function M.setup(opts, c)
         TermCursor = { link = 'Cursor' }, -- Cursor in a focused terminal
         TermCursorNC = { link = "Cursor" }, -- Cursor in an unfocused terminal
         ErrorMsg = { fg = c.error, reverse = true }, -- Error messages on the command line
-        WinSeparator = { fg = c.base12, bg = c.base12 }, -- Separators between window splits
+        WinSeparator = { fg = c.base20, bg = c.base20 }, -- Separators between window splits
         Folded = { fg = c.base00, bg = c.base12, underline = true, bold = true }, -- Line used for closed folds
         FoldColumn = { fg = c.base00, bg = c.base12, bold = true }, -- 'foldcolumn'
         SignColumn = { fg = c.base00, bg = c.base12, }, -- Column were signs are displayed
@@ -49,7 +50,7 @@ function M.setup(opts, c)
         MoreMsg = { fg = c.blue }, -- more-prompt
         NonText = { fg = c.base01, bold = true }, -- '@' at the end of the window
         Normal = { fg = c.base00, bg = c.base10 }, -- Normal text
-        NormalSB = { fg = c.base00, bg = c.base12 }, -- Normal text
+        NormalSB = { fg = c.base00, bg = c.base20 }, -- Normal text
         NormalFloat = { fg = c.base00, bg = c.base10 }, -- Normal text in floating windows
         FloatBorder = { }, -- Border of floating windows.
         FloatTitle = { fg = c.orange }, -- Title of float windows.
@@ -72,7 +73,7 @@ function M.setup(opts, c)
         StatusLine = { fg = c.base00, bg = c.base12 }, -- Status line of current window.
         StatusLineNC = { bg = c.base12 }, -- Status lines of not-current windows.
         TabLine = { fg = c.base01, bg = c.base11 }, -- Tab pages line, not active tab page label.
-        TabLineFill = { bg = util.darken(c.base10, 0.3) }, -- Tab pages line, where there are no labels.
+        TabLineFill = { bg = c.base20 }, -- Tab pages line, where there are no labels.
         TabLineSel = { fg = c.base02, bg = c.base01, sp = c.base00, underline = true }, -- Tab pages line, active tab page label.
         Title = { fg = c.orange, bold = true }, -- Titles for output from ":set all", ":autocmd" etc.
         Visual = { reverse = true }, -- Visual mode selection.
@@ -351,14 +352,14 @@ function M.setup(opts, c)
         NvimTreeGitRenamed                = { fg   = c.add },
         NvimTreeGitNew                    = { fg   = c.add },
         NvimTreeGitDeleted                = { fg   = c.delete },
-        NvimTreeNormal                    = { fg = c.base00, bg = c.base12 },
+        NvimTreeNormal                    = { link = "NormalSB" },
         NvimTreeNormalFloat               = { link = 'NvimTreeNormal' },
         NvimTreeEndOfBuffer               = { link = "EndOfBuffer" },
         NvimTreeWinSeparator              = { link = "WinSeparator" },
-        NvimTreeCursorLine = { fg = c.base00, bg = c.base13 },
+        NvimTreeCursorLine = { link = "CursorLineSB" },
 
         --- Trouble
-        TroubleNormal = { fg = c.base00, bg = c.base12 },
+        TroubleNormal = { link = "NormalSB" },
 
         --- telescope
         TelescopeSelection      = { fg   = c.base10, bg = c.base13 },
@@ -380,6 +381,10 @@ function M.setup(opts, c)
         TelescopePromptCounter  = { link = 'NonText' },
         TelescopeMatching       = { fg   = c.yellow },
         TelescopePromptPrefix   = { fg   = c.magenta },
+
+        --- nvim-treesitter-context
+        TreesitterContext = { bg = c.base20 },
+        TreesitterContextBottom = { bg = c.base20, underline=true, sp = c.base01 }
 
     }
 

@@ -266,7 +266,7 @@ require("lazy").setup(
                 enabled = true,
                 delay = 0,
                 reveal = { "close" }
-            }
+            },
         }}
     },
     {
@@ -505,6 +505,16 @@ require("lazy").setup(
             })
             require("nvim-treesitter").setup()
         end
+    },
+    {
+        "nvim-treesitter/nvim-treesitter-context",
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter",
+        },
+        opts = {
+            line_numbers = false,
+            mode = "topline", 
+        }
     },
     {
         "nvim-telescope/telescope.nvim",
