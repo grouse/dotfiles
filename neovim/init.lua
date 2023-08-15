@@ -124,14 +124,38 @@ require("lazy").setup(
     { "echasnovski/mini.align",   version = "*", opts = {}},
     { "echasnovski/mini.comment", version = "*", opts = {}},
     { "echasnovski/mini.move",    version = "*", opts = {}},
-    { "echasnovski/mini.starter", version = "*", opts = {}},
+    { 
+        "echasnovski/mini.starter", 
+        dependencies = {
+            "nvim-telescope/telescope.nvim",
+        },
+        version = "*", 
+        config = function()
+            local starter = require("mini.starter")
+            starter.setup({
+                items = {
+                    starter.sections.sessions(5, true),
+                    starter.sections.recent_files(5, false, false),
+                    starter.sections.telescope(),
+                    starter.sections.builtin_actions(),
+                }
+            })
+        end
+    },
     { 
         'echasnovski/mini.sessions',   
         version = '*', 
         enabled = not vim.g.vscode,
         opts = {
             directory = vim.fn.stdpath("data") .. "/session",
-            file = "",
+            file = "session.vim",
+            hooks = {
+                pre = {
+                    read = function()
+                        if vim.v.this_session ~= '' then require("mini.sessions").write(nil, { force = true }) end
+                    end
+                }
+            }
         }
     },
     { 
@@ -266,7 +290,7 @@ require("lazy").setup(
             },
             inactive_sections = {
                 lualine_a = {},
-                lualine_b = {},
+                lualine_b = {'diagnostics'},
                 lualine_c = {
                     { 'filename', symbols = { modified = "●", readonly = "", unnamed = '[No Name]', newfile = '[New]' } },
                 },
@@ -364,8 +388,6 @@ require("lazy").setup(
 			capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
 			local function on_attach(client, bufnr)
-                local telescope = require("telescope.builtin")
-
                 if client.name ~= "lua_ls" then
                     -- disabling this in lua cause it is all sorts of funky in giant require blocks, for example
                     require("nvim-navic").attach(client, bufnr)
@@ -375,10 +397,10 @@ require("lazy").setup(
 
                 vim.keymap.set('n', 'gD',       vim.lsp.buf.declaration, { desc = "Go to declaration", buffer = bufnr })
                 vim.keymap.set('n', 'K',        vim.lsp.buf.hover, { desc = "Preview declaration", buffer = bufnr })
-                vim.keymap.set('n', 'gd',       telescope.lsp_definitions, { desc = "Find definition(s)", buffer = bufnr })
-                vim.keymap.set('n', 'gi',       telescope.lsp_implementations, { desc = "Find implementation(s)", buffer = bufnr })
-                vim.keymap.set('n', '<space>D', telescope.lsp_type_definitions, { desc = "Find type definition(s)", buffer = bufnr })
-                vim.keymap.set('n', 'gr',       telescope.lsp_references, { desc = "Find references", buffer = bufnr })
+                vim.keymap.set('n', 'gd',       require("telescope.builtin").lsp_definitions, { desc = "Find definition(s)", buffer = bufnr })
+                vim.keymap.set('n', 'gi',       require("telescope.builtin").lsp_implementations, { desc = "Find implementation(s)", buffer = bufnr })
+                vim.keymap.set('n', '<space>D', require("telescope.builtin").lsp_type_definitions, { desc = "Find type definition(s)", buffer = bufnr })
+                vim.keymap.set('n', 'gr',       require("telescope.builtin").lsp_references, { desc = "Find references", buffer = bufnr })
 
                 vim.keymap.set("n", "gR", vim.lsp.buf.rename, { desc = "Rename symbol", buffer = bufnr })
                 vim.keymap.set("n", "gC", vim.lsp.buf.code_action, { desc = "Code action", buffer = bufnr })
@@ -493,12 +515,13 @@ require("lazy").setup(
     },
     {
         "nvim-telescope/telescope.nvim",
-        enabled = not vim.g.vscode,
         tag = "0.1.2",
+        enabled = not vim.g.vscode,
         dependencies = {
             "nvim-lua/plenary.nvim",
             "nvim-telescope/telescope-fzy-native.nvim",
             "nvim-telescope/telescope-ui-select.nvim",
+            "nvim-telescope/telescope-file-browser.nvim"
         },
         config = function()
             local telescope = require("telescope")
@@ -512,19 +535,27 @@ require("lazy").setup(
                             ["<C-j>"] = actions.move_selection_next,
                             ["<C-k>"] = actions.move_selection_previous,
                         }
-                    }
+                    },
+                    prompt_prefix = " ",
+                    selection_caret = " ",
                 },
                 pickers = {
                     find_files = { theme = "ivy" },
                     live_grep = { theme = "ivy" },
+                    keymaps = { theme = "ivy" },
                 },
                 extensions = {
                     ["ui-select"] = { themes.get_dropdown() },
+                    file_browser = {
+                        theme = "ivy",
+                        hijack_netrw = true,
+                    }
                 }
             })
 
             telescope.load_extension("fzy_native")
             telescope.load_extension("ui-select")
+            telescope.load_extension("file_browser")
         end
     },
     {
@@ -550,6 +581,8 @@ require("lazy").setup(
 
 vim.keymap.set("n", "<C-s>", ":w", { desc = "Save", silent = true })
 vim.keymap.set("n", "<C-S-s>", ":wa", { desc = "Save all", silent = true })
+vim.keymap.set("n", "<M-`>", require("mini.sessions").select, { desc = "Open session" })
+vim.keymap.set("n", "<M-s>", require("mini.sessions").write, { desc = "Open session" })
 
 if vim.g.neovide then
     vim.g.neovide_cursor_animation_length = 0
@@ -621,8 +654,8 @@ if not vim.g.vscode then
         { desc = "Prev diagnostic" })
 
 
-    local overseer = require("overseer")
     vim.keymap.set("n", "<C-b>", function()
+        local overseer = require("overseer")
         vim.cmd(":wa")
         local tasks = overseer.list_tasks({ recent_first = true })
         if vim.tbl_isempty(tasks) then
@@ -635,18 +668,16 @@ if not vim.g.vscode then
     vim.keymap.set("n", "<M-b>", ":wa<CR>:OverseerRun<CR>", { desc = "Build select", silent = true })
     vim.keymap.set("n", "<M-j>", ":OverseerToggle bottom<CR>", { desc = "Toggle build output", silent = true })
 
-    local telescope = require("telescope")
-    local builtin = require("telescope.builtin")
     vim.keymap.set({"n", "i", "c" }, "<M-p>", 
         function()
-            builtin.keymaps({
+            require("telescope.builtin").keymaps({
                 filter = function(entry) return entry.desc end,
                 modes = { vim.api.nvim_get_mode()["mode"] },
             })
         end, 
         { desc = "Command palette" })
-    vim.keymap.set('n', '<C-p>', builtin.find_files, { desc = "Find file" })
-    vim.keymap.set("n", "<C-f>", builtin.live_grep, { desc = "Grep files" })
+    vim.keymap.set('n', '<C-p>', require("telescope.builtin").find_files, { desc = "Find file" })
+    vim.keymap.set("n", "<C-f>", require("telescope.builtin").live_grep, { desc = "Grep files" })
 end
 
 vim.api.nvim_create_autocmd('TextYankPost', {

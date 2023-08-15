@@ -36,13 +36,13 @@ function M.setup(opts, c)
         WinSeparator = { fg = c.base20, bg = c.base20 }, -- Separators between window splits
         Folded = { fg = c.base00, bg = c.base12, underline = true, bold = true }, -- Line used for closed folds
         FoldColumn = { fg = c.base00, bg = c.base12, bold = true }, -- 'foldcolumn'
-        SignColumn = { fg = c.base00, bg = c.base12, }, -- Column were signs are displayed
+        SignColumn = { bg = c.base10, fg = c.base00 },
         LineNr = { fg = c.base00 }, -- Line number for ":number" and ":#" commands
         LineNrAbove = { link = 'LineNr' }, -- Line number, above the cursor line
         LineNrBelow = { link = 'LineNr' }, -- Line number, below the cursor
         CursorLineNr = { fg = util.lighten(c.base00, 0.1) },
         CursorLineFold = { link = 'FoldColumn' }, -- Like FoldColumn when 'cursorline' is set
-        CursorLineSign = { link = 'SignColumn' }, -- Like SignColumn when 'cursorline' is set
+        CursorLineSign = { link = 'CursorLine' }, -- Like SignColumn when 'cursorline' is set
         MatchParen = { fg = util.lighten(c.base00, 0.9), bold = true }, -- Character under the cursor or just before it
         ModeMsg = { fg = c.blue }, -- 'showmode' message (e.g., "-- INSERT --")
         MsgArea = { link = "NormalFg" }, -- 'Area for messages and cmdline'
@@ -380,7 +380,7 @@ function M.setup(opts, c)
         TelescopePreviewTitle   = { link = 'TelescopeTitle' },
         TelescopePromptCounter  = { link = 'NonText' },
         TelescopeMatching       = { fg   = c.yellow },
-        TelescopePromptPrefix   = { fg   = c.magenta },
+        TelescopePromptPrefix   = { fg   = c.base00 },
 
         --- nvim-treesitter-context
         TreesitterContext = { bg = c.base20 },
