@@ -29,32 +29,6 @@ function ReloadConfig()
 end
 vim.cmd("command! Reload lua ReloadConfig()")
 
-local function keymap_set(desc, category, mode, key, cmd, opts)
-    if not vim.g.vscode then
-        local command_center = require("command_center")
-        command_center.add({
-            {
-                desc = desc,
-                cmd = cmd,
-                keys = { mode, key, opts },
-                cat = category,
-            }
-        })
-    end
-    vim.keymap.set(mode, key, cmd, opts)
-end
-
-local function command_add(desc, category, cmd)
-    if not vim.g.vscode then
-        local command_center = require("command_center")
-        command_center.add(
-            {
-                { desc = desc, cat = category, cmd = cmd, },
-            },
-            { mode = command_center.mode.ADD })
-    end
-end
-
 if vim.loop.os_uname().sysname == "Windows_NT" then
     vim.g.win32 = true
 end
@@ -106,6 +80,7 @@ local icons = {
 
 -- Annoyingly this is mostly for neovim's luas throwing me tons of warnings and "tips" that I haven't figured out how to disable and I cba
 vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { focusable = false })
 
 vim.opt.clipboard:append{ 'unnamedplus' }
 vim.opt.swapfile=false
@@ -398,16 +373,15 @@ require("lazy").setup(
 
                 vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
-                local opts = { buffer = bufnr }
-                keymap_set("Go to declaration",       "LSP", 'n', 'gD',       vim.lsp.buf.declaration,        opts)
-                keymap_set("Preview declaration",     "LSP", 'n', 'K',        vim.lsp.buf.hover,              opts)
-                keymap_set("Find definition(s)",      "LSP", 'n', 'gd',       telescope.lsp_definitions,      opts)
-                keymap_set("Find implementation(s)",  "LSP", 'n', 'gi',       telescope.lsp_implementations,  opts)
-                keymap_set("Find type definition(s)", "LSP", 'n', '<space>D', telescope.lsp_type_definitions, opts)
-                keymap_set("Find references",         "LSP", 'n', 'gr',       telescope.lsp_references,       opts)
+                vim.keymap.set('n', 'gD',       vim.lsp.buf.declaration, { desc = "Go to declaration", buffer = bufnr })
+                vim.keymap.set('n', 'K',        vim.lsp.buf.hover, { desc = "Preview declaration", buffer = bufnr })
+                vim.keymap.set('n', 'gd',       telescope.lsp_definitions, { desc = "Find definition(s)", buffer = bufnr })
+                vim.keymap.set('n', 'gi',       telescope.lsp_implementations, { desc = "Find implementation(s)", buffer = bufnr })
+                vim.keymap.set('n', '<space>D', telescope.lsp_type_definitions, { desc = "Find type definition(s)", buffer = bufnr })
+                vim.keymap.set('n', 'gr',       telescope.lsp_references, { desc = "Find references", buffer = bufnr })
 
-                command_add("Rename symbol", "LSP", vim.lsp.buf.rename)
-                command_add("Code action",   "LSP", vim.lsp.buf.code_action)
+                vim.keymap.set("n", "gR", vim.lsp.buf.rename, { desc = "Rename symbol", buffer = bufnr })
+                vim.keymap.set("n", "gC", vim.lsp.buf.code_action, { desc = "Code action", buffer = bufnr })
             end
 
             vim.api.nvim_create_autocmd('LspAttach', {
@@ -431,6 +405,7 @@ require("lazy").setup(
                                 [vim.fn.expand("$VIMRUNTIME/lua")] = true,
                                 [vim.fn.stdpath("config") .. "/lua"] = true,
                             },
+                            checkThirdParty = false,
                         },
                     },
                 }
@@ -522,7 +497,6 @@ require("lazy").setup(
         tag = "0.1.2",
         dependencies = {
             "nvim-lua/plenary.nvim",
-            "FeiyouG/command_center.nvim",
             "nvim-telescope/telescope-fzy-native.nvim",
             "nvim-telescope/telescope-ui-select.nvim",
         },
@@ -530,7 +504,6 @@ require("lazy").setup(
             local telescope = require("telescope")
             local actions = require("telescope.actions")
             local themes = require("telescope.themes")
-            local command_center = require("command_center")
 
             telescope.setup({
                 defaults = {
@@ -547,25 +520,11 @@ require("lazy").setup(
                 },
                 extensions = {
                     ["ui-select"] = { themes.get_dropdown() },
-                    command_center = {
-                        components = {
-                            command_center.component.DESC,
-                            command_center.component.KEYS,
-                            command_center.component.CATEGORY,
-                        },
-                        sort_by = {
-                            command_center.component.DESC,
-                            command_center.component.KEYS,
-                            command_center.component.CATEGORY,
-                        },
-                        theme = themes.get_ivy
-                    }
                 }
             })
 
             telescope.load_extension("fzy_native")
             telescope.load_extension("ui-select")
-            telescope.load_extension("command_center")
         end
     },
     {
@@ -589,8 +548,8 @@ require("lazy").setup(
     }
 })
 
-command_add("Save file", "file", ":w")
-command_add("Save all",  "file", ":wa")
+vim.keymap.set("n", "<C-s>", ":w", { desc = "Save", silent = true })
+vim.keymap.set("n", "<C-S-s>", ":wa", { desc = "Save all", silent = true })
 
 if vim.g.neovide then
     vim.g.neovide_cursor_animation_length = 0
@@ -603,8 +562,8 @@ if vim.g.neovide then
         vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + delta
     end
 
-    keymap_set("Zoom in",  "editor", "n", "<C-ScrollWheelUp>",   function() increment_scale_factor(1/16) end,  {});
-    keymap_set("Zoom out", "editor", "n", "<C-ScrollWheelDown>", function() increment_scale_factor(-1/16) end, {});
+    vim.keymap.set("n", "<C-ScrollWheelUp>",   function() increment_scale_factor(1/16) end,  { desc = "Zoom in" })
+    vim.keymap.set("n", "<C-ScrollWheelDown>", function() increment_scale_factor(-1/16) end, { desc = "Zoom out" })
 end
 
 if vim.g.fvim_loaded then
@@ -615,50 +574,55 @@ if vim.g.fvim_loaded then
     vim.keymap.set({"n", "i"}, "<M-CR>", ":FVimToggleFullScreen<CR>", { silent = true })
 end
 
-keymap_set("Decrease increment", "format", 'v', '<', '<gv', { silent = true })
-keymap_set("Increase increment", "format", 'v', '>', '>gv', { silent = true })
-keymap_set("Next search result", "editor", 'n', 'n', 'nzz', { silent = true })
-keymap_set("Prev search result", "editor", 'n', 'N', 'Nzz', { silent = true })
+vim.keymap.set('v', '<', '<gv', { desc = "Decrease increment", silent = true })
+vim.keymap.set('v', '>', '>gv', { desc = "Increase increment", silent = true })
+vim.keymap.set('n', 'n', 'nzz', { desc = "Next search result", silent = true })
+vim.keymap.set('n', 'N', 'Nzz', { desc = "Prev search result", silent = true })
 vim.keymap.set('n', "<CR>", ":nohlsearch<CR>", { silent = true })
-keymap_set("Close window", "editor", "n", "<C-q>", ":close<CR>", { silent = true })
+vim.keymap.set("n", "<C-q>", ":close<CR>", { desc = "Close window", silent = true })
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { silent = true })
 
 -- NOTE(jesper): not actually sure if these work. They don't in neovide or nvim-qt, but I think that might be a client limitation, not having implemented the events properly
-keymap_set("Jump next", "editor", "n", "<X1Mouse>", "<C-i>", {})
-keymap_set("Jump prev", "editor", "n", "<X2Mouse>", "<C-o>", {})
+vim.keymap.set("n", "<X1Mouse>", "<C-i>", { desc = "Jump next" })
+vim.keymap.set("n", "<X2Mouse>", "<C-o>", { desc = "Jump prev" })
+
+
 
 if not vim.g.vscode then
-    keymap_set("File explorer", "project", "n", "<M-h>", require("nvim-tree.api").tree.toggle, {})
+    vim.keymap.set("n", "<M-h>", require("nvim-tree.api").tree.toggle, { desc = "File explorer" })
 
-    keymap_set("View diagnostics", "diagnostic", "n", "<M-l>",    function() require("trouble").toggle() end)
-    keymap_set("Open diagnostic",  "diagnostic", 'n', '<space>e', vim.diagnostic.open_float)
-    keymap_set("Next diagnostic",  "diagnostic", 'n', '<C-j>',
-    function()
-        local size = #vim.fn.getqflist()
-        if size == 0 then return end
+    vim.keymap.set("n", "<M-l>", require("trouble").toggle, { desc = "View diagnostics" })
+    vim.keymap.set("n", '<space>e', vim.diagnostic.open_float, { desc = "Open diagnostic" })
+    vim.keymap.set('n', '<C-j>', 
+        function()
+            local size = #vim.fn.getqflist()
+            if size == 0 then return end
 
-        local current = vim.fn.getqflist({ id = 0 }).id
-        if current == size-1 or size == 1 then
-            vim.cmd("clast!")
-        else
-            vim.cmd("cnext!")
-        end
-    end)
-    keymap_set("Prev diagnostic", "diagnostic", 'n', '<C-k>',
-    function()
-        local size = #vim.fn.getqflist()
-        if size == 0 then return end
+            local current = vim.fn.getqflist({ id = 0 }).id
+            if current == size-1 or size == 1 then
+                vim.cmd("clast!")
+            else
+                vim.cmd("cnext!")
+            end
+        end, 
+        { desc = "Next diagnostic" })
+    vim.keymap.set('n', '<C-k>',
+        function()
+            local size = #vim.fn.getqflist()
+            if size == 0 then return end
 
-        local current = vim.fn.getqflist({ id = 0 }).id
-        if current == size-1 or size == 1 then
-            vim.cmd("cfirst!")
-        else
-            vim.cmd("cprev!")
-        end
-    end)
+            local current = vim.fn.getqflist({ id = 0 }).id
+            if current == size-1 or size == 1 then
+                vim.cmd("cfirst!")
+            else
+                vim.cmd("cprev!")
+            end
+        end,
+        { desc = "Prev diagnostic" })
+
 
     local overseer = require("overseer")
-    keymap_set("Build last", "project", "n", "<C-b>", function()
+    vim.keymap.set("n", "<C-b>", function()
         vim.cmd(":wa")
         local tasks = overseer.list_tasks({ recent_first = true })
         if vim.tbl_isempty(tasks) then
@@ -666,17 +630,23 @@ if not vim.g.vscode then
         else
             overseer.run_action(tasks[1], "restart")
         end
-    end, {})
+    end, { desc = "Build last" })
 
-    keymap_set("Build select", "project", "n", "<M-b>", ":wa<CR>:OverseerRun<CR>", { silent = true })
-    keymap_set("Toggle build output", "project", "n", "<M-j>", ":OverseerToggle bottom<CR>", { silent = true })
-
+    vim.keymap.set("n", "<M-b>", ":wa<CR>:OverseerRun<CR>", { desc = "Build select", silent = true })
+    vim.keymap.set("n", "<M-j>", ":OverseerToggle bottom<CR>", { desc = "Toggle build output", silent = true })
 
     local telescope = require("telescope")
     local builtin = require("telescope.builtin")
-    keymap_set("Command palette", "editor", "n", "<C-l>", telescope.extensions.command_center.command_center)
-    keymap_set("Find file", "project", 'n', '<C-p>', builtin.find_files)
-    keymap_set("Grep files", "project", "n", "<C-f>", builtin.live_grep)
+    vim.keymap.set({"n", "i", "c" }, "<M-p>", 
+        function()
+            builtin.keymaps({
+                filter = function(entry) return entry.desc end,
+                modes = { vim.api.nvim_get_mode()["mode"] },
+            })
+        end, 
+        { desc = "Command palette" })
+    vim.keymap.set('n', '<C-p>', builtin.find_files, { desc = "Find file" })
+    vim.keymap.set("n", "<C-f>", builtin.live_grep, { desc = "Grep files" })
 end
 
 vim.api.nvim_create_autocmd('TextYankPost', {
