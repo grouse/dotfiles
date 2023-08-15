@@ -261,12 +261,37 @@ require("lazy").setup(
             indicator = { style = "underline" },
             show_buffer_icons = false,
             separator_style = "slant",
+            sort_by = nil,
             hover = {
                 enabled = true,
                 delay = 0,
                 reveal = { "close" }
             },
-        }}
+        }},
+        init = function()
+            vim.keymap.set({ "n", "i" }, "<M-o>", function() require("bufferline").cycle(1) end)
+            vim.keymap.set({ "n", "i" }, "<M-i>", function() require("bufferline").cycle(-1) end)
+
+            vim.api.nvim_create_autocmd({ "BufEnter" }, {
+                group = vim.api.nvim_create_augroup('BufferLine', {}),
+                callback = function(args)
+                    local buffer = args.buf
+                    local state = require("bufferline.state")
+                    for i, element in pairs(state.components) do
+                        if element.id == buffer then
+                            if i ~= 1 then
+                                local copy = element;
+                                table.remove(state.components, i, copy)
+                                table.insert(state.components, 1, copy)
+                            end
+
+                            return
+                        end
+                    end
+                end,
+            })
+
+        end
     },
     {
         "nvim-lualine/lualine.nvim",
