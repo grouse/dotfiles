@@ -93,7 +93,7 @@ function M.setup(opts, c)
         Keyword    = { fg = c.base01 }, 
         Define     = { fg = util.lighten(c.base01, 0.2) }, 
         Comment    = { fg = c.base02, italic = true },  
-        Constant   = { fg = util.lighten(c.base02, 0.4) },  
+        Constant   = { fg = util.blend(c.base02, c.base00, 0.4) },  
         String     = { fg = util.darken(c.base02, 0.25) }, 
         Macro      = { fg = c.base03 },
         Special    = { fg = c.cyan }, 

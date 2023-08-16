@@ -69,9 +69,9 @@ local defaults = {
             base00 = "#1B2E28", -- fg main
             base01 = "#d36e2a", -- fg accent0, syntax keywords
             base02 = "#6ea05c", -- fg accent1, comments, text, strings
-            base03 = "#84a89a", -- fg accent2, macros, annotations, pre-processor identifiers
+            base03 = "#64887a", -- fg accent2, macros, annotations, pre-processor identifiers
 
-            base10 = "#EDD9A3", -- fg main
+            base10 = "#EDD9A3", -- bg main
             base11 = "#657b83", -- bg accent0, visual
             base12 = "#DDC993", -- bg accent1, window accents, sidebars, cursorline, popup/floating background, 
             base13 = "#d36e2a", -- bg accent2, insert, selected menu item 
