@@ -356,7 +356,7 @@ function M.setup(opts, c)
         NvimTreeNormalFloat               = { link = 'NvimTreeNormal' },
         NvimTreeEndOfBuffer               = { link = "EndOfBuffer" },
         NvimTreeWinSeparator              = { link = "WinSeparator" },
-        NvimTreeCursorLine = { link = "CursorLineSB" },
+        NvimTreeCursorLine = { link = "PmenuSel" },
 
         --- Trouble
         TroubleNormal = { link = "NormalSB" },

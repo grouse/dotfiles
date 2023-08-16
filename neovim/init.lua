@@ -607,7 +607,7 @@ require("lazy").setup(
 vim.keymap.set("n", "<C-s>", ":w", { desc = "Save", silent = true })
 vim.keymap.set("n", "<C-S-s>", ":wa", { desc = "Save all", silent = true })
 vim.keymap.set("n", "<M-`>", require("mini.sessions").select, { desc = "Open session" })
-vim.keymap.set("n", "<M-s>", require("mini.sessions").write, { desc = "Open session" })
+vim.keymap.set("n", "<M-s>", require("mini.sessions").write, { desc = "write session" })
 
 if vim.g.neovide then
     vim.g.neovide_cursor_animation_length = 0
