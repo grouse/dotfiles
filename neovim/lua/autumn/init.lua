@@ -14,7 +14,7 @@ local colors = {
         green   = "#2C8E49",
     },
     light = {
-        yellow  = "#FFEC51",
+        yellow  = "#EFCC31",
         orange  = "#F2AF29",
         red     = "#D95D39",
         magenta = "#d33682",
@@ -39,10 +39,9 @@ local defaults = {
 
             base10 = "#233329", -- bg main
             base11 = "#1d6656", -- bg accent0, visual
-            base12 = "#3A5543", -- bg accent1, window accents, sidebars, cursorline, popup/floating background, 
+            base12 = "#132319", -- bg accent1, window accents, sidebars, cursorline, popup/floating background, 
             base13 = "#d36e2a", -- bg accent2, insert, selected menu item 
 
-            base20 = "#132319",
 
             -- colors
             yellow  = colors.dark.yellow,
@@ -71,12 +70,11 @@ local defaults = {
             base02 = "#6ea05c", -- fg accent1, comments, text, strings
             base03 = "#64887a", -- fg accent2, macros, annotations, pre-processor identifiers
 
-            base10 = "#EDD9A3", -- bg main
+            base10 = "#EEDAA4", -- bg main
             base11 = "#657b83", -- bg accent0, visual
-            base12 = "#DDC993", -- bg accent1, window accents, sidebars, cursorline, popup/floating background, 
+            base12 = "#DDC993", -- bg accent1, cursorline, window accents, sidebars, popup/floating background, 
             base13 = "#d36e2a", -- bg accent2, insert, selected menu item 
             base14 = "#8ec07c", -- bg accent3, command
-            base20 = "#DFCB95", -- bg darker
 
             -- colors
             yellow  = colors.light.yellow,
