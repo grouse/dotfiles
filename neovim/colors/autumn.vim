@@ -1,3 +1,3 @@
 lua << EOF
-require("autumn").setup()
+require("autumn").load()
 EOF

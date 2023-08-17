@@ -114,7 +114,7 @@ function M.highlight(group, hl)
     vim.api.nvim_set_hl(0, group, hl)
 end
 
-function M.setup(opts)
+function M.load(opts)
     opts = opts or {}
 
     if vim.g.colors_name then
@@ -161,5 +161,6 @@ function M.setup(opts)
     })
 end
 
+M.setup = M.load
 
 return M
