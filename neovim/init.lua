@@ -111,6 +111,8 @@ vim.opt.linebreak=true
 vim.opt.breakindent=true
 vim.opt.breakindentopt="shift:8"
 
+vim.opt.sessionoptions="curdir,folds,help,tabpages,winsize,terminal"
+
 if vim.g.vscode then
     vim.opt.inccommand="nosplit"
 end
