@@ -544,6 +544,9 @@ require("lazy").setup(
                     },
                     prompt_prefix = " ",
                     selection_caret = " ",
+                    path_display = {
+                        truncate = true,
+                    }
                 },
                 pickers = {
                     find_files = { theme = "ivy" },
