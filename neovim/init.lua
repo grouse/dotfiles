@@ -591,7 +591,14 @@ require("lazy").setup(
 vim.keymap.set("n", "<C-s>", ":w", { desc = "Save", silent = true })
 vim.keymap.set("n", "<C-S-s>", ":wa", { desc = "Save all", silent = true })
 vim.keymap.set("n", "<M-`>", require("mini.sessions").select, { desc = "Open session" })
-vim.keymap.set("n", "<M-s>", require("mini.sessions").write, { desc = "write session" })
+vim.keymap.set("n", "<M-s>", require("mini.sessions").write, { desc = "Write session" })
+
+vim.keymap.set("n", "<M-left>", ":tabNext<CR>", { silent = true, desc = "Previous tab page" })
+vim.keymap.set("n", "<M-right>", ":tabnext<CR>", { silent = true, desc = "Next tab page" })
+vim.keymap.set("n", "<M-1>", function() vim.api.nvim_set_current_tabpage(1) end, { desc = "Open 1st tab page" })
+vim.keymap.set("n", "<M-2>", function() vim.api.nvim_set_current_tabpage(2) end, { desc = "Open 2nd tab page" })
+vim.keymap.set("n", "<M-3>", function() vim.api.nvim_set_current_tabpage(3) end, { desc = "Open 3rd tab page" })
+vim.keymap.set("n", "<M-4>", function() vim.api.nvim_set_current_tabpage(4) end, { desc = "Open 4th tab page" })
 
 if vim.g.neovide then
     vim.g.neovide_cursor_animation_length = 0
@@ -627,8 +634,6 @@ vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { silent = true })
 -- NOTE(jesper): not actually sure if these work. They don't in neovide or nvim-qt, but I think that might be a client limitation, not having implemented the events properly
 vim.keymap.set("n", "<X1Mouse>", "<C-i>", { desc = "Jump next" })
 vim.keymap.set("n", "<X2Mouse>", "<C-o>", { desc = "Jump prev" })
-
-
 
 if not vim.g.vscode then
     vim.keymap.set("n", "<M-h>", require("nvim-tree.api").tree.toggle, { desc = "File explorer" })
@@ -697,7 +702,3 @@ vim.api.nvim_create_autocmd('TextYankPost', {
         vim.highlight.on_yank { higroup = 'HighlightYank', timeout = 500 }
     end,
 })
-
-if not vim.g.vscode then
-end
-
