@@ -83,7 +83,7 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { focusable = false })
 
 vim.opt.clipboard:append{ 'unnamedplus' }
-vim.opt.swapfile=false
+vim.opt.backup=false
 vim.opt.undofile=true
 vim.opt.termguicolors=true -- see bufferline.nvim
 vim.opt.mousemoveevent=true
