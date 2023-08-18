@@ -311,25 +311,15 @@ require("lazy").setup(
         }
     },
     {
-        "nvim-tree/nvim-tree.lua",
+        "nvim-neo-tree/neo-tree.nvim",
         enabled = not vim.g.vscode,
-        version = "*",
-        dependencies = "nvim-tree/nvim-web-devicons",
+        branch = "v3.x",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+            "MunifTanjim/nui.nvim",
+        },
         opts = {
-            disable_netrw = true,
-            renderer = {
-                icons = {
-                    show = {
-                        file = false,
-                        git = false,
-                    }
-                }
-            },
-            actions = {
-                open_file = {
-                    quit_on_open = true,
-                }
-            }
         },
     },
     {
@@ -588,6 +578,7 @@ require("lazy").setup(
     }
 })
 
+
 vim.keymap.set("n", "<C-s>", ":w", { desc = "Save", silent = true })
 vim.keymap.set("n", "<C-S-s>", ":wa", { desc = "Save all", silent = true })
 vim.keymap.set("n", "<M-`>", require("mini.sessions").select, { desc = "Open session" })
@@ -636,7 +627,7 @@ vim.keymap.set("n", "<X1Mouse>", "<C-i>", { desc = "Jump next" })
 vim.keymap.set("n", "<X2Mouse>", "<C-o>", { desc = "Jump prev" })
 
 if not vim.g.vscode then
-    vim.keymap.set("n", "<M-h>", require("nvim-tree.api").tree.toggle, { desc = "File explorer" })
+    vim.keymap.set("n", "<M-h>", ":Neotree toggle left<CR>", { silent = true, desc = "File browser" })
 
     vim.keymap.set("n", "<M-l>", require("trouble").toggle, { desc = "View diagnostics" })
     vim.keymap.set("n", '<space>e', vim.diagnostic.open_float, { desc = "Open diagnostic" })
