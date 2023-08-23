@@ -358,6 +358,18 @@ function M.setup(opts, c)
         NvimTreeWinSeparator              = { link = "WinSeparator" },
         NvimTreeCursorLine = { link = "PmenuSel" },
 
+        NeoTreeCursorLine = { link = "PmenuSel" },
+        NeoTreeDirectoryName = { link = "NormalSB" },
+        NeoTreeFloatBorder = { link = "FloatBorder" },
+        NeoTreeFloatNormal = { link = "NormalFloat" },
+        NeoTreeFloatTitle = { link = "FloatTitle" },
+        NeoTreeWinSeparator = { link = "WinSeparator" },
+        NeoTreeNormal = { link = "NormalSB" },
+        NeoTreeNormalNC = { link = "NeoTreeNormal" },
+        NeoTreeFileIcon = { fg = c.base02 },
+        NeoTreeDirectoryIcon = { fg = c.base02 },
+
+
         --- Trouble
         TroubleNormal = { link = "NormalSB" },
 
