@@ -93,9 +93,9 @@ vim.opt.ignorecase=true
 vim.opt.smartcase=true
 vim.opt.gdefault=true
 
-vim.opt.cindent = true
 vim.opt.copyindent = true
-vim.opt.cinoptions = ">s,(0,u0,Us,Ws,:0,l1,is,g0,E-s"
+vim.opt.cindent = true
+vim.opt.cinoptions = ">s,(0,u0,Us,w1,Ws,m1,j1,J1,:0,l1,is,g0,E-s"
 
 vim.opt.cursorline=true
 vim.opt.showmode=false
