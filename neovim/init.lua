@@ -95,7 +95,7 @@ vim.opt.gdefault=true
 
 vim.opt.copyindent = true
 vim.opt.cindent = true
-vim.opt.cinoptions = ">s,(0,u0,Us,w1,Ws,m1,j1,J1,:0,l1,is,g0,E-s"
+vim.opt.cinoptions = ">s,(0,u0,Us,w1,Ws,m1,j1,J1,:0,l1,Ls,is,g0,E-s"
 
 vim.opt.cursorline=true
 vim.opt.showmode=false
@@ -411,38 +411,42 @@ require("lazy").setup(
                 end,
             })
 
-            require("lspconfig").lua_ls.setup({
-                log_level = vim.lsp.protocol.MessageType.Error,
-                capabilities = capabilities,
-                settings = {
-                    Lua = {
-                        completion = { callSnippet = "Replace" },
-                        diagnostics = { globals = { "vim" }, },
-                        workspace = {
-                            library = {
-                                [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-                                [vim.fn.stdpath("config") .. "/lua"] = true,
+            require("mason-lspconfig").setup_handlers {
+                function(server_name)
+                    require("lspconfig")[server_name].setup{ capabilities = capabilities }
+                end,
+                ["lua_ls"] = function()
+                    require("lspconfig").lua_ls.setup({
+                        log_level = vim.lsp.protocol.MessageType.Error,
+                        capabilities = capabilities,
+                        settings = {
+                            Lua = {
+                                completion = { callSnippet = "Replace" },
+                                diagnostics = { globals = { "vim" }, },
+                                workspace = {
+                                    library = {
+                                        [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+                                        [vim.fn.stdpath("config") .. "/lua"] = true,
+                                    },
+                                    checkThirdParty = false,
+                                },
                             },
-                            checkThirdParty = false,
-                        },
-                    },
-                }
-            })
-
-            require("lspconfig").clangd.setup({
-                capabilities = capabilities,
-            })
-
-            require("lspconfig").rust_analyzer.setup({
-                capabilities = capabilities,
-                settings = {
-                    ['rust-analyzer'] = {
-                        diagnostics = {
-                            enable = false;
                         }
-                    }
-                }
-            })
+                    })
+                end,
+                ["rust_analyzer"] = function()
+                    require("lspconfig").rust_analyzer.setup({
+                        capabilities = capabilities,
+                        settings = {
+                            ['rust-analyzer'] = {
+                                diagnostics = {
+                                    enable = false;
+                                }
+                            }
+                        }
+                    })
+                end,
+            }
         end
     },
     {
