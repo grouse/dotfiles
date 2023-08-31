@@ -35,8 +35,8 @@ function M.setup(opts, c)
         ErrorMsg = { fg = c.error, reverse = true }, -- Error messages on the command line
         WinSeparator = { fg = c.base12, bg = c.base12 }, -- Separators between window splits
         Folded = { fg = c.base00, bg = c.base12, underline = true, bold = true }, -- Line used for closed folds
-        FoldColumn = { fg = c.base00, bg = c.base12, bold = true }, -- 'foldcolumn'
-        SignColumn = { bg = c.base10, fg = c.base00 },
+        FoldColumn = { fg = c.base00, bg = c.base12 }, -- 'foldcolumn'
+        SignColumn = { fg = c.base00, bg = c.base12 },
         LineNr = { fg = c.base00 }, -- Line number for ":number" and ":#" commands
         LineNrAbove = { link = 'LineNr' }, -- Line number, above the cursor line
         LineNrBelow = { link = 'LineNr' }, -- Line number, below the cursor
@@ -51,8 +51,8 @@ function M.setup(opts, c)
         NonText = { fg = c.base01, bold = true }, -- '@' at the end of the window
         Normal = { fg = c.base00, bg = c.base10 }, -- Normal text
         NormalSB = { fg = c.base00, bg = c.base12 }, -- Normal text
-        NormalFloat = { fg = c.base00, bg = c.base10 }, -- Normal text in floating windows
-        FloatBorder = { }, -- Border of floating windows.
+        NormalFloat = { fg = c.base00, bg = c.base12 }, -- Normal text in floating windows
+        FloatBorder = { fg = c.base12, bg = c.base12 }, -- Border of floating windows.
         FloatTitle = { fg = c.orange }, -- Title of float windows.
         NormalNC = { link = "NormalFg" }, -- Normal text in non-current windows.
         Pmenu = { fg = c.base00, bg = c.base12 }, -- Popup menu: Normal item
