@@ -403,7 +403,16 @@ function M.setup(opts, c)
 
         --- nvim-treesitter-context
         TreesitterContext = { bg = c.base12 },
-        TreesitterContextBottom = { bg = c.base12, underline=true, sp = c.base01 }
+        TreesitterContextBottom = { bg = c.base12, underline=true, sp = c.base01 },
+
+        --- which-key
+        WhichKey          = { link = "Function" }, -- 	the key
+        WhichKeyGroup     = { link = "Keyword" }, -- 	a group
+        WhichKeySeparator = { fg = c.base01 }, -- 	the separator between the key and its label
+        WhichKeyDesc      = { link = "Comment" }, -- 	the label of the key
+        WhichKeyFloat     = { link = "NormalFloat" }, -- 	Normal in the popup window
+        WhichKeyBorder    = { link = "FloatBorder" }, -- 	Normal in the popup window
+        WhichKeyValue     = { link = "Comment" }, -- 	used by plugins that provide values
 
     }
 
