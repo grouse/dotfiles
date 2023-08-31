@@ -113,6 +113,12 @@ vim.opt.breakindentopt="shift:8"
 
 vim.opt.sessionoptions="curdir,folds,help,tabpages,winsize,terminal"
 
+vim.o.fillchars = "foldopen:,foldsep: ,foldclose:"
+vim.o.foldcolumn = "auto" 
+vim.o.foldlevel = 99 
+vim.o.foldlevelstart = 99
+vim.o.foldenable = true
+
 if vim.g.vscode then
     vim.opt.inccommand="nosplit"
 end
@@ -171,9 +177,31 @@ require("lazy").setup(
             }
         }
     },
+    {
+        'kevinhwang91/nvim-ufo', 
+        dependencies = { 'kevinhwang91/promise-async' },
+    },
+    { 
+        "luukvbaal/statuscol.nvim",
+        config = function()
+            local builtin = require("statuscol.builtin")
+            require("statuscol").setup({
+                segments = {
+                    {
+                        text = { builtin.foldfunc },
+                        condition = { builtin.not_empty },
+                        click = "v:lua.ScFa"
+                    },
+                    {
+                        sign = { name = { "Diagnostic" }, maxwidth = 1, auto = true },
+                        click = "v:lua.ScSa"
+                    },
+                }
+            })
+        end
+    },
     { 
         "hrsh7th/nvim-cmp",         
-        enabled = not vim.g.vscode,
         dependencies = {
             "hrsh7th/cmp-nvim-lsp",
             "hrsh7th/cmp-buffer",
@@ -181,7 +209,7 @@ require("lazy").setup(
             "hrsh7th/cmp-nvim-lsp-signature-help",
             "saadparwaiz1/cmp_luasnip",
         },
-        init = function()
+        config = function()
             local cmp = require("cmp")
             local luasnip = require("luasnip")
 
@@ -383,13 +411,22 @@ require("lazy").setup(
 
             require("neodev").setup()
 
-            local signs = { Error = "", Warn = "", Hint = "", Info = "" }
+            local signs = { 
+                Error = "",
+                Warn = "", 
+                Hint = "", 
+                Info = "" 
+            }
             for type, icon in pairs(signs) do
                 local hl = "DiagnosticSign" .. type
                 vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
             end
 
             local capabilities = vim.lsp.protocol.make_client_capabilities()
+            capabilities.textDocument.foldingRange = {
+                dynamicRegistration = false,
+                lineFoldingOnly = true
+            }
 			capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
 			local function on_attach(client, bufnr)
@@ -456,11 +493,12 @@ require("lazy").setup(
                     })
                 end,
             }
+
+            require("ufo").setup()
         end
     },
     {
         "SmiteshP/nvim-navic",
-        enabled = not vim.g.vscode,
         dependencies = { "neovim/nvim-lspconfig" },
         opts = {
             separator = "  ",
