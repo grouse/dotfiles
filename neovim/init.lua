@@ -128,9 +128,6 @@ require("lazy").setup(
     { "echasnovski/mini.move",    version = "*", opts = {}},
     { 
         "echasnovski/mini.starter", 
-        dependencies = {
-            "nvim-telescope/telescope.nvim",
-        },
         version = "*", 
         config = function()
             local starter = require("mini.starter")
@@ -314,6 +311,7 @@ require("lazy").setup(
         "nvim-neo-tree/neo-tree.nvim",
         enabled = not vim.g.vscode,
         branch = "v3.x",
+        lazy = true,
         dependencies = {
             "nvim-lua/plenary.nvim",
             "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
@@ -325,7 +323,6 @@ require("lazy").setup(
     {
         "folke/trouble.nvim",
         dependencies = { "nvim-tree/nvim-web-devicons" },
-        lazy = false,
         opts = {
             position = "right",
         },
@@ -360,8 +357,6 @@ require("lazy").setup(
         dependencies = {
             "williamboman/mason.nvim",
             "williamboman/mason-lspconfig.nvim",
-            "hrsh7th/cmp-nvim-lsp",
-            "SmiteshP/nvim-navic",
             "folke/neodev.nvim",
         },
         enabled = not vim.g.vsode,
@@ -572,9 +567,6 @@ require("lazy").setup(
     },
 },
 {
-    defaults = {
-        lazy = false,
-    },
     dev = {
         path = project_path,
         patterns = { "grouse" },
@@ -631,7 +623,7 @@ vim.keymap.set("n", "<X1Mouse>", "<C-i>", { desc = "Jump next" })
 vim.keymap.set("n", "<X2Mouse>", "<C-o>", { desc = "Jump prev" })
 
 if not vim.g.vscode then
-    vim.keymap.set("n", "<M-h>", ":Neotree toggle left<CR>", { silent = true, desc = "File browser" })
+    vim.keymap.set("n", "<M-h>", function() require("neo-tree.command").execute({ toggle = true, position = "left" }) end)
 
     vim.keymap.set("n", "<M-l>", require("trouble").toggle, { desc = "View diagnostics" })
     vim.keymap.set("n", '<space>e', vim.diagnostic.open_float, { desc = "Open diagnostic" })
