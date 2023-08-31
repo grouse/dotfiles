@@ -120,6 +120,13 @@ function M.setup(opts, c)
         SpecialComment = { link = 'Special' }, -- special things inside a comment
         Debug          = { link = 'Special' }, -- debugging statements
 
+        --- diagnostics
+        DiagnosticSignError = { fg = c.red, bg = c.base12 },
+        DiagnosticSignWarn = { fg = c.yellow, bg = c.base12 },
+        DiagnosticSignHint = { fg = c.cyan, bg = c.base12 },
+        DiagnosticSignInfo = { fg = c.cyan, bg = c.base12 },
+
+
         --- treesitter highlights
         ['@comment']               = { link = 'Comment' }, -- line and block comments
         ['@comment.documentation'] = { link = 'Comment' }, -- comments documenting code
