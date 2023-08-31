@@ -54,7 +54,7 @@ function M.setup(opts, c)
         NormalFloat = { fg = c.base00, bg = c.base12 }, -- Normal text in floating windows
         FloatBorder = { fg = c.base12, bg = c.base12 }, -- Border of floating windows.
         FloatTitle = { fg = c.orange }, -- Title of float windows.
-        NormalNC = { link = "NormalFg" }, -- Normal text in non-current windows.
+        NormalNC = { fg = c.base00, bg = util.darken(c.base10, 0.15) },
         Pmenu = { fg = c.base00, bg = c.base12 }, -- Popup menu: Normal item
         PmenuSel = { fg = c.base00, bg = c.base13 }, -- Popup menu: Selected item
         PmenuKind = { link = 'Pmenu' }, -- Popup menu: Normal item kind
