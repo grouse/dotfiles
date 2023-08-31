@@ -294,7 +294,6 @@ require("lazy").setup(
     { 'echasnovski/mini.starter',  version = '*',              enabled = not vim.g.vscode },
     {
         "akinsho/bufferline.nvim",
-        enabled = not vim.g.vscode,
         version = "*",
         dependencies = "nvim-tree/nvim-web-devicons",
         opts = { options = {
@@ -315,7 +314,6 @@ require("lazy").setup(
     },
     {
         "nvim-lualine/lualine.nvim",
-        enabled = not vim.g.vsode,
         opts = {
             theme = "auto",
             sections = {
@@ -351,7 +349,6 @@ require("lazy").setup(
     },
     {
         "nvim-neo-tree/neo-tree.nvim",
-        enabled = not vim.g.vscode,
         branch = "v3.x",
         lazy = true,
         dependencies = {
@@ -359,19 +356,14 @@ require("lazy").setup(
             "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
             "MunifTanjim/nui.nvim",
         },
-        opts = {
-        },
     },
     {
         "folke/trouble.nvim",
         dependencies = { "nvim-tree/nvim-web-devicons" },
-        opts = {
-            position = "right",
-        },
+        opts = { position = "right", },
     },
     {
         "rcarriga/nvim-notify",
-        enabled = not vim.g.vscode,
         opts = {
             fps = 60,
             timeout = 2000,
@@ -385,14 +377,8 @@ require("lazy").setup(
     { "stevearc/dressing.nvim", enabled = not vim.g.vscode, opts = {} },
     {
         "williamboman/mason.nvim",
-        enabled = not vim.g.vscode,
         cmd = "Mason",
         build = ":MasonUpdate",
-    },
-    {
-        "williamboman/mason-lspconfig.nvim",
-        dependencies = { "williamboman/mason.nvim", },
-        enabled = not vim.g.vsode,
     },
     {
         "neovim/nvim-lspconfig",
@@ -401,7 +387,6 @@ require("lazy").setup(
             "williamboman/mason-lspconfig.nvim",
             "folke/neodev.nvim",
         },
-        enabled = not vim.g.vsode,
         config = function()
             require("mason").setup()
             require("mason-lspconfig").setup({
@@ -514,7 +499,6 @@ require("lazy").setup(
 
     {
         "grouse/overseer.nvim",
-        enabled = not vim.g.vscode,
         opts = {
             component_aliases = {
                 default = {
@@ -534,7 +518,6 @@ require("lazy").setup(
     },
     {
         "nvim-treesitter/nvim-treesitter",
-        enabled = not vim.g.vsode, 
         build = ":TSUpdate",
         config = function()
             require("nvim-treesitter.install").prefer_git = false
@@ -552,18 +535,15 @@ require("lazy").setup(
     },
     {
         "nvim-treesitter/nvim-treesitter-context",
-        dependencies = {
-            "nvim-treesitter/nvim-treesitter",
-        },
+        dependencies = { "nvim-treesitter/nvim-treesitter", },
         opts = {
             line_numbers = false,
-            mode = "topline", 
+            mode = "topline",
         }
     },
     {
         "nvim-telescope/telescope.nvim",
         tag = "0.1.2",
-        enabled = not vim.g.vscode,
         dependencies = {
             "nvim-lua/plenary.nvim",
             "nvim-telescope/telescope-fzy-native.nvim",
@@ -607,15 +587,6 @@ require("lazy").setup(
             telescope.load_extension("ui-select")
             telescope.load_extension("file_browser")
         end
-    },
-    {
-        "uga-rosa/ccc.nvim",
-        opts = {
-            highlighter = {
-                auto_enable = true,
-                lsp = true,
-            },
-        }
     },
 },
 {
