@@ -134,6 +134,8 @@ require("lazy").setup(
     { "echasnovski/mini.move",    version = "*", opts = {}},
     { 
         "echasnovski/mini.starter", 
+        enabled = not vim.g.vscode,
+        dependencies = { 'echasnovski/mini.sessions', },
         version = "*", 
         config = function()
             local starter = require("mini.starter")
@@ -149,6 +151,7 @@ require("lazy").setup(
     },
     {
         "folke/which-key.nvim",
+        enabled = not vim.g.vscode,
         event = "VeryLazy",
         init = function()
             vim.o.timeout = true
@@ -164,6 +167,7 @@ require("lazy").setup(
     },
     { 
         'echasnovski/mini.sessions',   
+        enabled = not vim.g.vscode,
         version = '*', 
         opts = {
             directory = vim.fn.stdpath("data") .. "/session",
@@ -175,14 +179,20 @@ require("lazy").setup(
                     end
                 }
             }
+        },
+        keys = {
+            { "<M-`>", function() require("mini.sessions").select() end, desc = "Open session" },
+            { "<M-s>", function() require("mini.sessions").write() end, desc = "Write session" },
         }
     },
     {
         'kevinhwang91/nvim-ufo', 
+        enabled = not vim.g.vscode,
         dependencies = { 'kevinhwang91/promise-async' },
     },
     { 
         "luukvbaal/statuscol.nvim",
+        enabled = not vim.g.vscode,
         config = function()
             local builtin = require("statuscol.builtin")
             require("statuscol").setup({
@@ -202,6 +212,7 @@ require("lazy").setup(
     },
     { 
         "hrsh7th/nvim-cmp",         
+        enabled = not vim.g.vscode,
         dependencies = {
             "hrsh7th/cmp-nvim-lsp",
             "hrsh7th/cmp-buffer",
@@ -290,10 +301,11 @@ require("lazy").setup(
             })
         end
     },
-    { "L3MON4D3/LuaSnip",         enabled = not vim.g.vscode, version = "2.*", build = "make install_jsregexp" },
-    { 'echasnovski/mini.starter',  version = '*',              enabled = not vim.g.vscode },
+    { "L3MON4D3/LuaSnip", enabled = not vim.g.vscode, version = "2.*", build = "make install_jsregexp" },
+    { 'echasnovski/mini.starter',  enabled = not vim.g.vscode, version = '*',  },
     {
         "akinsho/bufferline.nvim",
+        enabled = not vim.g.vscode,
         version = "*",
         dependencies = "nvim-tree/nvim-web-devicons",
         opts = { options = {
@@ -307,13 +319,14 @@ require("lazy").setup(
                 reveal = { "close" }
             },
         }},
-        init = function()
-            vim.keymap.set({ "n", "i" }, "<M-o>", function() require("bufferline").cycle(1) end)
-            vim.keymap.set({ "n", "i" }, "<M-i>", function() require("bufferline").cycle(-1) end)
-        end
+        keys = {
+            { "<M-o>", function() require("bufferline").cycle(1) end, { "n", "i" } },
+            { "<M-l>", function() require("bufferline").cycle(-11) end, { "n", "i" } },
+        }
     },
     {
         "nvim-lualine/lualine.nvim",
+        enabled = not vim.g.vscode,
         opts = {
             theme = "auto",
             sections = {
@@ -349,6 +362,7 @@ require("lazy").setup(
     },
     {
         "nvim-neo-tree/neo-tree.nvim",
+        enabled = not vim.g.vscode,
         branch = "v3.x",
         lazy = true,
         dependencies = {
@@ -356,14 +370,22 @@ require("lazy").setup(
             "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
             "MunifTanjim/nui.nvim",
         },
+        keys = {
+            { "<M-h>", function() require("neo-tree.command").execute({ toggle = true, position = "left" }) end, desc = "File browser" },
+        }
     },
     {
         "folke/trouble.nvim",
+        enabled = not vim.g.vscode,
         dependencies = { "nvim-tree/nvim-web-devicons" },
         opts = { position = "right", },
+        keys = {
+            { "<M-l>", function() require("trouble").toggle() end, desc = "View diagnostics" },
+        }
     },
     {
         "rcarriga/nvim-notify",
+        enabled = not vim.g.vscode,
         opts = {
             fps = 60,
             timeout = 2000,
@@ -377,11 +399,13 @@ require("lazy").setup(
     { "stevearc/dressing.nvim", enabled = not vim.g.vscode, opts = {} },
     {
         "williamboman/mason.nvim",
+        enabled = not vim.g.vscode,
         cmd = "Mason",
         build = ":MasonUpdate",
     },
     {
         "neovim/nvim-lspconfig",
+        enabled = not vim.g.vscode,
         dependencies = {
             "williamboman/mason.nvim",
             "williamboman/mason-lspconfig.nvim",
@@ -484,6 +508,7 @@ require("lazy").setup(
     },
     {
         "SmiteshP/nvim-navic",
+        enabled = not vim.g.vscode,
         dependencies = { "neovim/nvim-lspconfig" },
         opts = {
             separator = "  ",
@@ -499,6 +524,7 @@ require("lazy").setup(
 
     {
         "grouse/overseer.nvim",
+        enabled = not vim.g.vscode,
         opts = {
             component_aliases = {
                 default = {
@@ -515,9 +541,25 @@ require("lazy").setup(
                 }
             }
         },
+        keys = {
+            { "<C-b>", function()
+                local overseer = require("overseer")
+                vim.cmd(":wa")
+                local tasks = overseer.list_tasks({ recent_first = true })
+                if vim.tbl_isempty(tasks) then
+                    overseer.run_template()
+                else
+                    overseer.run_action(tasks[1], "restart")
+                end
+            end, desc = "Build last" },
+            { "<M-b>", "<cmd>wa<CR><cmd>OverseerRun<CR>", desc = "Build select" },
+            { "<M-j>", "<cmd>OverseerToggle bottom<CR>" , desc = "Toggle build output" },
+
+        }
     },
     {
         "nvim-treesitter/nvim-treesitter",
+        enabled = not vim.g.vscode,
         build = ":TSUpdate",
         config = function()
             require("nvim-treesitter.install").prefer_git = false
@@ -535,6 +577,7 @@ require("lazy").setup(
     },
     {
         "nvim-treesitter/nvim-treesitter-context",
+        enabled = not vim.g.vscode,
         dependencies = { "nvim-treesitter/nvim-treesitter", },
         opts = {
             line_numbers = false,
@@ -543,6 +586,7 @@ require("lazy").setup(
     },
     {
         "nvim-telescope/telescope.nvim",
+        enabled = not vim.g.vscode,
         tag = "0.1.2",
         dependencies = {
             "nvim-lua/plenary.nvim",
@@ -586,7 +630,22 @@ require("lazy").setup(
             telescope.load_extension("fzy_native")
             telescope.load_extension("ui-select")
             telescope.load_extension("file_browser")
-        end
+        end,
+        keys = {
+            { 
+                "<M-p>", 
+                function()
+                    require("telescope.builtin").keymaps({
+                        filter = function(entry) return entry.desc end,
+                        modes = { vim.api.nvim_get_mode()["mode"] },
+                    })
+                end,
+                { "n", "i", },
+                desc = "Command palette" 
+            },
+            { '<C-p>', function() require("telescope.builtin").find_files() end, desc = "Find file" },
+            { "<C-f>", function() require("telescope.builtin").live_grep() end, desc = "Grep files" },
+        }
     },
 },
 {
@@ -600,8 +659,6 @@ require("lazy").setup(
 
 vim.keymap.set("n", "<C-s>", ":w", { desc = "Save", silent = true })
 vim.keymap.set("n", "<C-S-s>", ":wa", { desc = "Save all", silent = true })
-vim.keymap.set("n", "<M-`>", require("mini.sessions").select, { desc = "Open session" })
-vim.keymap.set("n", "<M-s>", require("mini.sessions").write, { desc = "Write session" })
 
 vim.keymap.set("n", "<M-left>", ":tabNext<CR>", { silent = true, desc = "Previous tab page" })
 vim.keymap.set("n", "<M-right>", ":tabnext<CR>", { silent = true, desc = "Next tab page" })
@@ -646,9 +703,6 @@ vim.keymap.set("n", "<X1Mouse>", "<C-i>", { desc = "Jump next" })
 vim.keymap.set("n", "<X2Mouse>", "<C-o>", { desc = "Jump prev" })
 
 if not vim.g.vscode then
-    vim.keymap.set("n", "<M-h>", function() require("neo-tree.command").execute({ toggle = true, position = "left" }) end)
-
-    vim.keymap.set("n", "<M-l>", require("trouble").toggle, { desc = "View diagnostics" })
     vim.keymap.set("n", '<space>e', vim.diagnostic.open_float, { desc = "Open diagnostic" })
     vim.keymap.set('n', '<C-j>', 
         function()
@@ -676,32 +730,6 @@ if not vim.g.vscode then
             end
         end,
         { desc = "Prev diagnostic" })
-
-
-    vim.keymap.set("n", "<C-b>", function()
-        local overseer = require("overseer")
-        vim.cmd(":wa")
-        local tasks = overseer.list_tasks({ recent_first = true })
-        if vim.tbl_isempty(tasks) then
-            overseer.run_template()
-        else
-            overseer.run_action(tasks[1], "restart")
-        end
-    end, { desc = "Build last" })
-
-    vim.keymap.set("n", "<M-b>", ":wa<CR>:OverseerRun<CR>", { desc = "Build select", silent = true })
-    vim.keymap.set("n", "<M-j>", ":OverseerToggle bottom<CR>", { desc = "Toggle build output", silent = true })
-
-    vim.keymap.set({"n", "i", "c" }, "<M-p>", 
-        function()
-            require("telescope.builtin").keymaps({
-                filter = function(entry) return entry.desc end,
-                modes = { vim.api.nvim_get_mode()["mode"] },
-            })
-        end, 
-        { desc = "Command palette" })
-    vim.keymap.set('n', '<C-p>', require("telescope.builtin").find_files, { desc = "Find file" })
-    vim.keymap.set("n", "<C-f>", require("telescope.builtin").live_grep, { desc = "Grep files" })
 end
 
 vim.api.nvim_create_autocmd('TextYankPost', {
