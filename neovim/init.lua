@@ -85,7 +85,7 @@ vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { 
 vim.opt.clipboard:append{ 'unnamedplus' }
 vim.opt.backup=false
 vim.opt.undofile=true
-vim.opt.termguicolors=true -- see bufferline.nvim
+vim.opt.termguicolors=true 
 vim.opt.mousemoveevent=true
 
 vim.opt.inccommand="split"
@@ -131,7 +131,18 @@ require("lazy").setup(
 {
     { "echasnovski/mini.align",   version = "*", opts = {}},
     { "echasnovski/mini.comment", version = "*", opts = {}},
-    { "echasnovski/mini.move",    version = "*", opts = {}},
+    { 
+        "echasnovski/mini.move",    
+        version = "*", 
+        opts = {
+            mappings = {
+                left = "",
+                right = "",
+                line_left = "",
+                line_right = "",
+            }
+        }
+    },
     { 
         "echasnovski/mini.starter", 
         enabled = not vim.g.vscode,
@@ -319,9 +330,10 @@ require("lazy").setup(
                 reveal = { "close" }
             },
         }},
+        lazy = false,
         keys = {
-            { "<M-o>", function() require("bufferline").cycle(1) end, { "n", "i" } },
-            { "<M-l>", function() require("bufferline").cycle(-11) end, { "n", "i" } },
+            { "<M-l>", function() require("bufferline").cycle(1) end, { "n", "i" } },
+            { "<M-h>", function() require("bufferline").cycle(-1) end, { "n", "i" } },
         }
     },
     {
@@ -587,7 +599,6 @@ require("lazy").setup(
     {
         "nvim-telescope/telescope.nvim",
         enabled = not vim.g.vscode,
-        tag = "0.1.2",
         dependencies = {
             "nvim-lua/plenary.nvim",
             "nvim-telescope/telescope-fzy-native.nvim",
