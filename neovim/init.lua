@@ -113,7 +113,7 @@ vim.opt.breakindentopt="shift:8"
 
 vim.opt.sessionoptions="curdir,folds,help,tabpages,winsize,terminal"
 
-vim.o.fillchars = "foldopen:,foldsep: ,foldclose:"
+vim.o.fillchars = "foldopen:,foldsep: ,foldclose:"
 vim.o.foldcolumn = "auto" 
 vim.o.foldlevel = 99 
 vim.o.foldlevelstart = 99
@@ -667,6 +667,11 @@ require("lazy").setup(
     }
 })
 
+vim.keymap.set("n", "za", "za", { desc = "Toggle fold" })
+vim.keymap.set("n", "zc", "zc", { desc = "Close fold" })
+vim.keymap.set("n", "zo", "zo", { desc = "Open fold" })
+vim.keymap.set("n", "zR", "zR", { desc = "Open all folds" })
+vim.keymap.set("n", "zM", "zM", { desc = "Close all folds" })
 
 vim.keymap.set("n", "<C-s>", ":w", { desc = "Save", silent = true })
 vim.keymap.set("n", "<C-S-s>", ":wa", { desc = "Save all", silent = true })
