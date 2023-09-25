@@ -181,6 +181,7 @@ require("lazy").setup(
         enabled = not vim.g.vscode,
         version = '*', 
         opts = {
+            autoread = true,
             directory = vim.fn.stdpath("data") .. "/session",
             file = "session.vim",
             hooks = {
