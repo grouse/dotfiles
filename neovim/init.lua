@@ -384,7 +384,7 @@ require("lazy").setup(
             "MunifTanjim/nui.nvim",
         },
         keys = {
-            { "<M-h>", function() require("neo-tree.command").execute({ toggle = true, position = "left" }) end, desc = "File browser" },
+            { "<C-w>f", function() require("neo-tree.command").execute({ toggle = true, position = "left" }) end, desc = "File browser" },
         }
     },
     {
@@ -393,7 +393,7 @@ require("lazy").setup(
         dependencies = { "nvim-tree/nvim-web-devicons" },
         opts = { position = "right", },
         keys = {
-            { "<M-l>", function() require("trouble").toggle() end, desc = "View diagnostics" },
+            { "<C-w>d", function() require("trouble").toggle() end, desc = "View diagnostics" },
         }
     },
     {
@@ -566,7 +566,7 @@ require("lazy").setup(
                 end
             end, desc = "Build last" },
             { "<M-b>", "<cmd>wa<CR><cmd>OverseerRun<CR>", desc = "Build select" },
-            { "<M-j>", "<cmd>OverseerToggle bottom<CR>" , desc = "Toggle build output" },
+            { "<C-w>b", "<cmd>OverseerToggle bottom<CR>" , desc = "Toggle build output" },
 
         }
     },
@@ -747,6 +747,13 @@ if not vim.g.vscode then
             end
         end,
         { desc = "Prev diagnostic" })
+end
+
+if vim.g.vscode then
+    local vscode = require("vscode-neovim")
+    vim.keymap.set({ "n", "x", "v" }, "=", function() vscode.call("editor.action.formatSelection") end, { desc = "Format selection" }) 
+    vim.keymap.set("n", "==", function() vscode.call("editor.action.formatSelection") end, { desc = "Format line" }) 
+
 end
 
 vim.api.nvim_create_autocmd('TextYankPost', {
