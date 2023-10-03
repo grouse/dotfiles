@@ -716,8 +716,8 @@ vim.keymap.set("n", "<C-q>", ":close<CR>", { desc = "Close window", silent = tru
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { silent = true })
 
 -- NOTE(jesper): not actually sure if these work. They don't in neovide or nvim-qt, but I think that might be a client limitation, not having implemented the events properly
-vim.keymap.set("n", "<X1Mouse>", "<C-i>", { desc = "Jump next" })
-vim.keymap.set("n", "<X2Mouse>", "<C-o>", { desc = "Jump prev" })
+vim.keymap.set("n", "<X1Mouse>", "<C-o>", { desc = "Jump next" })
+vim.keymap.set("n", "<X2Mouse>", "<C-i>", { desc = "Jump prev" })
 
 if not vim.g.vscode then
     vim.keymap.set("n", '<space>e', vim.diagnostic.open_float, { desc = "Open diagnostic" })
