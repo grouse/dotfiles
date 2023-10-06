@@ -1,6 +1,8 @@
 vim.g.loaded_netrw = 1 -- see nvim-tree
 vim.g.loaded_netrwPlugin = 1
 
+vim.g.mapleader = ";"
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -41,41 +43,60 @@ else
 end
 
 local icons = {
-    Array         = " ",
-    Boolean       = "◩ ",
-    Class         = ' ',
-    Color         = "󰏘 ",
-    Constant      = " ",
-    Constructor   = " ",
-    Enum          = " ",
-    EnumMember    = ' ',
-    Event         = ' ',
-    Field         = " ",
-    File          = ' ',
-    Folder        = "󰉋 ",
-    Function      = "󰊕 ",
-    Interface     = " ",
-    Key           = ' ',
-    Keyword       = "󰌋 ",
-    Method        = "󰊕 ",
-    Misc          = " ",
-    Module        = " ",
-    Namespace     = ' ',
-    Null          = "ﳠ ",
-    Number        = " ",
-    Object        = ' ',
-    Operator      = ' ',
-    Package       = ' ',
-    Property      = "󰜢 ",
-    Reference     = " ",
-    Snippet       = " ",
-    String        = ' ',
-    Struct        = " ",
-    Text          = "󰉿 ",
-    TypeParameter = ' ',
-    Unit          = "󰑭 ",
-    Value         = "󰎠 ",
-    Variable      = "󰀫 ",
+    kinds = {
+        Array         = " ",
+        Boolean       = "◩ ",
+        Class         = ' ',
+        Color         = "󰏘 ",
+        Constant      = " ",
+        Constructor   = " ",
+        Enum          = " ",
+        EnumMember    = ' ',
+        Event         = ' ',
+        Field         = " ",
+        File          = ' ',
+        Folder        = "󰉋 ",
+        Function      = "󰊕 ",
+        Interface     = " ",
+        Key           = ' ',
+        Keyword       = "󰌋 ",
+        Method        = "󰊕 ",
+        Misc          = " ",
+        Module        = " ",
+        Namespace     = ' ',
+        Null          = "ﳠ ",
+        Number        = " ",
+        Object        = ' ',
+        Operator      = ' ',
+        Package       = ' ',
+        Property      = "󰜢 ",
+        Reference     = " ",
+        Snippet       = " ",
+        String        = ' ',
+        Struct        = " ",
+        Text          = "󰉿 ",
+        TypeParameter = ' ',
+        Unit          = "󰑭 ",
+        Value         = "󰎠 ",
+        Variable      = "󰀫 ",
+    },
+    diagnostics = {
+        Error = "",
+        Warn = "", 
+        Hint = "", 
+        Info = "" 
+    },
+    filename = {
+        modified = "●", 
+        readonly = "", 
+        unnamed = '[No Name]', 
+        newfile = '[New]',
+    },
+    fileformat = {
+        unix = "LF", 
+        dos = "CRLF", 
+        mac = "CR",
+    }
 }
 
 -- Annoyingly this is mostly for neovim's luas throwing me tons of warnings and "tips" that I haven't figured out how to disable and I cba
@@ -295,8 +316,8 @@ require("lazy").setup(
                         if icon then
                             item.kind = icon
                             item.kind_hl_group = hl_group
-                        elseif icons[item.kind] then
-                            item.kind = icons[item.kind]
+                        elseif icons.kinds[item.kind] then
+                            item.kind = icons.kinds[item.kind]
                         end
 
                         item.menu = ({
@@ -333,8 +354,8 @@ require("lazy").setup(
         }},
         lazy = false,
         keys = {
-            { "<M-l>", function() require("bufferline").cycle(1) end, { "n", "i" } },
-            { "<M-h>", function() require("bufferline").cycle(-1) end, { "n", "i" } },
+            { "[b", function() require("bufferline").cycle(-1) end, desc = "Previous buffer" },
+            { "]b", function() require("bufferline").cycle(1) end, desc = "Next buffer" },
         }
     },
     {
@@ -346,12 +367,12 @@ require("lazy").setup(
                 lualine_a = {'mode'},
                 lualine_b = {'diagnostics'},
                 lualine_c = {
-                    { 'filename', symbols = { modified = "●", readonly = "", unnamed = '[No Name]', newfile = '[New]' } },
+                    { 'filename', symbols = icons.filename },
                     { "navic" },
                 },
                 lualine_x = {
                     'encoding',
-                    { 'fileformat', symbols = { unix = "LF", dos = "CRLF", mac = "CR" } },
+                    { 'fileformat', symbols = icons.fileformat },
                     'filetype'
                 },
                 lualine_y = {},
@@ -360,12 +381,10 @@ require("lazy").setup(
             inactive_sections = {
                 lualine_a = {},
                 lualine_b = {'diagnostics'},
-                lualine_c = {
-                    { 'filename', symbols = { modified = "●", readonly = "", unnamed = '[No Name]', newfile = '[New]' } },
-                },
+                lualine_c = { { 'filename', symbols = icons.filename } },
                 lualine_x = {
                     'encoding',
-                    { 'fileformat', symbols = { unix = "LF", dos = "CRLF", mac = "CR" } },
+                    { 'fileformat', symbols = icons.fileformat },
                     'filetype',
                 },
                 lualine_y = {},
@@ -433,13 +452,7 @@ require("lazy").setup(
 
             require("neodev").setup()
 
-            local signs = { 
-                Error = "",
-                Warn = "", 
-                Hint = "", 
-                Info = "" 
-            }
-            for type, icon in pairs(signs) do
+            for type, icon in pairs(icons.diagnostics) do
                 local hl = "DiagnosticSign" .. type
                 vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
             end
@@ -528,7 +541,7 @@ require("lazy").setup(
             highlight = false,
             depth_limit = 5,
             depth_limit_indicator = "..",
-            icons = icons,
+            icons = icons.kinds,
         },
         init = function()
             vim.g.navic_silence = true
@@ -720,11 +733,11 @@ vim.keymap.set("n", "<X1Mouse>", "<C-o>", { desc = "Jump next" })
 vim.keymap.set("n", "<X2Mouse>", "<C-i>", { desc = "Jump prev" })
 
 if not vim.g.vscode then
-    vim.keymap.set("n", '<space>e', vim.diagnostic.open_float, { desc = "Open diagnostic" })
+    vim.keymap.set("n", '<leader>d', vim.diagnostic.open_float, { desc = "Open diagnostic" })
     vim.keymap.set('n', '<C-j>', 
         function()
             local size = #vim.fn.getqflist()
-            if size == 0 then return end
+            if size == 0 or sze == nil then return end
 
             local current = vim.fn.getqflist({ id = 0 }).id
             if current == size-1 or size == 1 then
@@ -747,6 +760,9 @@ if not vim.g.vscode then
             end
         end,
         { desc = "Prev diagnostic" })
+
+    vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" });
+    vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" });
 end
 
 if vim.g.vscode then
