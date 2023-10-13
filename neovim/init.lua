@@ -549,7 +549,7 @@ require("lazy").setup(
     },
 
     {
-        "grouse/overseer.nvim",
+        "stevearc/overseer.nvim",
         enabled = not vim.g.vscode,
         opts = {
             component_aliases = {
