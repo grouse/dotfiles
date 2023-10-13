@@ -31,6 +31,12 @@ function ReloadConfig()
 end
 vim.cmd("command! Reload lua ReloadConfig()")
 
+local has_words_before = function()
+  if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_text(0, line-1, 0, line-1, col, {})[1]:match("^%s*$") == nil
+end
+
 if vim.loop.os_uname().sysname == "Windows_NT" then
     vim.g.win32 = true
 end
@@ -79,6 +85,7 @@ local icons = {
         Unit          = "󰑭 ",
         Value         = "󰎠 ",
         Variable      = "󰀫 ",
+        Copilot       = "",
     },
     diagnostics = {
         Error = "",
@@ -243,6 +250,31 @@ require("lazy").setup(
             })
         end
     },
+    {
+        "zbirenbaum/copilot.lua",
+        cmd = "Copilot",
+        opts = {
+            suggestion = { 
+                enabled = true,
+                auto_trigger = true,
+            },
+            panel = { 
+                enabled = false,
+                auto_refresh = true,
+            },
+            filetypes = {
+                cpp = true,
+                c = true,
+            }
+        }
+    },
+    {
+        "zbirenbaum/copilot-cmp",
+        dependencies = { "zbirenbaum/copilot.lua" },
+        event = { "InsertEnter", "LspAttach" },
+        opts = {},
+
+    },
     { 
         "hrsh7th/nvim-cmp",         
         enabled = not vim.g.vscode,
@@ -252,12 +284,19 @@ require("lazy").setup(
             "hrsh7th/cmp-path",
             "hrsh7th/cmp-nvim-lsp-signature-help",
             "saadparwaiz1/cmp_luasnip",
+            "zbirenbaum/copilot-cmp",
         },
         config = function()
             local cmp = require("cmp")
             local luasnip = require("luasnip")
 
             cmp.setup({
+                view = {
+                    entries = {
+                        name = 'custom', 
+                        selection_order = 'near_cursor' 
+                    } 
+                },
                 window = {
                     documentation = {
                         winhighlight = 'Normal:CppDocNormal,FloatBorder:CppDocBorder,CursorLine:CppDocSel,Search:None',
@@ -287,28 +326,32 @@ require("lazy").setup(
                             fallback()
                         end
                     end, { "i", "s" }),
-                    ["<CR>"] = cmp.mapping({
-                        i = function(fallback)
-                            if cmp.visible() and cmp.get_active_entry() then
-                                cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
-                            else
-                                fallback()
-                            end
-                        end,
-                        s = cmp.mapping.confirm({ select = true }),
-                        c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
-                    })
                 },
                 confirmation = {
                     default_behavior = cmp.ConfirmBehavior.Replace,
                 },
                 sources = cmp.config.sources({
-                    { name = 'nvim_lsp' },
+                    { name = "copilot" },
+                    { name = "nvim_lsp" },
                     { name = "nvim_lsp_signature_help" },
-                    { name = 'luasnip' },
-                    { name = "buffer" },
-                    { name = "path" }
+                    { name = "luasnip" },
+                    { name = "path" },
                 }),
+                sorting = {
+                    priority_weight = 2,
+                    comparators = {
+                        require("copilot_cmp.comparators").prioritize,
+                        cmp.config.compare.offset,
+                        cmp.config.compare.exact,
+                        cmp.config.compare.score,
+                        cmp.config.compare.recently_used,
+                        cmp.config.compare.locality,
+                        cmp.config.compare.kind,
+                        cmp.config.compare.sort_text,
+                        cmp.config.compare.length,
+                        cmp.config.compare.order,
+                    },
+                },
                 formatting = {
                     fields = { "kind", "abbr", "menu" },
                     format = function(entry, item)
@@ -323,9 +366,10 @@ require("lazy").setup(
                         item.menu = ({
                             buffer = "[Buffer]",
                             nvim_lsp = "[LSP]",
-                            luasnip = "[LuaSnip]",
-                            nvim_lua = "[Lua]",
+                            luasnip       = "[LuaSnip]",
+                            nvim_lua      = "[Lua]",
                             latex_symbols = "[LaTeX]",
+                            copilot       = "[[Copilot]]"
                         })[entry.source.name]
 
                         return item
