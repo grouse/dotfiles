@@ -253,6 +253,7 @@ require("lazy").setup(
     {
         "zbirenbaum/copilot.lua",
         cmd = "Copilot",
+        enabled = not vim.g.vscode,
         opts = {
             suggestion = { 
                 enabled = true,
@@ -270,10 +271,10 @@ require("lazy").setup(
     },
     {
         "zbirenbaum/copilot-cmp",
+        enabled = not vim.g.vscode,
         dependencies = { "zbirenbaum/copilot.lua" },
-        event = { "InsertEnter", "LspAttach" },
+        event = { "InsertEnter" },
         opts = {},
-
     },
     { 
         "hrsh7th/nvim-cmp",         
