@@ -107,8 +107,10 @@ local icons = {
 }
 
 -- Annoyingly this is mostly for neovim's luas throwing me tons of warnings and "tips" that I haven't figured out how to disable and I cba
-vim.lsp.handlers["textDocument/publishDiagnostics"] = function() end
+vim.lsp.handlers["textDocument/publishDiagnostics"] = nil
+
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { focusable = false })
+vim.lsp.handlers["textDocument/documentHighlight"] = nil
 
 vim.opt.clipboard:append{ 'unnamedplus' }
 vim.opt.backup=false
@@ -516,6 +518,7 @@ require("lazy").setup(
                 end
 
                 vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
+                vim.bo[bufnr].formatexpr = nil
 
                 vim.keymap.set('n', 'gD',       vim.lsp.buf.declaration, { desc = "Go to declaration", buffer = bufnr })
                 vim.keymap.set('n', 'K',        vim.lsp.buf.hover, { desc = "Preview declaration", buffer = bufnr })
@@ -644,6 +647,9 @@ require("lazy").setup(
 
             })
             require("nvim-treesitter").setup()
+
+            vim.treesitter.query.set("c", "indents", "")
+            vim.treesitter.query.set("cpp", "indents", "")
         end
     },
     {
