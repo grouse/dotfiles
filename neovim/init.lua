@@ -569,7 +569,7 @@ require("lazy").setup(
                         settings = {
                             ['rust-analyzer'] = {
                                 diagnostics = {
-                                    enable = false;
+                                    enable = false
                                 }
                             }
                         }
@@ -612,6 +612,7 @@ require("lazy").setup(
                 default_vscode = {
                     "default",
                     { "on_result_diagnostics", remove_on_restart = true },
+                    "on_result_diagnostics_quickfix",
                 }
             }
         },
@@ -788,10 +789,9 @@ if not vim.g.vscode then
     vim.keymap.set('n', '<C-j>', 
         function()
             local size = #vim.fn.getqflist()
-            if size == 0 or sze == nil then return end
+            if size == 0 or size == nil then return end
 
-            local current = vim.fn.getqflist({ id = 0 }).id
-            if current == size-1 or size == 1 then
+            if size == 1 then
                 vim.cmd("clast!")
             else
                 vim.cmd("cnext!")
@@ -803,8 +803,7 @@ if not vim.g.vscode then
             local size = #vim.fn.getqflist()
             if size == 0 then return end
 
-            local current = vim.fn.getqflist({ id = 0 }).id
-            if current == size-1 or size == 1 then
+            if size == 1 then
                 vim.cmd("cfirst!")
             else
                 vim.cmd("cprev!")
