@@ -282,17 +282,11 @@ require("lazy").setup(
         cmd = "Copilot",
         enabled = not vim.g.vscode,
         opts = {
-            suggestion = { 
-                enabled = true,
-                auto_trigger = true,
-            },
-            panel = { 
-                enabled = false,
-                auto_refresh = true,
-            },
+            event = "InsertEnter",
+            suggestion = { enabled = false },
+            panel = { enabled = false },
             filetypes = {
-                cpp = true,
-                c = true,
+                ["*"] = true,
             }
         }
     },
@@ -300,11 +294,14 @@ require("lazy").setup(
         "zbirenbaum/copilot-cmp",
         enabled = not vim.g.vscode,
         dependencies = { "zbirenbaum/copilot.lua" },
-        event = { "InsertEnter" },
-        opts = {},
+        opts = {
+            event = "InsertEnter",
+        },
     },
     { 
-        "hrsh7th/nvim-cmp",         
+        --"hrsh7th/nvim-cmp",         
+        "llllvvuu/nvim-cmp",
+        branch = "feat/above",
         enabled = not vim.g.vscode,
         dependencies = {
             "hrsh7th/cmp-nvim-lsp",
@@ -322,7 +319,8 @@ require("lazy").setup(
                 view = {
                     entries = {
                         name = 'custom', 
-                        selection_order = 'near_cursor' 
+                        selection_order = 'near_cursor',
+                        vertical_positioning = 'above',
                     } 
                 },
                 window = {
@@ -330,7 +328,7 @@ require("lazy").setup(
                         winhighlight = 'Normal:CppDocNormal,FloatBorder:CppDocBorder,CursorLine:CppDocSel,Search:None',
                     }
                 },
-                experimental = { ghost_text = true, },
+                experimental = { ghost_text = { hl_group = "GhostText" } },
                 snippet = {
                     expand = function(args)
                         luasnip.lsp_expand(args.body)
@@ -343,8 +341,9 @@ require("lazy").setup(
                         fallback()
                     end),
                     ['<C-e>'] = cmp.mapping.abort(),
-                    ["<C-j>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
-                    ["<C-k>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+                    -- funkily inverted because of vertical_positioning
+                    ["<C-k>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+                    ["<C-j>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
                     ["<Tab>"] = cmp.mapping(function(fallback)
                         if cmp.visible() then
                             cmp.confirm({ select = true })
@@ -354,9 +353,6 @@ require("lazy").setup(
                             fallback()
                         end
                     end, { "i", "s" }),
-                },
-                confirmation = {
-                    default_behavior = cmp.ConfirmBehavior.Replace,
                 },
                 sources = cmp.config.sources({
                     { name = "copilot" },
@@ -397,7 +393,7 @@ require("lazy").setup(
                             luasnip       = "[LuaSnip]",
                             nvim_lua      = "[Lua]",
                             latex_symbols = "[LaTeX]",
-                            copilot       = "[[Copilot]]"
+                            copilot       = "[CoPilot]",
                         })[entry.source.name]
 
                         return item

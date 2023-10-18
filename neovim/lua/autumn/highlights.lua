@@ -414,6 +414,8 @@ function M.setup(opts, c)
         WhichKeyBorder    = { link = "FloatBorder" }, -- 	Normal in the popup window
         WhichKeyValue     = { link = "Comment" }, -- 	used by plugins that provide values
 
+        --- nvim-cmp
+        GhostText = { fg = c.base02 },
     }
 
     return highlights
