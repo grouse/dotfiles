@@ -548,6 +548,8 @@ require("lazy").setup(
                 vim.keymap.set('n', '<space>D', require("telescope.builtin").lsp_type_definitions, { desc = "Find type definition(s)", buffer = bufnr })
                 vim.keymap.set('n', 'gr',       require("telescope.builtin").lsp_references, { desc = "Find references", buffer = bufnr })
 
+                vim.keymap.set('n', '<C-f>',    require("telescope.builtin").lsp_workspace_symbols, { desc = "Find symbol", buffer = bufnr })
+
                 vim.keymap.set("n", "gR", vim.lsp.buf.rename, { desc = "Rename symbol", buffer = bufnr })
                 vim.keymap.set("n", "gC", vim.lsp.buf.code_action, { desc = "Code action", buffer = bufnr })
             end
@@ -739,10 +741,19 @@ require("lazy").setup(
                     })
                 end,
                 { "n", "i", },
-                desc = "Command palette" 
+                desc = "Keymaps" 
+            },
+            { 
+                "<M-;>", 
+                function()
+                    require("telescope.builtin").commands({
+                        filter = function(entry) return entry.desc end,
+                    })
+                end,
+                desc = "Commands" 
             },
             { '<C-p>', function() require("telescope.builtin").find_files() end, desc = "Find file" },
-            { "<C-f>", function() require("telescope.builtin").live_grep() end, desc = "Grep files" },
+            { "<M-/>", function() require("telescope.builtin").live_grep() end, desc = "Grep files" },
         }
     },
 },
