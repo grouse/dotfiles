@@ -154,7 +154,7 @@ vim.opt.cinoptions = ">s,(0,u0,Us,w1,Ws,m1,j1,J1,:0,l1,Ls,is,g0,E-s"
 
 vim.opt.cursorline=true
 vim.opt.showmode=false
-vim.opt.pumheight=5
+vim.opt.pumheight=2
 vim.opt.scrolloff=5
 vim.opt.sidescrolloff=5
 
@@ -320,7 +320,6 @@ require("lazy").setup(
                     entries = {
                         name = 'custom', 
                         selection_order = 'near_cursor',
-                        vertical_positioning = 'above',
                     } 
                 },
                 window = {
@@ -341,9 +340,8 @@ require("lazy").setup(
                         fallback()
                     end),
                     ['<C-e>'] = cmp.mapping.abort(),
-                    -- funkily inverted because of vertical_positioning
-                    ["<C-k>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
-                    ["<C-j>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+                    ["<C-j>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+                    ["<C-k>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
                     ["<Tab>"] = cmp.mapping(function(fallback)
                         if cmp.visible() then
                             cmp.confirm({ select = true })
