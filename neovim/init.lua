@@ -288,7 +288,7 @@ require("lazy").setup(
             filetypes = {
                 ["*"] = true,
             }
-        }
+        },
     },
     {
         "zbirenbaum/copilot-cmp",
@@ -299,9 +299,7 @@ require("lazy").setup(
         },
     },
     { 
-        --"hrsh7th/nvim-cmp",         
-        "llllvvuu/nvim-cmp",
-        branch = "feat/above",
+        "hrsh7th/nvim-cmp",         
         enabled = not vim.g.vscode,
         dependencies = {
             "hrsh7th/cmp-nvim-lsp",
@@ -324,8 +322,9 @@ require("lazy").setup(
                 },
                 window = {
                     documentation = {
-                        winhighlight = 'Normal:CppDocNormal,FloatBorder:CppDocBorder,CursorLine:CppDocSel,Search:None',
-                    }
+                        winhighlight = 'Normal:CmpDocNormal,FloatBorder:CmpDocBorder,CursorLine:CmpDocSel,Search:None',
+                    },
+                    completion = { col_offset = 10 }
                 },
                 experimental = { ghost_text = { hl_group = "GhostText" } },
                 snippet = {
@@ -539,17 +538,17 @@ require("lazy").setup(
                 vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
                 vim.bo[bufnr].formatexpr = nil
 
-                vim.keymap.set('n', 'gD',       vim.lsp.buf.declaration, { desc = "Go to declaration", buffer = bufnr })
-                vim.keymap.set('n', 'K',        vim.lsp.buf.hover, { desc = "Preview declaration", buffer = bufnr })
-                vim.keymap.set('n', 'gd',       require("telescope.builtin").lsp_definitions, { desc = "Find definition(s)", buffer = bufnr })
-                vim.keymap.set('n', 'gi',       require("telescope.builtin").lsp_implementations, { desc = "Find implementation(s)", buffer = bufnr })
-                vim.keymap.set('n', '<space>D', require("telescope.builtin").lsp_type_definitions, { desc = "Find type definition(s)", buffer = bufnr })
-                vim.keymap.set('n', 'gr',       require("telescope.builtin").lsp_references, { desc = "Find references", buffer = bufnr })
+                vim.keymap.set('n', 'gD', vim.lsp.buf.declaration,                           { desc = "Go to declaration",       buffer = bufnr })
+                vim.keymap.set('n', 'gH', vim.lsp.buf.hover,                                 { desc = "Preview declaration",     buffer = bufnr })
+                vim.keymap.set('n', 'gd', require("telescope.builtin").lsp_definitions,      { desc = "Find definition(s)",      buffer = bufnr })
+                vim.keymap.set('n', 'gt', require("telescope.builtin").lsp_type_definitions, { desc = "Find type definition(s)", buffer = bufnr })
+                vim.keymap.set('n', 'gi', require("telescope.builtin").lsp_implementations,  { desc = "Find implementation(s)",  buffer = bufnr })
+                vim.keymap.set('n', 'gr', require("telescope.builtin").lsp_references,       { desc = "Find references",         buffer = bufnr })
 
-                vim.keymap.set('n', '<C-f>',    require("telescope.builtin").lsp_workspace_symbols, { desc = "Find symbol", buffer = bufnr })
+                vim.keymap.set("n", "gC", vim.lsp.buf.code_action, { desc = "Code action",   buffer = bufnr })
+                vim.keymap.set("n", "gR", vim.lsp.buf.rename,      { desc = "Rename symbol", buffer = bufnr })
 
-                vim.keymap.set("n", "gR", vim.lsp.buf.rename, { desc = "Rename symbol", buffer = bufnr })
-                vim.keymap.set("n", "gC", vim.lsp.buf.code_action, { desc = "Code action", buffer = bufnr })
+                vim.keymap.set('n', '<C-f>', require("telescope.builtin").lsp_workspace_symbols, { desc = "Find symbol", buffer = bufnr })
             end
 
             vim.api.nvim_create_autocmd('LspAttach', {
@@ -703,6 +702,7 @@ require("lazy").setup(
                         i = {
                             ["<C-j>"] = actions.move_selection_next,
                             ["<C-k>"] = actions.move_selection_previous,
+                            ["<Esc>"] = actions.close,
                         }
                     },
                     prompt_prefix = " ",
@@ -713,7 +713,6 @@ require("lazy").setup(
                 },
                 pickers = {
                     find_files = { theme = "ivy" },
-                    live_grep = { theme = "ivy" },
                     keymaps = { theme = "ivy" },
                 },
                 extensions = {

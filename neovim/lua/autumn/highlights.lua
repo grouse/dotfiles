@@ -304,9 +304,9 @@ function M.setup(opts, c)
         CmpItemKindFunction      = { link = 'Function' },
         CmpItemKindText          = { link = 'String' },
 
-        CppDocNormal = { bg = util.darken(c.base12, 0.2) },
-        CppDocBorder = { link = "CppDocNormal" },
-        CppDocSel = { link = "PmenuSel" },
+        CmpDocNormal = { bg = util.darken(c.base12, 0.2) },
+        CmpDocBorder = { link = "CppDocNormal" },
+        CmpDocSel = { link = "PmenuSel" },
 
 
         --- navic
