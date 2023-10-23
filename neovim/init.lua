@@ -324,7 +324,10 @@ require("lazy").setup(
                     documentation = {
                         winhighlight = 'Normal:CmpDocNormal,FloatBorder:CmpDocBorder,CursorLine:CmpDocSel,Search:None',
                     },
-                    completion = { col_offset = 10 }
+                    completion = { 
+                        col_offset = 10,
+                        scrollbar = false,
+                    }
                 },
                 experimental = { ghost_text = { hl_group = "GhostText" } },
                 snippet = {
@@ -362,15 +365,14 @@ require("lazy").setup(
                     priority_weight = 2,
                     comparators = {
                         require("copilot_cmp.comparators").prioritize,
+                        cmp.config.compare.score,
                         cmp.config.compare.offset,
                         cmp.config.compare.exact,
-                        cmp.config.compare.score,
                         cmp.config.compare.recently_used,
                         cmp.config.compare.locality,
                         cmp.config.compare.kind,
-                        cmp.config.compare.sort_text,
-                        cmp.config.compare.length,
                         cmp.config.compare.order,
+                        cmp.config.compare.length,
                     },
                 },
                 formatting = {
