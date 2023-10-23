@@ -169,6 +169,8 @@ vim.opt.breakindentopt="shift:8"
 vim.opt.sessionoptions="curdir,folds,help,tabpages,winsize,terminal"
 
 vim.o.fillchars = "foldopen:,foldsep: ,foldclose:"
+vim.o.list = true
+vim.o.listchars = "eol:,trail:·,tab: "
 vim.o.foldcolumn = "auto" 
 vim.o.foldlevel = 99 
 vim.o.foldlevelstart = 99
@@ -197,6 +199,15 @@ require("lazy").setup(
                 line_right = "",
             }
         }
+    },
+    {
+        "mcauley-penney/tidy.nvim",
+        opts = {
+            filetype_exclude = { "markdown", "diff" }
+        },
+        init = function()
+            vim.keymap.set("n", "<leader>te", require("tidy").toggle, { desc = "Toggle Tidy" })
+        end 
     },
     { 
         "echasnovski/mini.starter", 

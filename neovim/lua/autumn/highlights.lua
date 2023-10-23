@@ -48,7 +48,6 @@ function M.setup(opts, c)
         MsgArea = { link = "NormalFg" }, -- 'Area for messages and cmdline'
         MsgSeparator = { link = "NormalFg" }, -- Separator for scrolled messages msgsep.
         MoreMsg = { fg = c.blue }, -- more-prompt
-        NonText = { fg = c.base01, bold = true }, -- '@' at the end of the window
         Normal = { fg = c.base00, bg = c.base10 }, -- Normal text
         NormalSB = { fg = c.base00, bg = c.base12 }, -- Normal text
         NormalFloat = { fg = c.base00, bg = c.base12 }, -- Normal text in floating windows
@@ -79,10 +78,12 @@ function M.setup(opts, c)
         Visual = { reverse = true }, -- Visual mode selection.
         VisualNOS = { link = 'Visual' }, -- Visual mode selection when vim is "Not Owning the Selection".
         WarningMsg = { fg = c.warning, bold = true }, -- Warning messages.
-        Whitespace = { fg = c.base03 }, -- "nbsp", "space", "tab", "multispace", "lead" and "trail" in 'listchars'.
         WildMenu = { fg = util.lighten(c.base00, 0.3), bg = c.base12 }, -- Current match in 'wildmenu' completion.
         WinBar = { link = 'Pmenu' }, -- Window bar of current window.
         WinBarNC = { link = 'WinBar' }, -- Window bar of not-current windows.
+
+        NonText = { fg = util.blend(c.base03, c.base10, 0.6) }, -- "eol", "extends" and "precedes" in 'listchars'
+        Whitespace = { link = "NonText" }, -- "nbsp", "space", "tab", "multispace", "lead" and "trail" in 'listchars'.
 
         --- syntax highlights
         Identifier = { fg = c.base00 },  
