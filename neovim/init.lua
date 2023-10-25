@@ -497,10 +497,10 @@ require("lazy").setup(
         "rcarriga/nvim-notify",
         enabled = not vim.g.vscode,
         opts = {
-            fps = 60,
+            fps = 30,
             timeout = 2000,
             render = "compact",
-            stages = "slide",
+            stages = "static",
         },
         init = function()
             vim.notify = require("notify")
@@ -551,6 +551,7 @@ require("lazy").setup(
                 lineFoldingOnly = true
             }
 			capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
+            capabilities.offsetEncoding =  'utf-16'
 
 			local function on_attach(client, bufnr)
                 if client.name ~= "lua_ls" then
