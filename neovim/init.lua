@@ -19,13 +19,13 @@ vim.opt.rtp:prepend(lazypath)
 local function tprint (tbl, indent)
     if not indent then indent = 0 end
     local toprint = string.rep(" ", indent) .. "{\r\n"
-    indent = indent + 2 
+    indent = indent + 2
     for k, v in pairs(tbl) do
         toprint = toprint .. string.rep(" ", indent)
         if (type(k) == "number") then
             toprint = toprint .. "[" .. k .. "] = "
         elseif (type(k) == "string") then
-            toprint = toprint  .. k ..  "= "   
+            toprint = toprint  .. k ..  "= "
         end
         if (type(v) == "number") then
             toprint = toprint .. v .. ",\r\n"
@@ -114,19 +114,19 @@ local icons = {
     },
     diagnostics = {
         Error = "",
-        Warn = "", 
-        Hint = "", 
-        Info = "" 
+        Warn = "",
+        Hint = "",
+        Info = ""
     },
     filename = {
-        modified = "●", 
-        readonly = "", 
-        unnamed = '[No Name]', 
+        modified = "●",
+        readonly = "",
+        unnamed = '[No Name]',
         newfile = '[New]',
     },
     fileformat = {
-        unix = "LF", 
-        dos = "CRLF", 
+        unix = "LF",
+        dos = "CRLF",
         mac = "CR",
     }
 }
@@ -140,7 +140,7 @@ vim.lsp.handlers["textDocument/documentHighlight"] = nil
 vim.opt.clipboard:append{ 'unnamedplus' }
 vim.opt.backup=false
 vim.opt.undofile=true
-vim.opt.termguicolors=true 
+vim.opt.termguicolors=true
 vim.opt.mousemoveevent=true
 
 vim.opt.inccommand="split"
@@ -171,8 +171,8 @@ vim.opt.sessionoptions="curdir,folds,help,tabpages,winsize,terminal"
 vim.o.fillchars = "foldopen:,foldsep: ,foldclose:"
 vim.o.list = true
 vim.o.listchars = "eol:,trail:·,tab: "
-vim.o.foldcolumn = "auto" 
-vim.o.foldlevel = 99 
+vim.o.foldcolumn = "auto"
+vim.o.foldlevel = 99
 vim.o.foldlevelstart = 99
 vim.o.foldenable = true
 
@@ -188,9 +188,9 @@ require("lazy").setup(
 {
     { "echasnovski/mini.align",   version = "*", opts = {}},
     { "echasnovski/mini.comment", version = "*", opts = {}},
-    { 
-        "echasnovski/mini.move",    
-        version = "*", 
+    {
+        "echasnovski/mini.move",
+        version = "*",
         opts = {
             mappings = {
                 left = "",
@@ -207,13 +207,13 @@ require("lazy").setup(
         },
         init = function()
             vim.keymap.set("n", "<leader>te", require("tidy").toggle, { desc = "Toggle Tidy" })
-        end 
+        end
     },
-    { 
-        "echasnovski/mini.starter", 
+    {
+        "echasnovski/mini.starter",
         enabled = not vim.g.vscode,
         dependencies = { 'echasnovski/mini.sessions', },
-        version = "*", 
+        version = "*",
         config = function()
             local starter = require("mini.starter")
             starter.setup({
@@ -236,16 +236,16 @@ require("lazy").setup(
         end,
         opts = {
             icons = {
-                breadcrumb = "»", 
+                breadcrumb = "»",
                 separator = "  ",
-                group = "+", 
+                group = "+",
             },
         }
     },
-    { 
-        'echasnovski/mini.sessions',   
+    {
+        'echasnovski/mini.sessions',
         enabled = not vim.g.vscode,
-        version = '*', 
+        version = '*',
         opts = {
             autoread = true,
             directory = vim.fn.stdpath("data") .. "/session",
@@ -264,11 +264,11 @@ require("lazy").setup(
         }
     },
     {
-        'kevinhwang91/nvim-ufo', 
+        'kevinhwang91/nvim-ufo',
         enabled = not vim.g.vscode,
         dependencies = { 'kevinhwang91/promise-async' },
     },
-    { 
+    {
         "luukvbaal/statuscol.nvim",
         enabled = not vim.g.vscode,
         config = function()
@@ -309,8 +309,8 @@ require("lazy").setup(
             event = "InsertEnter",
         },
     },
-    { 
-        "hrsh7th/nvim-cmp",         
+    {
+        "hrsh7th/nvim-cmp",
         enabled = not vim.g.vscode,
         dependencies = {
             "hrsh7th/cmp-nvim-lsp",
@@ -327,15 +327,15 @@ require("lazy").setup(
             cmp.setup({
                 view = {
                     entries = {
-                        name = 'custom', 
+                        name = 'custom',
                         selection_order = 'near_cursor',
-                    } 
+                    }
                 },
                 window = {
                     documentation = {
                         winhighlight = 'Normal:CmpDocNormal,FloatBorder:CmpDocBorder,CursorLine:CmpDocSel,Search:None',
                     },
-                    completion = { 
+                    completion = {
                         col_offset = 10,
                         scrollbar = false,
                     }
@@ -512,6 +512,16 @@ require("lazy").setup(
         enabled = not vim.g.vscode,
         cmd = "Mason",
         build = ":MasonUpdate",
+    },
+    {
+        url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+        config = function()
+            require("lsp_lines").setup()
+            vim.diagnostic.config({
+                virtual_text = false,
+                virtual_lines = { only_current_line = true },
+            })
+        end
     },
     {
         "neovim/nvim-lspconfig",
@@ -742,8 +752,8 @@ require("lazy").setup(
             telescope.load_extension("file_browser")
         end,
         keys = {
-            { 
-                "<M-p>", 
+            {
+                "<M-p>",
                 function()
                     require("telescope.builtin").keymaps({
                         filter = function(entry) return entry.desc end,
@@ -751,16 +761,16 @@ require("lazy").setup(
                     })
                 end,
                 { "n", "i", },
-                desc = "Keymaps" 
+                desc = "Keymaps"
             },
-            { 
-                "<M-;>", 
+            {
+                "<M-;>",
                 function()
                     require("telescope.builtin").commands({
                         filter = function(entry) return entry.desc end,
                     })
                 end,
-                desc = "Commands" 
+                desc = "Commands"
             },
             { '<C-p>', function() require("telescope.builtin").find_files() end, desc = "Find file" },
             { "<M-/>", function() require("telescope.builtin").live_grep() end, desc = "Grep files" },
@@ -828,7 +838,7 @@ vim.keymap.set("n", "<X2Mouse>", "<C-i>", { desc = "Jump prev" })
 
 if not vim.g.vscode then
     vim.keymap.set("n", '<leader>d', vim.diagnostic.open_float, { desc = "Open diagnostic" })
-    vim.keymap.set('n', '<C-j>', 
+    vim.keymap.set('n', '<C-j>',
         function()
             local size = #vim.fn.getqflist()
             if size == 0 or size == nil then return end
@@ -838,7 +848,7 @@ if not vim.g.vscode then
             else
                 vim.cmd("cnext!")
             end
-        end, 
+        end,
         { desc = "Next diagnostic" })
     vim.keymap.set('n', '<C-k>',
         function()
@@ -859,8 +869,8 @@ end
 
 if vim.g.vscode then
     local vscode = require("vscode-neovim")
-    vim.keymap.set({ "n", "x", "v" }, "=", function() vscode.call("editor.action.formatSelection") end, { desc = "Format selection" }) 
-    vim.keymap.set("n", "==", function() vscode.call("editor.action.formatSelection") end, { desc = "Format line" }) 
+    vim.keymap.set({ "n", "x", "v" }, "=", function() vscode.call("editor.action.formatSelection") end, { desc = "Format selection" })
+    vim.keymap.set("n", "==", function() vscode.call("editor.action.formatSelection") end, { desc = "Format line" })
 
 end
 

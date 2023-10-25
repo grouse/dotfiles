@@ -16,20 +16,20 @@ function M.setup(opts, c)
         Substitute = { link = 'IncSearch' }, -- :substitute replacement text highlight
         Search = { bg = c.base13 }, -- Last search pattern highlighting
 
-        ColorColumn = { bg = c.base12 }, 
-        Conceal = { fg = c.blue }, 
-        Cursor = { bg = c.base00, fg = c.base10 }, 
-        lCursor = { link = 'Cursor' }, 
-        CursorIM = { link = 'Cursor' }, 
-        CursorColumn = { link = 'ColorColumn' }, 
+        ColorColumn = { bg = c.base12 },
+        Conceal = { fg = c.blue },
+        Cursor = { bg = c.base00, fg = c.base10 },
+        lCursor = { link = 'Cursor' },
+        CursorIM = { link = 'Cursor' },
+        CursorColumn = { link = 'ColorColumn' },
         CursorLine = { bg = c.base12 },
         CursorLineSB = { bg = util.darken(c.base12, 0.2) },
-        Directory = { fg = c.blue }, 
-        DiffAdd = { fg = c.add, reverse = true }, 
-        DiffChange = { fg = c.change, reverse = true }, 
-        DiffDelete = { fg = c.delete, reverse = true }, 
-        DiffText = { fg = c.blue, reverse = true }, 
-        EndOfBuffer = { fg = c.base12 }, 
+        Directory = { fg = c.blue },
+        DiffAdd = { fg = c.add, reverse = true },
+        DiffChange = { fg = c.change, reverse = true },
+        DiffDelete = { fg = c.delete, reverse = true },
+        DiffText = { fg = c.blue, reverse = true },
+        EndOfBuffer = { fg = c.base12 },
         TermCursor = { link = 'Cursor' }, -- Cursor in a focused terminal
         TermCursorNC = { link = "Cursor" }, -- Cursor in an unfocused terminal
         ErrorMsg = { fg = c.error, reverse = true }, -- Error messages on the command line
@@ -82,25 +82,25 @@ function M.setup(opts, c)
         WinBar = { link = 'Pmenu' }, -- Window bar of current window.
         WinBarNC = { link = 'WinBar' }, -- Window bar of not-current windows.
 
-        NonText = { fg = util.blend(c.base03, c.base10, 0.6) }, -- "eol", "extends" and "precedes" in 'listchars'
-        Whitespace = { link = "NonText" }, -- "nbsp", "space", "tab", "multispace", "lead" and "trail" in 'listchars'.
+        NonText    = { fg = util.blend(c.base03, c.base10, 0.2) }, -- "eol", "extends" and "precedes" in 'listchars'
+        Whitespace = { fg = util.blend(c.base03, c.base10, 0.6) }, -- "nbsp", "space", "tab", "multispace", "lead" and "trail" in 'listchars'.
 
         --- syntax highlights
-        Identifier = { fg = c.base00 },  
-        Function   = { fg = util.darken(c.base00, 0.08) },  
-        Operator   = { fg = util.lighten(c.base00, 0.2) }, 
-        Type       = { fg = util.blend(c.base00, c.base01, 0.7) }, 
-        Delimiter  = { fg = util.lighten(c.base00, 0.5) }, 
-        Keyword    = { fg = c.base01 }, 
-        Define     = { fg = util.lighten(c.base01, 0.2) }, 
-        Comment    = { fg = c.base02, italic = true },  
-        Constant   = { fg = util.blend(c.base02, c.base00, 0.4) },  
-        String     = { fg = util.darken(c.base02, 0.25) }, 
+        Identifier = { fg = c.base00 },
+        Function   = { fg = util.darken(c.base00, 0.08) },
+        Operator   = { fg = util.lighten(c.base00, 0.2) },
+        Type       = { fg = util.blend(c.base00, c.base01, 0.7) },
+        Delimiter  = { fg = util.lighten(c.base00, 0.5) },
+        Keyword    = { fg = c.base01 },
+        Define     = { fg = util.lighten(c.base01, 0.2) },
+        Comment    = { fg = c.base02, italic = true },
+        Constant   = { fg = util.blend(c.base02, c.base00, 0.4) },
+        String     = { fg = util.darken(c.base02, 0.25) },
         Macro      = { fg = c.base03 },
-        Special    = { fg = c.cyan }, 
-        Underlined = { underline = true }, 
+        Special    = { fg = c.cyan },
+        Underlined = { underline = true },
         Error      = {},
-        Todo       = { fg = c.red, bold = true }, 
+        Todo       = { fg = c.red, bold = true },
         Character      = { link = 'String' }, -- a character constant: 'c', '\n'
         Number         = { link = "Constant" },  -- a number constant: 234, 0xff
         Boolean        = { link = 'Constant' }, -- a boolean constant: TRUE, false
@@ -122,10 +122,15 @@ function M.setup(opts, c)
         Debug          = { link = 'Special' }, -- debugging statements
 
         --- diagnostics
-        DiagnosticSignError = { fg = c.red, bg = c.base12 },
-        DiagnosticSignWarn = { fg = c.yellow, bg = c.base12 },
-        DiagnosticSignHint = { fg = c.cyan, bg = c.base12 },
-        DiagnosticSignInfo = { fg = c.cyan, bg = c.base12 },
+        DiagnosticSignError = { fg = c.red,    bg = c.base12 },
+        DiagnosticSignWarn  = { fg = c.yellow, bg = c.base12 },
+        DiagnosticSignHint  = { fg = c.cyan,   bg = c.base12 },
+        DiagnosticSignInfo  = { fg = c.cyan,   bg = c.base12 },
+
+        DiagnosticVirtualTextError = { fg = c.red,    bg = util.darken(c.red,    0.9) },
+        DiagnosticVirtualTextWarn  = { fg = c.yellow, bg = util.darken(c.yellow, 0.9) },
+        DiagnosticVirtualTextHint  = { fg = c.cyan,   bg = util.darken(c.cyan,   0.9) },
+        DiagnosticVirtualTextInfo  = { fg = c.cyan,   bg = util.darken(c.cyan,   0.9) },
 
 
         --- treesitter highlights
@@ -229,28 +234,28 @@ function M.setup(opts, c)
         ['@tag.delimiter'] = { }, -- XML tag delimiters
 
         --- semantic highlights
-        ["@lsp.type.class"]         = { link = 'Type' }, 
-        ["@lsp.type.decorator"]     = { link = 'Function' }, 
-        ["@lsp.type.enum"]          = { link = 'Type' }, 
+        ["@lsp.type.class"]         = { link = 'Type' },
+        ["@lsp.type.decorator"]     = { link = 'Function' },
+        ["@lsp.type.enum"]          = { link = 'Type' },
         ["@lsp.type.enumMember"]    = { link = 'Constant' },
-        ["@lsp.type.function"]      = { link = 'Function' }, 
-        ["@lsp.type.interface"]     = { link = 'Type' }, 
-        ["@lsp.type.macro"]         = { link = 'Macro' }, 
-        ["@lsp.type.method"]        = { link = 'Function' }, 
-        ["@lsp.type.namespace"]     = { link = '@namespace' }, 
+        ["@lsp.type.function"]      = { link = 'Function' },
+        ["@lsp.type.interface"]     = { link = 'Type' },
+        ["@lsp.type.macro"]         = { link = 'Macro' },
+        ["@lsp.type.method"]        = { link = 'Function' },
+        ["@lsp.type.namespace"]     = { link = '@namespace' },
         ["@lsp.type.parameter"]     = { link = "NormalFg" },
-        ["@lsp.type.property"]      = { link = '@field' }, 
-        ["@lsp.type.struct"]        = { link = 'Structure' }, 
-        ["@lsp.type.type"]          = { link = 'Type' }, 
-        ["@lsp.type.typeParameter"] = { link = 'Type' }, 
-        ["@lsp.type.variable"]      = { link = 'Identifier' }, 
+        ["@lsp.type.property"]      = { link = '@field' },
+        ["@lsp.type.struct"]        = { link = 'Structure' },
+        ["@lsp.type.type"]          = { link = 'Type' },
+        ["@lsp.type.typeParameter"] = { link = 'Type' },
+        ["@lsp.type.variable"]      = { link = 'Identifier' },
 
         -- Extra highlight
-        ["@lsp.typemod.variable.readonly"]     = { link = '@variable' }, 
-        ["@lsp.typemod.variable.global"]       = { link = '@variable' }, 
-        ["@lsp.typemod.keyword.documentation"] = { fg = c.base03 }, 
-        ["@lsp.typemod.class.documentation"]   = { link = 'Type' }, 
-        ["@lsp.typemod.property.readonly"]     = { link = '@variable' }, 
+        ["@lsp.typemod.variable.readonly"]     = { link = '@variable' },
+        ["@lsp.typemod.variable.global"]       = { link = '@variable' },
+        ["@lsp.typemod.keyword.documentation"] = { fg = c.base03 },
+        ["@lsp.typemod.class.documentation"]   = { link = 'Type' },
+        ["@lsp.typemod.property.readonly"]     = { link = '@variable' },
 
         --- notify
         NotifyBackground  = { bg   = c.base12 },
