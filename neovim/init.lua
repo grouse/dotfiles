@@ -171,10 +171,12 @@ vim.opt.sessionoptions="curdir,folds,help,tabpages,winsize,terminal"
 vim.o.fillchars = "foldopen:,foldsep: ,foldclose:"
 vim.o.list = true
 vim.o.listchars = "eol:,trail:·,tab: "
-vim.o.foldcolumn = "auto"
-vim.o.foldlevel = 99
-vim.o.foldlevelstart = 99
-vim.o.foldenable = true
+
+-- disabled due to shit performance on large files, e.g. flecs.c
+-- vim.o.foldcolumn = "auto"
+-- vim.o.foldlevel = 99
+-- vim.o.foldlevelstart = 99
+-- vim.o.foldenable = true
 
 if vim.g.vscode then
     vim.opt.inccommand="nosplit"
@@ -264,8 +266,9 @@ require("lazy").setup(
         }
     },
     {
+        -- disabled due to shit performance on large files
         'kevinhwang91/nvim-ufo',
-        enabled = not vim.g.vscode,
+        enabled = false,
         dependencies = { 'kevinhwang91/promise-async' },
     },
     {
@@ -620,8 +623,6 @@ require("lazy").setup(
                     })
                 end,
             }
-
-            require("ufo").setup()
         end
     },
     {
@@ -698,8 +699,9 @@ require("lazy").setup(
         end
     },
     {
+        -- disabled due to stuttering on large files
         "nvim-treesitter/nvim-treesitter-context",
-        enabled = not vim.g.vscode,
+        enabled = false,
         dependencies = { "nvim-treesitter/nvim-treesitter", },
         opts = {
             line_numbers = false,
