@@ -11,11 +11,12 @@ args = parser.parse_args();
 root = os.path.dirname(os.path.abspath(__file__))
 
 if platform == "win32":
-    local_config = os.path.realpath(os.path.expandvars("%appdata%/../local"))
+    config = os.path.realpath(os.path.expandvars("%appdata%/../local"))
 elif platform == "linux":
-    local_config = os.path.realpath(os.path.expandvars("$HOME/.config/"))
-    if not os.path.exists(local_config):
-        mkdir(local_config)
+    home = os.path.realpath(os.path.expandvars("$HOME"))
+    config = os.path.realpath(os.path.expandvars("$HOME/.config/"))
+    if not os.path.exists(config):
+        mkdir(config)
 else:
     print("unknown platform: {}".format(platform))
 
@@ -29,9 +30,13 @@ def symlink(path, target):
         os.system("ln -s {} {}".format(target, path))
 
 if args.configure == "all" or args.configure == "neovim":
-    symlink("{}/nvim".format(local_config), "{}/neovim".format(root));
+    symlink("{}/nvim".format(config), "{}/neovim".format(root));
+
+if args.configure == "all":
+    if platform == "linux":
+        symlink("{}/.gdbinit".format(home), "{}/gdbinit".format(root))
+        symlink("{}/gf2_config.ini".format(config), "{}/gf2_config.ini".format(root))
 
 if args.install == "all" or args.install == "deps":
     if platform == "linux":
         os.system("sudo apt install gcc ripgrep")
-        
