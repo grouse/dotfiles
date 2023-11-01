@@ -204,9 +204,7 @@ require("lazy").setup(
     },
     {
         "mcauley-penney/tidy.nvim",
-        opts = {
-            filetype_exclude = { "markdown", "diff" }
-        },
+        opts = { filetype_exclude = { "markdown", "diff" } },
         init = function()
             vim.keymap.set("n", "<leader>te", require("tidy").toggle, { desc = "Toggle Tidy" })
         end
@@ -214,7 +212,10 @@ require("lazy").setup(
     {
         "echasnovski/mini.starter",
         enabled = not vim.g.vscode,
-        dependencies = { 'echasnovski/mini.sessions', },
+        dependencies = {
+            "echasnovski/mini.sessions",
+            "nvim-telescope/telescope.nvim"
+        },
         version = "*",
         config = function()
             local starter = require("mini.starter")
@@ -249,7 +250,6 @@ require("lazy").setup(
         enabled = not vim.g.vscode,
         version = '*',
         opts = {
-            autoread = true,
             directory = vim.fn.stdpath("data") .. "/session",
             file = "session.vim",
             hooks = {
@@ -553,10 +553,11 @@ require("lazy").setup(
                 dynamicRegistration = false,
                 lineFoldingOnly = true
             }
-			capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
+
+            capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
             capabilities.offsetEncoding =  'utf-16'
 
-			local function on_attach(client, bufnr)
+            local function on_attach(client, bufnr)
                 if client.name ~= "lua_ls" then
                     -- disabling this in lua cause it is all sorts of funky in giant require blocks, for example
                     require("nvim-navic").attach(client, bufnr)
@@ -709,7 +710,7 @@ require("lazy").setup(
         }
     },
     {
-        "nvim-telescope/telescope.nvim",
+        "nvim-telescope/telescope.nvim", branch = "0.1.x",
         enabled = not vim.g.vscode,
         dependencies = {
             "nvim-lua/plenary.nvim",
