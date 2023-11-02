@@ -188,7 +188,12 @@ require("autumn").setup()
 
 require("lazy").setup(
 {
-    { "echasnovski/mini.align",   version = "*", opts = {}},
+    {
+        "junegunn/vim-easy-align",
+        init = function()
+            vim.keymap.set({ "v", "x", "n" }, "ga", ":EasyAlign<CR>", { desc = "align..." })
+        end
+    },
     { "echasnovski/mini.comment", version = "*", opts = {}},
     {
         "echasnovski/mini.move",
