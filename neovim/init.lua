@@ -194,6 +194,11 @@ require("lazy").setup(
             vim.keymap.set({ "v", "x", "n" }, "ga", ":EasyAlign<CR>", { desc = "align..." })
         end
     },
+    {
+        "m4xshen/autoclose.nvim",
+        event = "InsertEnter",
+        config = true,
+    },
     { "echasnovski/mini.comment", version = "*", opts = {}},
     {
         "echasnovski/mini.move",
@@ -217,10 +222,7 @@ require("lazy").setup(
     {
         "echasnovski/mini.starter",
         enabled = not vim.g.vscode,
-        dependencies = {
-            "echasnovski/mini.sessions",
-            "nvim-telescope/telescope.nvim"
-        },
+        dependencies = { "echasnovski/mini.sessions", },
         version = "*",
         config = function()
             local starter = require("mini.starter")
@@ -228,7 +230,10 @@ require("lazy").setup(
                 items = {
                     starter.sections.sessions(5, true),
                     starter.sections.recent_files(5, false, false),
-                    starter.sections.telescope(),
+                    {
+                        { name = "Find file", action = require("telescope.builtin").find_files, section = "Telescope" },
+                        { name = "Help", action = require("telescope.builtin").help_tags, section = "Telescope" },
+                    },
                     starter.sections.builtin_actions(),
                 }
             })
@@ -313,13 +318,11 @@ require("lazy").setup(
         "zbirenbaum/copilot-cmp",
         enabled = not vim.g.vscode,
         dependencies = { "zbirenbaum/copilot.lua" },
-        opts = {
-            event = "InsertEnter",
-        },
     },
     {
         "hrsh7th/nvim-cmp",
         enabled = not vim.g.vscode,
+        event = "InsertEnter",
         dependencies = {
             "hrsh7th/cmp-nvim-lsp",
             "hrsh7th/cmp-buffer",
