@@ -194,11 +194,6 @@ require("lazy").setup(
             vim.keymap.set({ "v", "x", "n" }, "ga", ":EasyAlign<CR>", { desc = "align..." })
         end
     },
-    {
-        "m4xshen/autoclose.nvim",
-        event = "InsertEnter",
-        config = true,
-    },
     { "echasnovski/mini.comment", version = "*", opts = {}},
     {
         "echasnovski/mini.move",
