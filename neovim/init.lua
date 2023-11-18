@@ -111,6 +111,7 @@ local icons = {
         Value         = "󰎠 ",
         Variable      = "󰀫 ",
         Copilot       = "",
+        cmp_tabnine   = "",
     },
     diagnostics = {
         Error = "",
@@ -182,10 +183,17 @@ if vim.g.vscode then
     vim.opt.inccommand="nosplit"
 end
 
+local function cmp_tabnine_build_path()
+    if vim.loop.os_uname().sysname == "Windows_NT" then
+        return "powershell ./install.ps1"
+    else
+        return "./install.sh"
+    end
+end
+
 vim.o.guifont = "UbuntuMono Nerd Font:h14"
 
 require("autumn").setup()
-
 require("lazy").setup(
 {
     {
@@ -297,9 +305,27 @@ require("lazy").setup(
         end
     },
     {
+        'tzachar/cmp-tabnine',
+        build = cmp_tabnine_build_path(),
+        dependencies = { 'hrsh7th/nvim-cmp', },
+        config = function()
+            local tabnine = require('cmp_tabnine.config')
+
+            tabnine:setup({
+                max_lines = 1000,
+                max_num_results = 20,
+                sort = true,
+                run_on_every_keystroke = true,
+                snippet_placeholder = '..',
+                ignored_file_types = {},
+                show_prediction_strength = false
+            })
+        end
+    },
+    {
         "zbirenbaum/copilot.lua",
         cmd = "Copilot",
-        enabled = not vim.g.vscode,
+        enabled = false, -- not vim.g.vscode,
         opts = {
             event = "InsertEnter",
             suggestion = { enabled = false },
@@ -313,6 +339,8 @@ require("lazy").setup(
         "zbirenbaum/copilot-cmp",
         enabled = not vim.g.vscode,
         dependencies = { "zbirenbaum/copilot.lua" },
+        event = "InsertEnter",
+        opts = {}
     },
     {
         "hrsh7th/nvim-cmp",
@@ -324,7 +352,8 @@ require("lazy").setup(
             "hrsh7th/cmp-path",
             "hrsh7th/cmp-nvim-lsp-signature-help",
             "saadparwaiz1/cmp_luasnip",
-            "zbirenbaum/copilot-cmp",
+            "tzachar/cmp-tabnine",
+            --"zbirenbaum/copilot-cmp",
         },
         config = function()
             local cmp = require("cmp")
@@ -373,6 +402,7 @@ require("lazy").setup(
                 },
                 sources = cmp.config.sources({
                     { name = "copilot" },
+                    { name = "cmp_tabnine" },
                     { name = "nvim_lsp" },
                     { name = "nvim_lsp_signature_help" },
                     { name = "luasnip" },
@@ -381,7 +411,8 @@ require("lazy").setup(
                 sorting = {
                     priority_weight = 2,
                     comparators = {
-                        require("copilot_cmp.comparators").prioritize,
+                        --require("copilot_cmp.comparators").prioritize,
+                        require("cmp_tabnine.compare"),
                         cmp.config.compare.score,
                         cmp.config.compare.offset,
                         cmp.config.compare.exact,
@@ -404,12 +435,13 @@ require("lazy").setup(
                         end
 
                         item.menu = ({
-                            buffer = "[Buffer]",
-                            nvim_lsp = "[LSP]",
+                            buffer        = "[Buffer]",
+                            nvim_lsp      = "[LSP]",
                             luasnip       = "[LuaSnip]",
                             nvim_lua      = "[Lua]",
                             latex_symbols = "[LaTeX]",
                             copilot       = "[CoPilot]",
+                            cmp_tabnine   = "[TabNine]",
                         })[entry.source.name]
 
                         return item
@@ -872,13 +904,6 @@ if not vim.g.vscode then
 
     vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" });
     vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" });
-end
-
-if vim.g.vscode then
-    local vscode = require("vscode-neovim")
-    vim.keymap.set({ "n", "x", "v" }, "=", function() vscode.call("editor.action.formatSelection") end, { desc = "Format selection" })
-    vim.keymap.set("n", "==", function() vscode.call("editor.action.formatSelection") end, { desc = "Format line" })
-
 end
 
 vim.api.nvim_create_autocmd('TextYankPost', {
