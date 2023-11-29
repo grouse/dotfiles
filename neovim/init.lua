@@ -202,7 +202,11 @@ require("lazy").setup(
             vim.keymap.set({ "v", "x", "n" }, "ga", ":EasyAlign<CR>", { desc = "align..." })
         end
     },
-    { "echasnovski/mini.comment", version = "*", opts = {}},
+    {
+        'numToStr/Comment.nvim',
+        opts = {},
+        event = "BufEnter",
+    },
     {
         "echasnovski/mini.move",
         version = "*",
