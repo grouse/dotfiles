@@ -3,6 +3,13 @@ vim.g.loaded_netrwPlugin = 1
 
 vim.g.mapleader = ";"
 
+vim.g.copilot = false
+vim.g.tabnine = false
+
+if not vim.g.vscode then
+    vim.g.copilot = true
+end
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -312,6 +319,7 @@ require("lazy").setup(
         'tzachar/cmp-tabnine',
         build = cmp_tabnine_build_path(),
         dependencies = { 'hrsh7th/nvim-cmp', },
+        enabled = vim.g.tabnine,
         config = function()
             local tabnine = require('cmp_tabnine.config')
 
@@ -329,7 +337,7 @@ require("lazy").setup(
     {
         "zbirenbaum/copilot.lua",
         cmd = "Copilot",
-        enabled = false, -- not vim.g.vscode,
+        enabled = vim.g.copilot,
         opts = {
             event = "InsertEnter",
             suggestion = { enabled = false },
@@ -341,7 +349,7 @@ require("lazy").setup(
     },
     {
         "zbirenbaum/copilot-cmp",
-        enabled = not vim.g.vscode,
+        enabled = vim.g.copilot,
         dependencies = { "zbirenbaum/copilot.lua" },
         event = "InsertEnter",
         opts = {}
@@ -356,12 +364,29 @@ require("lazy").setup(
             "hrsh7th/cmp-path",
             "hrsh7th/cmp-nvim-lsp-signature-help",
             "saadparwaiz1/cmp_luasnip",
-            "tzachar/cmp-tabnine",
-            --"zbirenbaum/copilot-cmp",
         },
         config = function()
             local cmp = require("cmp")
             local luasnip = require("luasnip")
+
+            local comparators = {
+                cmp.config.compare.score,
+                cmp.config.compare.offset,
+                cmp.config.compare.exact,
+                cmp.config.compare.recently_used,
+                cmp.config.compare.locality,
+                cmp.config.compare.kind,
+                cmp.config.compare.order,
+                cmp.config.compare.length,
+            }
+
+            if vim.g.tabnine then
+                table.insert(comparators, 0, require("cmp_tabnine.compare"))
+            end
+
+            if vim.g.copilot then
+                table.insert(comparators, 0, require("copilot_cmp.comparators").prioritize)
+            end
 
             cmp.setup({
                 view = {
@@ -414,18 +439,7 @@ require("lazy").setup(
                 }),
                 sorting = {
                     priority_weight = 2,
-                    comparators = {
-                        --require("copilot_cmp.comparators").prioritize,
-                        require("cmp_tabnine.compare"),
-                        cmp.config.compare.score,
-                        cmp.config.compare.offset,
-                        cmp.config.compare.exact,
-                        cmp.config.compare.recently_used,
-                        cmp.config.compare.locality,
-                        cmp.config.compare.kind,
-                        cmp.config.compare.order,
-                        cmp.config.compare.length,
-                    },
+                    comparators = comparators,
                 },
                 formatting = {
                     fields = { "kind", "abbr", "menu" },
