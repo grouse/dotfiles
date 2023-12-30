@@ -762,12 +762,13 @@ require("lazy").setup(
             mode = "topline",
         }
     },
+    { 'nvim-telescope/telescope-fzf-native.nvim', build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' },
     {
         "nvim-telescope/telescope.nvim", branch = "0.1.x",
         enabled = not vim.g.vscode,
         dependencies = {
             "nvim-lua/plenary.nvim",
-            "nvim-telescope/telescope-fzy-native.nvim",
+            "nvim-telescope/telescope-fzf-native.nvim",
             "nvim-telescope/telescope-ui-select.nvim",
             "nvim-telescope/telescope-file-browser.nvim"
         },
@@ -800,11 +801,17 @@ require("lazy").setup(
                     file_browser = {
                         theme = "ivy",
                         hijack_netrw = true,
+                    },
+                    fzf = {
+                        fuzzy = true,
+                        override_generic_sorter = true,
+                        override_file_sorter = true,
+                        case_mode = "smart_case",
                     }
                 }
             })
 
-            telescope.load_extension("fzy_native")
+            telescope.load_extension("fzf")
             telescope.load_extension("ui-select")
             telescope.load_extension("file_browser")
         end,
