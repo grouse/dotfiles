@@ -219,11 +219,18 @@ require("lazy").setup(
         version = "*",
         opts = {
             mappings = {
-                left = "",
-                right = "",
-                line_left = "",
-                line_right = "",
+                up = "",        down = "",
+                left = "",      right = "",
+                line_up = "",   line_down = "",
+                line_left = "", line_right = "",
             }
+        },
+        keys = {
+            { "<M-k>", function() require("mini.move").move_selection("up") end, desc = "Move up", mode = "x" },
+            { "<M-j>", function() require("mini.move").move_selection("down") end, desc = "Move down", mode = "x" },
+            { "<M-k>", function() require("mini.move").move_line("up") end, desc = "Move line up", mode = "n" },
+            { "<M-j>", function() require("mini.move").move_line("down") end, desc = "Move line down", mode = "n" },
+
         }
     },
     {
@@ -245,8 +252,16 @@ require("lazy").setup(
                     starter.sections.sessions(5, true),
                     starter.sections.recent_files(5, false, false),
                     {
-                        { name = "Find file", action = require("telescope.builtin").find_files, section = "Telescope" },
-                        { name = "Help", action = require("telescope.builtin").help_tags, section = "Telescope" },
+                        {
+                            name = "Find file",
+                            section = "Telescope",
+                            action = function(opts) return require("telescope.builtin").find_files(opts) end,
+                        },
+                        {
+                            name = "Help",
+                            section = "Telescope",
+                            action = function(opts) return require("telescope.builtin").help_tags(opts) end,
+                        },
                     },
                     starter.sections.builtin_actions(),
                 }
@@ -363,6 +378,7 @@ require("lazy").setup(
             "hrsh7th/cmp-buffer",
             "hrsh7th/cmp-path",
             "hrsh7th/cmp-nvim-lsp-signature-help",
+            "L3MON4D3/LuaSnip",
             "saadparwaiz1/cmp_luasnip",
         },
         config = function()
@@ -468,7 +484,13 @@ require("lazy").setup(
             })
         end
     },
-    { "L3MON4D3/LuaSnip", enabled = not vim.g.vscode, version = "2.*", build = "make install_jsregexp" },
+    {
+        "L3MON4D3/LuaSnip",
+        enabled = not vim.g.vscode,
+        version = "2.*",
+        build = "make install_jsregexp",
+        lazy = true
+    },
     { 'echasnovski/mini.starter',  enabled = not vim.g.vscode, version = '*',  },
     {
         "akinsho/bufferline.nvim",
@@ -486,7 +508,7 @@ require("lazy").setup(
                 reveal = { "close" }
             },
         }},
-        lazy = false,
+        event = "BufEnter",
         keys = {
             { "[b", function() require("bufferline").cycle(-1) end, desc = "Previous buffer" },
             { "]b", function() require("bufferline").cycle(1) end, desc = "Next buffer" },
@@ -502,7 +524,6 @@ require("lazy").setup(
                 lualine_b = {'diagnostics'},
                 lualine_c = {
                     { 'filename', symbols = icons.filename },
-                    { "navic" },
                 },
                 lualine_x = {
                     'encoding',
@@ -614,6 +635,15 @@ require("lazy").setup(
                 if client.name ~= "lua_ls" then
                     -- disabling this in lua cause it is all sorts of funky in giant require blocks, for example
                     require("nvim-navic").attach(client, bufnr)
+
+                    require("lualine").setup({
+                        sections = {
+                            lualine_c = {
+                                { 'filename', symbols = icons.filename },
+                                { "navic" },
+                            },
+                        }
+                    })
                 end
 
                 vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
@@ -682,7 +712,11 @@ require("lazy").setup(
     {
         "SmiteshP/nvim-navic",
         enabled = not vim.g.vscode,
-        dependencies = { "neovim/nvim-lspconfig" },
+        lazy = true,
+        dependencies = {
+            "neovim/nvim-lspconfig",
+            "nvim-lualine/lualine.nvim",
+        },
         opts = {
             separator = "  ",
             highlight = false,
@@ -692,7 +726,7 @@ require("lazy").setup(
         },
         init = function()
             vim.g.navic_silence = true
-        end
+        end,
     },
 
     {
@@ -762,7 +796,12 @@ require("lazy").setup(
             mode = "topline",
         }
     },
-    { 'nvim-telescope/telescope-fzf-native.nvim', build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' },
+    {
+        "nvim-telescope/telescope-fzf-native.nvim",
+        build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && " ..
+            "cmake --build build --config Release && " ..
+            "cmake --install build --prefix build"
+    },
     {
         "nvim-telescope/telescope.nvim", branch = "0.1.x",
         enabled = not vim.g.vscode,
