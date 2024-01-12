@@ -297,11 +297,8 @@ require("lazy").setup(
                 }
             }
         },
-        keys = {
-            { "<M-`>", function() require("mini.sessions").select() end, desc = "Open session" },
-            { "<M-s>", function() vim.cmd.CreateSession() end, desc = "Write session" },
-        },
         init = function()
+            vim.api.nvim_create_user_command("OpenSession", function() require("mini.sessions").select() end, { desc = "Open existing session" })
             vim.api.nvim_create_user_command("CreateSession", function(opts)
                 session_name = nil
                 if opts and opts.fargs[1] then
@@ -313,7 +310,7 @@ require("lazy").setup(
                 end
 
                 require("mini.sessions").write(session_name)
-            end, { nargs = "?", complete = "file", desc = "create a new session" })
+            end, { nargs = "?", complete = "file", desc = "Create a new session" })
         end
     },
     {
