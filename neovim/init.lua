@@ -289,8 +289,6 @@ require("lazy").setup(
         enabled = not vim.g.vscode,
         version = '*',
         opts = {
-            directory = vim.fn.stdpath("data") .. "/session",
-            file = "session.vim",
             hooks = {
                 pre = {
                     read = function()
@@ -301,8 +299,22 @@ require("lazy").setup(
         },
         keys = {
             { "<M-`>", function() require("mini.sessions").select() end, desc = "Open session" },
-            { "<M-s>", function() require("mini.sessions").write() end, desc = "Write session" },
-        }
+            { "<M-s>", function() vim.cmd.CreateSession() end, desc = "Write session" },
+        },
+        init = function()
+            vim.api.nvim_create_user_command("CreateSession", function(opts)
+                session_name = nil
+                if opts and opts.fargs[1] then
+                    session_name = opts.fargs[1]
+                else
+                    -- use the last part of the cwd as the session name
+                    cwd = vim.fn.getcwd()
+                    session_name = cwd:match("^.+[\\/](.+)$") .. ".vim"
+                end
+
+                require("mini.sessions").write(session_name)
+            end, { nargs = "?", complete = "file", desc = "create a new session" })
+        end
     },
     {
         -- disabled due to shit performance on large files
