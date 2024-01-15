@@ -737,7 +737,10 @@ require("lazy").setup(
             vim.g.navic_silence = true
         end,
     },
-
+    {
+        'stevearc/stickybuf.nvim',
+        opts = {},
+    },
     {
         "stevearc/overseer.nvim",
         enabled = not vim.g.vscode,
