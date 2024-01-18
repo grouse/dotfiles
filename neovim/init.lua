@@ -298,7 +298,7 @@ require("lazy").setup(
             }
         },
         init = function()
-            vim.api.nvim_create_user_command("OpenSession", function() require("mini.sessions").select() end, { desc = "Open existing session" })
+            vim.api.nvim_create_user_command("OpenSession", function() require("mini.sessions").select() end, { desc = "Open session" })
             vim.api.nvim_create_user_command("CreateSession", function(opts)
                 session_name = nil
                 if opts and opts.fargs[1] then
@@ -786,10 +786,6 @@ require("lazy").setup(
             require("nvim-treesitter.configs").setup({
                 ensure_installed = { "comment", "c", "cpp", "bash", "vim", "lua" },
                 auto_install = true,
-                highlight = {
-                    enable = true,
-                },
-                additional_vim_regex_highlighting = false,
 
             })
             require("nvim-treesitter").setup()
