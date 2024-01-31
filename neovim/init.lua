@@ -249,8 +249,7 @@ require("lazy").setup(
             local starter = require("mini.starter")
             starter.setup({
                 items = {
-                    starter.sections.sessions(5, true),
-                    starter.sections.recent_files(5, false, false),
+                    starter.sections.sessions(10, true),
                     {
                         {
                             name = "Find file",
