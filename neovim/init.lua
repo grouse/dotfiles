@@ -413,6 +413,7 @@ require("lazy").setup(
             end
 
             cmp.setup({
+                completion = { autocomplete = false },
                 view = {
                     entries = {
                         name = 'custom',
@@ -435,18 +436,20 @@ require("lazy").setup(
                     end,
                 },
                 mapping = {
-                    ['<C-Space>'] = cmp.mapping.complete(),
+                    ['<C-n>'] = cmp.mapping.complete(),
                     ['<Esc>'] = cmp.mapping(function(fallback)
                         cmp.abort()
                         fallback()
                     end),
+
                     ['<C-e>'] = cmp.mapping.abort(),
                     ["<C-j>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
                     ["<C-k>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+
+                    ["<C-Enter>"] = cmp.mapping.confirm({ select = true }),
+
                     ["<Tab>"] = cmp.mapping(function(fallback)
-                        if cmp.visible() then
-                            cmp.confirm({ select = true })
-                        elseif luasnip.expand_or_jumpable() then
+                        if luasnip.expand_or_jumpable() then
                             luasnip.expand_or_jump()
                         else
                             fallback()
