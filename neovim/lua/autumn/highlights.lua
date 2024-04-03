@@ -43,7 +43,7 @@ function M.setup(opts, c)
         CursorLineNr = { fg = util.lighten(c.base00, 0.1) },
         CursorLineFold = { link = 'FoldColumn' }, -- Like FoldColumn when 'cursorline' is set
         CursorLineSign = { link = 'CursorLine' }, -- Like SignColumn when 'cursorline' is set
-        MatchParen = { fg = util.lighten(c.base00, 0.9), bold = true }, -- Character under the cursor or just before it
+        MatchParen = { underline = true, bold = true }, -- Character under the cursor or just before it
         ModeMsg = { fg = c.blue }, -- 'showmode' message (e.g., "-- INSERT --")
         MsgArea = { link = "NormalFg" }, -- 'Area for messages and cmdline'
         MsgSeparator = { link = "NormalFg" }, -- Separator for scrolled messages msgsep.

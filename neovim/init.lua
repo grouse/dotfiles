@@ -779,7 +779,15 @@ require("lazy").setup(
         }
     },
     {
+        "andymass/vim-matchup",
+        enabled = not vim.g.vscode,
+
+    },
+    {
         "nvim-treesitter/nvim-treesitter",
+        dependencies = {
+            "andymass/vim-matchup",
+        },
         enabled = not vim.g.vscode,
         build = ":TSUpdate",
         config = function()
@@ -787,7 +795,8 @@ require("lazy").setup(
             require("nvim-treesitter.configs").setup({
                 ensure_installed = { "comment", "c", "cpp", "bash", "vim", "lua" },
                 auto_install = true,
-
+                highlight = { enable = true },
+                matchup = { enable = true },
             })
             require("nvim-treesitter").setup()
 
