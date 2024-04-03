@@ -766,7 +766,9 @@ require("lazy").setup(
     {
         "andymass/vim-matchup",
         enabled = not vim.g.vscode,
-
+        init = function()
+            vim.g.matchup_matchparen_offscreen = { method = "popup", fullwidth = true }
+        end
     },
     {
         "nvim-treesitter/nvim-treesitter",
@@ -781,7 +783,10 @@ require("lazy").setup(
                 ensure_installed = { "comment", "c", "cpp", "bash", "vim", "lua" },
                 auto_install = true,
                 highlight = { enable = true },
-                matchup = { enable = true },
+                matchup = {
+                    enable = true,
+                    disable_virtual_text = true,
+                },
             })
             require("nvim-treesitter").setup()
 
