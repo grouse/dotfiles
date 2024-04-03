@@ -216,7 +216,6 @@ require("lazy").setup(
     },
     {
         "echasnovski/mini.move",
-        version = "*",
         opts = {
             mappings = {
                 up = "",        down = "",
@@ -244,7 +243,6 @@ require("lazy").setup(
         "echasnovski/mini.starter",
         enabled = not vim.g.vscode,
         dependencies = { "echasnovski/mini.sessions", },
-        version = "*",
         config = function()
             local starter = require("mini.starter")
             starter.setup({
@@ -286,7 +284,6 @@ require("lazy").setup(
     {
         'echasnovski/mini.sessions',
         enabled = not vim.g.vscode,
-        version = '*',
         opts = {
             hooks = {
                 pre = {
@@ -497,15 +494,13 @@ require("lazy").setup(
     {
         "L3MON4D3/LuaSnip",
         enabled = not vim.g.vscode,
-        version = "2.*",
         build = "make install_jsregexp",
         lazy = true
     },
-    { 'echasnovski/mini.starter',  enabled = not vim.g.vscode, version = '*',  },
+    { 'echasnovski/mini.starter',  enabled = not vim.g.vscode, },
     {
         "akinsho/bufferline.nvim",
         enabled = not vim.g.vscode,
-        version = "*",
         dependencies = "nvim-tree/nvim-web-devicons",
         opts = { options = {
             right_mouse_command = false,
@@ -899,6 +894,9 @@ require("lazy").setup(
     },
 },
 {
+    defaults = {
+        version = "*",
+    },
     dev = {
         path = project_path,
         patterns = { "grouse" },
