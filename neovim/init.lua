@@ -198,6 +198,14 @@ local function cmp_tabnine_build_path()
     end
 end
 
+vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
+    callback = function()
+        if vim.bo.filetype == "gdscript" then
+            vim.bo.expandtab=false
+        end
+    end
+})
+
 vim.o.guifont = "UbuntuMono Nerd Font:h14"
 
 require("autumn").setup()
