@@ -255,6 +255,7 @@ require("lazy").setup(
             local starter = require("mini.starter")
             starter.setup({
                 items = {
+                    starter.sections.recent_files(10, false, true),
                     starter.sections.sessions(10, true),
                     {
                         {
