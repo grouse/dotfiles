@@ -517,6 +517,7 @@ require("lazy").setup(
         "akinsho/bufferline.nvim",
         enabled = not vim.g.vscode,
         dependencies = "nvim-tree/nvim-web-devicons",
+        branch = "main",
         opts = { options = {
             right_mouse_command = false,
             indicator = { style = "underline" },
