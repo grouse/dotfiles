@@ -218,6 +218,11 @@ require("lazy").setup(
         end
     },
     {
+        'numToStr/Comment.nvim',
+        opts = {},
+        event = "BufEnter",
+    },
+    {
         "echasnovski/mini.move",
         opts = {
             mappings = {
