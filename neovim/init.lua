@@ -160,6 +160,7 @@ vim.opt.copyindent = true
 vim.opt.cindent = true
 vim.opt.cinoptions = ">s,(0,u0,Us,w1,Ws,m1,j1,J1,:0,l1,Ls,is,g0,E-s"
 
+vim.o.guifont = "UbuntuMono Nerd Font:h14"
 vim.opt.cursorline=true
 vim.opt.showmode=false
 vim.opt.pumheight=2
@@ -205,8 +206,6 @@ vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
         end
     end
 })
-
-vim.o.guifont = "UbuntuMono Nerd Font:h14"
 
 require("autumn").setup()
 require("lazy").setup(
@@ -425,7 +424,6 @@ require("lazy").setup(
             end
 
             cmp.setup({
-                completion = { autocomplete = false },
                 view = {
                     entries = {
                         name = 'custom',
@@ -926,26 +924,11 @@ vim.keymap.set("n", "<M-3>", function() vim.api.nvim_set_current_tabpage(3) end,
 vim.keymap.set("n", "<M-4>", function() vim.api.nvim_set_current_tabpage(4) end, { desc = "Open 4th tab page" })
 
 if vim.g.neovide then
+    vim.o.guifont = "UbuntuMono Nerd Font:h13"
     vim.g.neovide_cursor_animation_length = 0
     vim.g.neovide_cursor_animate_in_insert_mode = false
     vim.g.neovide_cursor_animate_command_line = false
     vim.g.neovide_scroll_animation_length = 0
-
-
-    local increment_scale_factor = function(delta)
-        vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + delta
-    end
-
-    vim.keymap.set("n", "<C-ScrollWheelUp>",   function() increment_scale_factor(1/16) end,  { desc = "Zoom in" })
-    vim.keymap.set("n", "<C-ScrollWheelDown>", function() increment_scale_factor(-1/16) end, { desc = "Zoom out" })
-end
-
-if vim.g.fvim_loaded then
-    vim.o.guifont = "Ubuntu Mono:h18"
-
-    vim.keymap.set({"n", "i"}, "<C-ScrollWheelUp>", ":set guifont=+<CR>", { silent = true })
-    vim.keymap.set({"n", "i"}, "<C-ScrollWheelDown>", ":set guifont=-<CR>", { silent = true })
-    vim.keymap.set({"n", "i"}, "<M-CR>", ":FVimToggleFullScreen<CR>", { silent = true })
 end
 
 vim.keymap.set('v', '<', '<gv', { desc = "Decrease increment", silent = true })
