@@ -21,7 +21,7 @@ function M.round(x)
 end
 
 
---- @param hex string     
+--- @param hex string
 --- @return number red
 --- @return number green
 --- @return number blue
@@ -41,12 +41,12 @@ function M.rgb_to_hex(red, green, blue)
     return string.format('#%02x%02x%02x', red, green, blue)
 end
 
---- @param r number      
---- @param g number      
---- @param b number      
---- @return number h     
---- @return number s     
---- @return number l     
+--- @param r number
+--- @param g number
+--- @param b number
+--- @return number h
+--- @return number s
+--- @return number l
 function M.rgb_to_hsl(r, g, b)
     r = r / 255
     g = g / 255
@@ -97,12 +97,12 @@ function M.rgb_to_hsl(r, g, b)
     return M.round(h), M.round(s * 100), M.round(l * 100)
 end
 
---- @param h number      
---- @param s number      
---- @param l number      
---- @return number red   
---- @return number green 
---- @return number blue  
+--- @param h number
+--- @param s number
+--- @param l number
+--- @return number red
+--- @return number green
+--- @return number blue
 function M.hsl_to_rgb(h, s, l)
     h = h / 360
     s = s / 100
@@ -142,9 +142,9 @@ function M.hsl_to_rgb(h, s, l)
     end
 end
 
---- @param color string   
---- @param factor float 
---- @return string color  
+--- @param color string
+--- @param factor float
+--- @return string color
 function M.darken(color, factor)
     local r, g, b = M.hex_to_rgb(color)
     local h, s, l = M.rgb_to_hsl(r, g, b)
@@ -155,9 +155,9 @@ function M.darken(color, factor)
     return M.rgb_to_hex(new_r, new_g, new_b)
 end
 
---- @param color string   
---- @param factor float 
---- @return string color  
+--- @param color string
+--- @param factor float
+--- @return string color
 function M.lighten(color, factor)
     local r, g, b = M.hex_to_rgb(color)
     local h, s, l = M.rgb_to_hsl(r, g, b)
@@ -168,10 +168,10 @@ function M.lighten(color, factor)
     return M.rgb_to_hex(new_r, new_g, new_b)
 end
 
---- @param hex_fg string 
---- @param hex_bg string 
---- @param alpha float 
---- @return string color 
+--- @param hex_fg string
+--- @param hex_bg string
+--- @param alpha float
+--- @return string color
 function M.blend(hex_fg, hex_bg, alpha)
     local red_bg, green_bg, blue_bg = M.hex_to_rgb(hex_bg)
     local red_fg, green_fg, blue_fg = M.hex_to_rgb(hex_fg)
@@ -187,6 +187,17 @@ function M.blend(hex_fg, hex_bg, alpha)
     end
 
     return M.rgb_to_hex(blend_channel(red_fg, red_bg), blend_channel(green_fg, green_bg), blend_channel(blue_fg, blue_bg))
+end
+
+function M.blend_hue(hex_a, hex_b, alpha)
+    local r1, g1, b1 = M.hex_to_rgb(hex_a)
+    local r2, g2, b2 = M.hex_to_rgb(hex_b)
+
+    local h1, s1, l1 = M.rgb_to_hsl(r1, g1, b1)
+    local h2, s2, l2 = M.rgb_to_hsl(r2, g2, b2)
+
+    local h = h1 * alpha + h2 * (1 - alpha)
+    return M.rgb_to_hex(M.hsl_to_rgb(h, s1, l1))
 end
 
 

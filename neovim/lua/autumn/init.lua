@@ -3,26 +3,25 @@ local M = {}
 M.config = {}
 
 local colors = {
-    dark = {
-        yellow  = "#FFEC51",
-        orange  = "#F2AF29",
-        red     = "#D95D39",
-        magenta = "#d33682",
-        violet  = "#6c71c4",
-        blue    = "#006992",
-        cyan    = "#2aa198",
-        green   = "#2C8E49",
-    },
-    light = {
-        yellow  = "#bca221",
-        orange  = "#F2AF29",
-        red     = "#D95D39",
-        magenta = "#d33682",
-        violet  = "#6c71c4",
-        blue    = "#006992",
-        cyan    = "#2aa198",
-        green   = "#2C8E49",
-    }
+    base03 = "#20352e", -- bg tone2
+    base02 = "#244238", -- bg tone1
+
+    base01 = "#586e75", -- fg tone2
+    base00 = "#657b83", -- fg tone1
+    base0  = "#839496", -- fg main
+    base1  = "#93a1a1", -- fg tone0
+
+    base2  = "#ede4c7", -- bg tone0, window accents, sidebars, cursorline, popup/floating background
+    base3  = "#fcf2d6", -- bg main
+
+    yellow  = "#b58900",
+    orange  = "#cb4b16",
+    red     = "#dc322f",
+    magenta = "#d33682",
+    violet  = "#6c71c4",
+    blue    = "#268bd2",
+    cyan    = "#2aa198",
+    green   = "#859900",
 }
 
 local defaults = {
@@ -31,80 +30,42 @@ local defaults = {
         "help", "qf", "OverseerList", "Trouble",
     },
     colors = {
-        dark = {
-            base00 = "#EDD9A3", -- fg main
-            base01 = "#d36e2a", -- fg accent0, syntax keywords
-            base02 = "#8ec07c", -- fg accent1, comments, text, strings
-            base03 = "#84a89a", -- fg accent2, macros, annotations, pre-processor identifiers
-
-            base10 = "#233329", -- bg main
-            base11 = "#1d6656", -- bg accent0, visual
-            base12 = "#132319", -- bg accent1, window accents, sidebars, cursorline, popup/floating background, 
-            base13 = "#d36e2a", -- bg accent2, insert, selected menu item 
-
-
-            -- colors
-            yellow  = colors.dark.yellow,
-            orange  = colors.dark.orange,
-            red     = colors.dark.red,
-            magenta = colors.dark.magenta,
-            violet  = colors.dark.violet,
-            blue    = colors.dark.blue,
-            cyan    = colors.dark.cyan,
-            green   = colors.dark.green,
-
+        state = {
             -- diff
-            add     = colors.dark.green,
-            change  = colors.dark.yellow,
-            delete  = colors.dark.red,
+            add     = colors.green,
+            change  = colors.yellow,
+            delete  = colors.red,
 
             -- diagnostics
-            info    = colors.dark.cyan,
-            hint    = colors.dark.green,
-            warning = colors.dark.yellow,
-            error   = colors.dark.red,
+            info    = colors.cyan,
+            hint    = colors.green,
+            warning = colors.yellow,
+            error   = colors.red,
         },
+
         light = {
-            base00 = "#1B2E28", -- fg main
-            base01 = "#d36e2a", -- fg accent0, syntax keywords
-            base02 = "#6ea05c", -- fg accent1, comments, text, strings
-            base03 = "#64887a", -- fg accent2, macros, annotations, pre-processor identifiers
+        },
 
-            base10 = "#EEDAA4", -- bg main
-            base11 = "#657b83", -- bg accent0, visual
-            base12 = "#DDC993", -- bg accent1, cursorline, window accents, sidebars, popup/floating background, 
-            base13 = "#d36e2a", -- bg accent2, insert, selected menu item 
-            base14 = "#8ec07c", -- bg accent3, command
-
-            -- colors
-            yellow  = colors.light.yellow,
-            orange  = colors.light.orange,
-            red     = colors.light.red,
-            magenta = colors.light.magenta,
-            violet  = colors.light.violet,
-            blue    = colors.light.blue,
-            cyan    = colors.light.cyan,
-            green   = colors.light.green,
-
-            -- diff
-            add     = colors.light.green,
-            change  = colors.light.yellow,
-            delete  = colors.light.red,
-
-            -- diagnostics
-            info    = colors.light.cyan,
-            hint    = colors.light.green,
-            warning = colors.light.yellow,
-            error   = colors.light.red,
-        }
+        dark = {
+            base0 = "#EDD9A3",
+            base1 = colors.base01,
+            base2 = colors.base02,
+            base3 = colors.base03,
+            base00  = colors.base0,
+            base01  = colors.base1,
+            base02  = colors.base2,
+            base03  = colors.base3,
+        },
     }
 }
 
 function M.get_colors()
     if M.config.palette == "light" or (M.config.palette == "auto" and vim.o.background == "light") then
-        return M.config.colors.light
+        M.config.palette = "light"
+        return vim.tbl_deep_extend("force", {}, colors, M.config.colors.state, M.config.colors.light)
     else
-        return M.config.colors.dark
+        M.config.palette = "dark"
+        return vim.tbl_deep_extend("force", {}, colors, M.config.colors.state, M.config.colors.dark)
     end
 end
 
@@ -115,13 +76,9 @@ end
 function M.load(opts)
     opts = opts or {}
 
-    if vim.g.colors_name then
-        vim.cmd('hi clear')
-    end
-
-    if vim.fn.exists('syntax_on') then
-        vim.cmd('syntax reset')
-    end
+    vim.cmd('hi clear')
+    if vim.fn.exists("syntax_on") then vim.cmd("syntax reset") end
+    if not vim.o.background then vim.o.background = "dark" end
 
     vim.o.termguicolors = true
     vim.g.colors_name = "autumn"

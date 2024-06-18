@@ -4,43 +4,43 @@ local util = require("autumn.util")
 
 function M.setup(opts, c)
     local highlights = {
-        Foo    = { bg = c.magenta, fg = c.base00 },
+        Foo    = { bg = c.magenta, fg = c.base0 },
         Ignore = {},
 
-        NormalFg = { fg = c.base00 },
+        NormalFg = { fg = c.base0 },
 
         --- core editor highlights
         HighlightYank = { fg = util.lighten(c.cyan, 0.2) },
-        CurSearch = { fg = c.base13, underline = true },
+        CurSearch = { fg = c.orange, underline = true },
         IncSearch = { fg = c.orange, standout = true }, -- 'incsearch' highlighting, also for the text replaced
         Substitute = { link = 'IncSearch' }, -- :substitute replacement text highlight
-        Search = { bg = c.base13 }, -- Last search pattern highlighting
+        Search = { bg = c.orange, fg = c.base2 }, -- Last search pattern highlighting
 
-        ColorColumn = { bg = c.base12 },
+        ColorColumn = { bg = c.base2 },
         Conceal = { fg = c.blue },
-        Cursor = { bg = c.base00, fg = c.base10 },
+        Cursor = { bg = c.base0, fg = c.base3 },
         lCursor = { link = 'Cursor' },
         CursorIM = { link = 'Cursor' },
         CursorColumn = { link = 'ColorColumn' },
-        CursorLine = { bg = c.base12 },
-        CursorLineSB = { bg = util.darken(c.base12, 0.2) },
+        CursorLine = { bg = c.base2 },
+        CursorLineSB = { bg = util.darken(c.base2, 0.2) },
         Directory = { fg = c.blue },
         DiffAdd = { fg = c.add, reverse = true },
         DiffChange = { fg = c.change, reverse = true },
         DiffDelete = { fg = c.delete, reverse = true },
         DiffText = { fg = c.blue, reverse = true },
-        EndOfBuffer = { fg = c.base12 },
+        EndOfBuffer = { fg = c.base2 },
         TermCursor = { link = 'Cursor' }, -- Cursor in a focused terminal
         TermCursorNC = { link = "Cursor" }, -- Cursor in an unfocused terminal
         ErrorMsg = { fg = c.error, reverse = true }, -- Error messages on the command line
-        WinSeparator = { fg = c.base12, bg = c.base12 }, -- Separators between window splits
-        Folded = { fg = c.base00, bg = c.base12, underline = true, bold = true }, -- Line used for closed folds
-        FoldColumn = { fg = c.base00, bg = c.base12 }, -- 'foldcolumn'
-        SignColumn = { fg = c.base00, bg = c.base12 },
-        LineNr = { fg = c.base00 }, -- Line number for ":number" and ":#" commands
+        WinSeparator = { fg = c.base2, bg = c.base2 }, -- Separators between window splits
+        Folded = { fg = c.base0, bg = c.base2, underline = true, bold = true }, -- Line used for closed folds
+        FoldColumn = { fg = c.base0, bg = c.base2 }, -- 'foldcolumn'
+        SignColumn = { fg = c.base0, bg = c.base2 },
+        LineNr = { fg = c.base0 }, -- Line number for ":number" and ":#" commands
         LineNrAbove = { link = 'LineNr' }, -- Line number, above the cursor line
         LineNrBelow = { link = 'LineNr' }, -- Line number, below the cursor
-        CursorLineNr = { fg = util.lighten(c.base00, 0.1) },
+        CursorLineNr = { fg = c.base1 },
         CursorLineFold = { link = 'FoldColumn' }, -- Like FoldColumn when 'cursorline' is set
         CursorLineSign = { link = 'CursorLine' }, -- Like SignColumn when 'cursorline' is set
         MatchParen = { underline = true, bold = true }, -- Character under the cursor or just before it
@@ -48,56 +48,56 @@ function M.setup(opts, c)
         MsgArea = { link = "NormalFg" }, -- 'Area for messages and cmdline'
         MsgSeparator = { link = "NormalFg" }, -- Separator for scrolled messages msgsep.
         MoreMsg = { fg = c.blue }, -- more-prompt
-        Normal = { fg = c.base00, bg = c.base10 }, -- Normal text
-        NormalSB = { fg = c.base00, bg = c.base12 }, -- Normal text
-        NormalFloat = { fg = c.base00, bg = c.base12 }, -- Normal text in floating windows
-        FloatBorder = { fg = c.base12, bg = c.base12 }, -- Border of floating windows.
+        Normal = { fg = c.base0, bg = c.base3 }, -- Normal text
+        NormalSB = { fg = c.base0, bg = c.base2 }, -- Normal text
+        NormalFloat = { fg = c.base0, bg = c.base2 }, -- Normal text in floating windows
+        FloatBorder = { fg = c.base2, bg = c.base2 }, -- Border of floating windows.
         FloatTitle = { fg = c.orange }, -- Title of float windows.
-        NormalNC = { fg = c.base00, bg = util.blend(c.base10, "#000000", 0.95) },
-        Pmenu = { fg = c.base00, bg = c.base12 }, -- Popup menu: Normal item
-        PmenuSel = { fg = c.base00, bg = c.base13 }, -- Popup menu: Selected item
+        NormalNC = { fg = c.base0, bg = util.blend(c.base3, "#000000", 0.95) },
+        Pmenu = { fg = c.base0, bg = c.base2 }, -- Popup menu: Normal item
+        PmenuSel = { fg = c.base0, bg = c.base03 }, -- Popup menu: Selected item
         PmenuKind = { link = 'Pmenu' }, -- Popup menu: Normal item kind
         PmenuKindSel = { link = 'PmenuSel' }, -- Popup menu: Selected item kind
         PmenuExtra = { link = 'Pmenu' }, -- Popup menu: Normal item extra text
         PmenuExtraSel = { link = 'PmenuSel' }, -- Popup menu: Selected item extra text
-        PmenuSbar = { fg = c.base00, bg = util.lighten(c.base10, 0.3) }, -- Popup menu: Scrollbar
-        PmenuThumb = { fg = c.base10, bg = c.base01 }, -- Popup menu: Thumb of the scrollbar
+        PmenuSbar = { fg = c.base0, bg = c.base2 }, -- Popup menu: Scrollbar
+        PmenuThumb = { fg = c.base3, bg = c.orange }, -- Popup menu: Thumb of the scrollbar
         Question = { fg = c.cyan, bold = true }, -- hit-enter prompt and yes/no questions.
-        QuickFixLine = { bg = c.base13 }, -- Current quickfix item in the quickfix window
+        QuickFixLine = { bg = c.orange }, -- Current quickfix item in the quickfix window
         SpecialKey = { fg = c.red, reverse = true }, -- Unprintable characters: Text displayed differently from what it really is.
         SpellBad = { sp = c.red, undercurl = true }, -- Word that is not recognized by the spellchecker.
         SpellCap = { sp = c.violet, undercurl = true }, -- Word that should start with a capital
         SpellLocal = { sp = c.yellow, undercurl = true }, -- Word that is recognized by the spellchecker as one that is used in another region
         SpellRare = { sp = c.cyan, undercurl = true }, -- Word that is recognized by the spellchecker as one that is hardly ever used.
-        StatusLine = { fg = c.base00, bg = c.base12 }, -- Status line of current window.
-        StatusLineNC = { bg = c.base12 }, -- Status lines of not-current windows.
-        TabLine = { fg = c.base01, bg = c.base11 }, -- Tab pages line, not active tab page label.
-        TabLineFill = { bg = c.base12 }, -- Tab pages line, where there are no labels.
-        TabLineSel = { fg = c.base02, bg = c.base01, sp = c.base00, underline = true }, -- Tab pages line, active tab page label.
-        Title = { fg = c.base13, bold = true }, -- Titles for output from ":set all", ":autocmd" etc.
-        Visual = { reverse = true }, -- Visual mode selection.
+        StatusLine = { fg = c.base0, bg = c.base2 }, -- Status line of current window.
+        StatusLineNC = { bg = c.base2 }, -- Status lines of not-current windows.
+        TabLine = { fg = c.orange, bg = c.cyan }, -- Tab pages line, not active tab page label.
+        TabLineFill = { bg = c.base2 }, -- Tab pages line, where there are no labels.
+        TabLineSel = { fg = c.green, bg = c.orange, sp = c.base0, underline = true }, -- Tab pages line, active tab page label.
+        Title = { fg = c.orange, bold = true }, -- Titles for output from ":set all", ":autocmd" etc.
+        Visual = { bg = c.base02 },--reverse = true }, -- Visual mode selection.
         VisualNOS = { link = 'Visual' }, -- Visual mode selection when vim is "Not Owning the Selection".
         WarningMsg = { fg = c.warning, bold = true }, -- Warning messages.
-        WildMenu = { fg = util.lighten(c.base00, 0.3), bg = c.base12 }, -- Current match in 'wildmenu' completion.
+        WildMenu = { fg = c.base1, bg = c.base2 }, -- Current match in 'wildmenu' completion.
         WinBar = { link = 'Pmenu' }, -- Window bar of current window.
         WinBarNC = { link = 'WinBar' }, -- Window bar of not-current windows.
 
-        NonText    = { fg = util.blend(c.base03, c.base10, 0.2) }, -- "eol", "extends" and "precedes" in 'listchars'
-        Whitespace = { fg = util.blend(c.base03, c.base10, 0.6) }, -- "nbsp", "space", "tab", "multispace", "lead" and "trail" in 'listchars'.
+        NonText    = { fg = util.blend(c.cyan, c.base3, 0.2) }, -- "eol", "extends" and "precedes" in 'listchars'
+        Whitespace = { fg = util.blend(c.cyan, c.base3, 0.6) }, -- "nbsp", "space", "tab", "multispace", "lead" and "trail" in 'listchars'.
 
         --- syntax highlights
-        Identifier = { fg = c.base00 },
-        Function   = { fg = util.darken(c.base00, 0.08) },
-        Operator   = { fg = util.lighten(c.base00, 0.2) },
-        Type       = { fg = util.blend(c.base00, c.base01, 0.7) },
-        Delimiter  = { fg = util.lighten(c.base00, 0.5) },
-        Keyword    = { fg = c.base01 },
-        Define     = { fg = util.lighten(c.base01, 0.2) },
-        Comment    = { fg = c.base02, italic = true },
-        Constant   = { fg = util.blend(c.base02, c.base00, 0.4) },
-        String     = { fg = util.darken(c.base02, 0.25) },
-        Macro      = { fg = c.base03 },
-        Special    = { fg = c.cyan },
+        Identifier = { fg = c.base0 },
+        Function   = { fg = util.blend(c.yellow, c.base0, 0.4) },--util.blend(c.base0, c.orange, 0.7) },
+        Operator   = { fg = c.base01 },
+        Type       = { fg = util.blend(c.yellow, c.orange, 0.75) }, --util.blend(c.base0, c.orange, 0.7) },
+        Delimiter  = { fg = c.base00 },
+        Define     = { fg = c.orange },
+        Keyword    = { fg = util.lighten(c.orange, 0.2) },
+        String     = { fg = c.cyan },
+        Comment    = { fg = util.blend(c.cyan , c.base2, 0.6) },
+        Constant   = { fg = util.blend(c.cyan, c.base0, 0.4) },
+        Macro      = { fg = c.green },
+        Special    = { fg = c.green },
         Underlined = { underline = true },
         Error      = {},
         Todo       = { fg = c.red, bold = true },
@@ -122,10 +122,10 @@ function M.setup(opts, c)
         Debug          = { link = 'Special' }, -- debugging statements
 
         --- diagnostics
-        DiagnosticSignError = { fg = c.red,    bg = c.base12 },
-        DiagnosticSignWarn  = { fg = c.yellow, bg = c.base12 },
-        DiagnosticSignHint  = { fg = c.cyan,   bg = c.base12 },
-        DiagnosticSignInfo  = { fg = c.cyan,   bg = c.base12 },
+        DiagnosticSignError = { fg = c.red,    bg = c.base2 },
+        DiagnosticSignWarn  = { fg = c.yellow, bg = c.base2 },
+        DiagnosticSignHint  = { fg = c.cyan,   bg = c.base2 },
+        DiagnosticSignInfo  = { fg = c.cyan,   bg = c.base2 },
 
         DiagnosticVirtualTextError = { fg = c.red,    bg = util.darken(c.red,    0.9) },
         DiagnosticVirtualTextWarn  = { fg = c.yellow, bg = util.darken(c.yellow, 0.9) },
@@ -191,8 +191,8 @@ function M.setup(opts, c)
         ['@type.qualifier']  = { link = 'Keyword' }, -- type qualifiers (e.g. `const`)
 
         ['@storageclass'] = { link = 'StorageClass' }, -- modifiers that affect storage in memory or life-time
-        ['@attribute']    = { fg = c.base03 }, -- attribute annotations (e.g. Python decorators)
-        ['@field']        = { fg   = c.base00 }, -- object and struct fields
+        ['@attribute']    = { fg = c.cyan }, -- attribute annotations (e.g. Python decorators)
+        ['@field']        = { fg   = c.base0 }, -- object and struct fields
         ['@property']     = { link = '@field' }, -- similar to `@field`
 
         ['@variable']         = { link = 'Identifier' }, -- various variable names
@@ -202,10 +202,10 @@ function M.setup(opts, c)
         ['@constant.builtin'] = { link = 'Constant' }, -- built-in constant values
         ['@constant.macro']   = { link = 'Constant' }, -- constants defined by the preprocessor
 
-        ['@namespace'] = { fg = c.base00 }, -- modules or namespaces
+        ['@namespace'] = { fg = c.base0 }, -- modules or namespaces
         ['@symbol']    = { fg = c.violet }, -- symbols or atoms
 
-        ['@text'] = { fg = c.base00 }, -- non-structured text
+        ['@text'] = { fg = c.base0 }, -- non-structured text
         ['@text.strong'] = { bold = true  }, -- bold text
         ['@text.emphasis'] = { italic = true }, -- text with emphasis
         ['@text.underline'] = { link = 'Underlined' }, -- underlined text
@@ -253,12 +253,12 @@ function M.setup(opts, c)
         -- Extra highlight
         ["@lsp.typemod.variable.readonly"]     = { link = '@variable' },
         ["@lsp.typemod.variable.global"]       = { link = '@variable' },
-        ["@lsp.typemod.keyword.documentation"] = { fg = c.base03 },
+        ["@lsp.typemod.keyword.documentation"] = { fg = c.cyan },
         ["@lsp.typemod.class.documentation"]   = { link = 'Type' },
         ["@lsp.typemod.property.readonly"]     = { link = '@variable' },
 
         --- notify
-        NotifyBackground  = { bg   = c.base12 },
+        NotifyBackground  = { bg   = c.base2 },
         NotifyERRORBorder = { fg   = c.error },
         NotifyWARNBorder  = { fg   = c.warn },
         NotifyINFOBorder  = { fg   = c.info },
@@ -282,7 +282,7 @@ function M.setup(opts, c)
 
 
         --- cmp
-        CmpItemAbbrDeprecated    = { fg   = c.base01, strikethrough = true }, -- Highlight group for unmatched characters of each deprecated completion field
+        CmpItemAbbrDeprecated    = { fg   = c.orange, strikethrough = true }, -- Highlight group for unmatched characters of each deprecated completion field
         CmpItemAbbrMatch         = { fg   = c.yellow }, -- Highlight group for matched characters of each completion field,
         CmpItemAbbrMatchFuzzy    = { fg   = c.yellow }, -- Highlight group for fuzzy-matched characters of each completion field,
         CmpItemKindReference     = { link = 'Underlined' },
@@ -290,7 +290,7 @@ function M.setup(opts, c)
         CmpItemKindEnum          = { link = 'Type' },
         CmpItemKindField         = { link = '@field' },
         CmpItemKindClass         = { link = 'Type' },
-        CmpItemKindFile          = { fg   = c.base00 },
+        CmpItemKindFile          = { fg   = c.base0 },
         CmpItemKindProperty      = { link = '@field' },
         CmpItemKindMethod        = { link = 'Function' },
         CmpItemKindKeyword       = { link = 'Keyword' },
@@ -301,22 +301,22 @@ function M.setup(opts, c)
         CmpItemKindInterface     = { link = 'Type' },
         CmpItemKindTypeParameter = { link = 'Type' },
         CmpItemKindEnumMember    = { link = 'Constant' },
-        CmpItemKindEvent         = { fg   = util.lighten(c.base00, 0.3) },
+        CmpItemKindEvent         = { fg   = c.base1 },
         CmpItemKindConstructor   = { link = '@constructor' },
         CmpItemKindConstant      = { link = 'Constant' },
         CmpItemKindModule        = { link = '@namespace' },
-        CmpItemKindValue         = { fg   = util.lighten(c.base00, 0.3) },
+        CmpItemKindValue         = { fg   = c.base1 },
         CmpItemKindColor         = { fg   = c.magenta },
         CmpItemKindFunction      = { link = 'Function' },
         CmpItemKindText          = { link = 'String' },
 
-        CmpDocNormal = { bg = util.darken(c.base12, 0.2) },
+        CmpDocNormal = { bg = util.darken(c.base2, 0.2) },
         CmpDocBorder = { link = "CppDocNormal" },
         CmpDocSel = { link = "PmenuSel" },
 
 
         --- navic
-        NavicIconsFile          = { fg   = c.base11 },
+        NavicIconsFile          = { fg   = c.cyan },
         NavicIconsModule        = { link = '@namespace' },
         NavicIconsNamespace     = { link = '@namespace' },
         NavicIconsPackage       = { link = 'Directory' },
@@ -339,24 +339,24 @@ function M.setup(opts, c)
         NavicIconsNull          = { link = 'Constant' },
         NavicIconsEnumMember    = { link = 'Constant' },
         NavicIconsStruct        = { link = 'Structure' },
-        NavicIconsEvent         = { fg   = util.lighten(c.base00, 0.3) },
+        NavicIconsEvent         = { fg   = c.base1 },
         NavicIconsOperator      = { link = 'Operator' },
         NavicIconsTypeParameter = { link = '@parameter' },
-        NavicText               = { fg   = c.base01 },
+        NavicText               = { fg   = c.orange },
         NavicSeparator          = { link = 'Keyword' },
 
         --- nvim-tree
         NvimTreeSymlink                   = { link = 'Underlined' },
         NvimTreeSymlinkIcon               = { link = 'Directory' },
-        NvimTreeFolderName                = { fg   = c.base00 },
+        NvimTreeFolderName                = { fg   = c.base0 },
         NvimTreeRootFolder                = { link = 'Title' },
         NvimTreeFolderIcon                = { link = 'Directory' },
-        NvimTreeEmptyFolderName           = { fg   = c.base00 },
+        NvimTreeEmptyFolderName           = { fg   = c.base0 },
         NvimTreeExecFile                  = { link = 'Function' },
         NvimTreeOpenedFile                = { fg   = c.blue, bold = true },
         NvimTreeModifiedFile              = { fg   = c.change },
         NvimTreeSpecialFile               = { link = 'Special' },
-        NvimTreeIndentMarker              = { fg   = c.base02 },
+        NvimTreeIndentMarker              = { fg   = c.green },
         NvimTreeLspDiagnosticsInformation = {},
         NvimTreeLspDiagnosticsHint        = {},
         NvimTreeGitDirty                  = { fg   = c.change },
@@ -379,8 +379,8 @@ function M.setup(opts, c)
         NeoTreeWinSeparator = { link = "WinSeparator" },
         NeoTreeNormal = { link = "NormalSB" },
         NeoTreeNormalNC = { link = "NeoTreeNormal" },
-        NeoTreeFileIcon = { fg = c.base02 },
-        NeoTreeDirectoryIcon = { fg = c.base02 },
+        NeoTreeFileIcon = { fg = c.green },
+        NeoTreeDirectoryIcon = { fg = c.green },
 
 
         --- Trouble
@@ -392,36 +392,36 @@ function M.setup(opts, c)
         TelescopeMultiSelection = { link = 'Type' },
         TelescopeMultiIcon      = { fg   = c.cyan },
         TelescopeNormal         = { link = "NormalSB" },
-        TelescopePreviewNormal  = { bg = c.base10 },
-        TelescopePromptNormal   = { bg = c.base10 },
+        TelescopePreviewNormal  = { bg = c.base3 },
+        TelescopePromptNormal   = { bg = c.base3 },
         TelescopeResultsNormal  = { link = 'TelescopeNormal' },
         TelescopeBorder         = { link = "WinSeparator" },
         TelescopePromptBorder   = { link = 'TelescopeBorder' },
         TelescopeResultsBorder  = { link = 'TelescopeBorder' },
-        TelescopePreviewBorder  = { fg = c.base10, bg = c.base10 },
-        TelescopeTitle          = { fg   = c.base02 },
+        TelescopePreviewBorder  = { fg = c.base3, bg = c.base3 },
+        TelescopeTitle          = { fg   = c.green },
         TelescopePromptTitle    = { link = 'TelescopeTitle' },
         TelescopeResultsTitle   = { link = 'TelescopeTitle' },
         TelescopePreviewTitle   = { link = 'TelescopeTitle' },
         TelescopePromptCounter  = { link = 'NonText' },
         TelescopeMatching       = { fg   = c.yellow },
-        TelescopePromptPrefix   = { fg   = c.base00 },
+        TelescopePromptPrefix   = { fg   = c.base0 },
 
         --- nvim-treesitter-context
-        TreesitterContext = { bg = c.base12 },
-        TreesitterContextBottom = { bg = c.base12, underline=true, sp = c.base01 },
+        TreesitterContext = { bg = c.base2 },
+        TreesitterContextBottom = { bg = c.base2, underline=true, sp = c.orange },
 
         --- which-key
         WhichKey          = { link = "Function" }, -- 	the key
         WhichKeyGroup     = { link = "Keyword" }, -- 	a group
-        WhichKeySeparator = { fg = c.base01 }, -- 	the separator between the key and its label
+        WhichKeySeparator = { fg = c.orange }, -- 	the separator between the key and its label
         WhichKeyDesc      = { link = "Comment" }, -- 	the label of the key
         WhichKeyFloat     = { link = "NormalFloat" }, -- 	Normal in the popup window
         WhichKeyBorder    = { link = "FloatBorder" }, -- 	Normal in the popup window
         WhichKeyValue     = { link = "Comment" }, -- 	used by plugins that provide values
 
         --- nvim-cmp
-        GhostText = { fg = c.base02 },
+        GhostText = { fg = c.green },
     }
 
     return highlights
