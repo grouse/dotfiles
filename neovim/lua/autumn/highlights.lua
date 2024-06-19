@@ -4,21 +4,20 @@ local util = require("autumn.util")
 
 function M.setup(opts, c)
     local highlights = {
-        Foo    = { bg = c.magenta, fg = c.base0 },
         Ignore = {},
 
         NormalFg = { fg = c.base0 },
 
         --- core editor highlights
         HighlightYank = { fg = util.lighten(c.cyan, 0.2) },
-        CurSearch = { fg = c.orange, underline = true },
-        IncSearch = { fg = c.orange, standout = true }, -- 'incsearch' highlighting, also for the text replaced
+        CurSearch = { fg = c.violet, underline = true },
+        IncSearch = { fg = c.violet, standout = true }, -- 'incsearch' highlighting, also for the text replaced
         Substitute = { link = 'IncSearch' }, -- :substitute replacement text highlight
         Search = { bg = c.orange, fg = c.base2 }, -- Last search pattern highlighting
 
         ColorColumn = { bg = c.base2 },
         Conceal = { fg = c.blue },
-        Cursor = { bg = c.base0, fg = c.base3 },
+        Cursor = { bg = c.base0 , fg = c.base3 },
         lCursor = { link = 'Cursor' },
         CursorIM = { link = 'Cursor' },
         CursorColumn = { link = 'ColorColumn' },
@@ -34,7 +33,7 @@ function M.setup(opts, c)
         TermCursorNC = { link = "Cursor" }, -- Cursor in an unfocused terminal
         ErrorMsg = { fg = c.error, reverse = true }, -- Error messages on the command line
         WinSeparator = { fg = c.base2, bg = c.base2 }, -- Separators between window splits
-        Folded = { fg = c.base0, bg = c.base2, underline = true, bold = true }, -- Line used for closed folds
+        Folded = { fg = c.base1, bg = c.base2, underline = true, bold = true }, -- Line used for closed folds
         FoldColumn = { fg = c.base0, bg = c.base2 }, -- 'foldcolumn'
         SignColumn = { fg = c.base0, bg = c.base2 },
         LineNr = { fg = c.base0 }, -- Line number for ":number" and ":#" commands
@@ -49,13 +48,13 @@ function M.setup(opts, c)
         MsgSeparator = { link = "NormalFg" }, -- Separator for scrolled messages msgsep.
         MoreMsg = { fg = c.blue }, -- more-prompt
         Normal = { fg = c.base0, bg = c.base3 }, -- Normal text
-        NormalSB = { fg = c.base0, bg = c.base2 }, -- Normal text
+        NormalSB = { fg = c.base0, bg = c.base3 }, -- Normal text
         NormalFloat = { fg = c.base0, bg = c.base2 }, -- Normal text in floating windows
         FloatBorder = { fg = c.base2, bg = c.base2 }, -- Border of floating windows.
         FloatTitle = { fg = c.orange }, -- Title of float windows.
         NormalNC = { fg = c.base0, bg = util.blend(c.base3, "#000000", 0.95) },
         Pmenu = { fg = c.base0, bg = c.base2 }, -- Popup menu: Normal item
-        PmenuSel = { fg = c.base0, bg = c.base03 }, -- Popup menu: Selected item
+        PmenuSel = { fg = c.base0, bg = c.selection_bg, bold=true}, -- Popup menu: Selected item
         PmenuKind = { link = 'Pmenu' }, -- Popup menu: Normal item kind
         PmenuKindSel = { link = 'PmenuSel' }, -- Popup menu: Selected item kind
         PmenuExtra = { link = 'Pmenu' }, -- Popup menu: Normal item extra text
@@ -75,10 +74,10 @@ function M.setup(opts, c)
         TabLineFill = { bg = c.base2 }, -- Tab pages line, where there are no labels.
         TabLineSel = { fg = c.green, bg = c.orange, sp = c.base0, underline = true }, -- Tab pages line, active tab page label.
         Title = { fg = c.orange, bold = true }, -- Titles for output from ":set all", ":autocmd" etc.
-        Visual = { bg = c.base02 },--reverse = true }, -- Visual mode selection.
+        Visual = { link = "CursorLine" }, -- Visual mode selection.
         VisualNOS = { link = 'Visual' }, -- Visual mode selection when vim is "Not Owning the Selection".
         WarningMsg = { fg = c.warning, bold = true }, -- Warning messages.
-        WildMenu = { fg = c.base1, bg = c.base2 }, -- Current match in 'wildmenu' completion.
+        WildMenu = { fg = c.base0, bg = c.base2 }, -- Current match in 'wildmenu' completion.
         WinBar = { link = 'Pmenu' }, -- Window bar of current window.
         WinBarNC = { link = 'WinBar' }, -- Window bar of not-current windows.
 
@@ -87,15 +86,15 @@ function M.setup(opts, c)
 
         --- syntax highlights
         Identifier = { fg = c.base0 },
-        Function   = { fg = util.blend(c.yellow, c.base0, 0.4) },--util.blend(c.base0, c.orange, 0.7) },
+        Function   = { fg = util.blend(c.yellow, c.base0, 0.4) },
         Operator   = { fg = c.base01 },
-        Type       = { fg = util.blend(c.yellow, c.orange, 0.75) }, --util.blend(c.base0, c.orange, 0.7) },
+        Type       = { fg = c.yellow },
         Delimiter  = { fg = c.base00 },
-        Define     = { fg = c.orange },
-        Keyword    = { fg = util.lighten(c.orange, 0.2) },
+        Define     = { fg = util.darken(c.orange, 0.1) },
+        Keyword    = { fg = c.orange },
+        Comment    = { fg = util.darken(c.cyan , 0.2) },
         String     = { fg = c.cyan },
-        Comment    = { fg = util.blend(c.cyan , c.base2, 0.6) },
-        Constant   = { fg = util.blend(c.cyan, c.base0, 0.4) },
+        Constant   = { fg = c.cyan },
         Macro      = { fg = c.green },
         Special    = { fg = c.green },
         Underlined = { underline = true },
@@ -168,7 +167,7 @@ function M.setup(opts, c)
         ['@method.call'] = { link = 'Function' }, -- method calls
 
         ['@constructor'] = { link = 'Function' }, -- constructor calls and definitions
-        ['@parameter']   = { fg   = c.base0 }, -- parameters of a function
+        ['@parameter']   = { link = "NormalFg" }, -- parameters of a function
 
         ['@keyword']           = { link = 'Keyword' }, -- various keywords
         ['@keyword.coroutine'] = { link = 'Statement' }, -- keywords related to coroutines (e.g. `go` in Go, `async/await` in Python)
@@ -192,7 +191,7 @@ function M.setup(opts, c)
 
         ['@storageclass'] = { link = 'StorageClass' }, -- modifiers that affect storage in memory or life-time
         ['@attribute']    = { fg = c.cyan }, -- attribute annotations (e.g. Python decorators)
-        ['@field']        = { fg   = c.base0 }, -- object and struct fields
+        ['@field']        = { link = "NormalFg" }, -- object and struct fields
         ['@property']     = { link = '@field' }, -- similar to `@field`
 
         ['@variable']         = { link = 'Identifier' }, -- various variable names
@@ -202,10 +201,10 @@ function M.setup(opts, c)
         ['@constant.builtin'] = { link = 'Constant' }, -- built-in constant values
         ['@constant.macro']   = { link = 'Constant' }, -- constants defined by the preprocessor
 
-        ['@namespace'] = { fg = c.base0 }, -- modules or namespaces
+        ['@namespace'] = { link = "NormalFg" }, -- modules or namespaces
         ['@symbol']    = { fg = c.violet }, -- symbols or atoms
 
-        ['@text'] = { fg = c.base0 }, -- non-structured text
+        ['@text'] = { link = "NormalFg" }, -- non-structured text
         ['@text.strong'] = { bold = true  }, -- bold text
         ['@text.emphasis'] = { italic = true }, -- text with emphasis
         ['@text.underline'] = { link = 'Underlined' }, -- underlined text
@@ -301,11 +300,11 @@ function M.setup(opts, c)
         CmpItemKindInterface     = { link = 'Type' },
         CmpItemKindTypeParameter = { link = 'Type' },
         CmpItemKindEnumMember    = { link = 'Constant' },
-        CmpItemKindEvent         = { fg   = c.base1 },
+        CmpItemKindEvent         = { fg   = c.base0 },
         CmpItemKindConstructor   = { link = '@constructor' },
         CmpItemKindConstant      = { link = 'Constant' },
         CmpItemKindModule        = { link = '@namespace' },
-        CmpItemKindValue         = { fg   = c.base1 },
+        CmpItemKindValue         = { fg   = c.base0 },
         CmpItemKindColor         = { fg   = c.magenta },
         CmpItemKindFunction      = { link = 'Function' },
         CmpItemKindText          = { link = 'String' },
@@ -404,7 +403,7 @@ function M.setup(opts, c)
         TelescopeResultsTitle   = { link = 'TelescopeTitle' },
         TelescopePreviewTitle   = { link = 'TelescopeTitle' },
         TelescopePromptCounter  = { link = 'NonText' },
-        TelescopeMatching       = { fg   = c.yellow },
+        TelescopeMatching       = { fg = c.selection_fg, bold=true },
         TelescopePromptPrefix   = { fg   = c.base0 },
 
         --- nvim-treesitter-context

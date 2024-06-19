@@ -208,6 +208,19 @@ vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
 })
 
 require("autumn").setup()
+
+function toggle_dark_mode()
+    local autumn = require("autumn")
+    if autumn.config.palette == "light" then
+        vim.cmd("colorscheme autumn-dark")
+    else
+        vim.cmd("colorscheme autumn-light")
+    end
+end
+vim.api.nvim_create_user_command("ToggleDarkmode", toggle_dark_mode, { desc = "Switch between light and dark mode" })
+vim.keymap.set("n", "<f10>", function() toggle_dark_mode() end, { desc = "Toggle dark mode" })
+
+
 require("lazy").setup(
 {
     {

@@ -1,28 +1,55 @@
 local M = {}
+local util = require("autumn.util")
 
 M.config = {}
 
+
 local colors = {
-    base03 = "#20352e", -- bg tone2
-    base02 = "#244238", -- bg tone1
+    base03 = "#0b352e",
+    base02 = "#0d3f37",
+
+    --- solarized
+    -- base03 = "#002b36",
+    -- base02 = "#073642",
+
+    --- seleneized
+    -- base03 = "#103c48",
+    -- base02 = "#184956",
 
     base01 = "#586e75", -- fg tone2
     base00 = "#657b83", -- fg tone1
-    base0  = "#839496", -- fg main
+    base0  = "#53676d", -- fg main
     base1  = "#93a1a1", -- fg tone0
 
-    base2  = "#ede4c7", -- bg tone0, window accents, sidebars, cursorline, popup/floating background
-    base3  = "#fcf2d6", -- bg main
+    -- base2  = "#ede4c7", -- bg tone0, window accents, sidebars, cursorline, popup/floating background
+    -- base3  = "#fcf2d6", -- bg main
 
-    yellow  = "#b58900",
-    orange  = "#cb4b16",
-    red     = "#dc322f",
-    magenta = "#d33682",
-    violet  = "#6c71c4",
-    blue    = "#268bd2",
-    cyan    = "#2aa198",
-    green   = "#859900",
+    base2  = "#ece3cc", -- bg tone0, window accents, sidebars, cursorline, popup/floating background
+    base3  = "#fbf3db",
+
+    --- solarized
+    -- yellow  = "#b58900",
+    -- orange  = "#cb4b16",
+    -- red     = "#dc322f",
+    -- magenta = "#d33682",
+    -- violet  = "#6c71c4",
+    -- blue    = "#268bd2",
+    -- cyan    = "#2aa198",
+    -- green   = "#859900",
+
+    --- selenized
+    red     = "#d2212d",
+    green   = "#489100",
+    yellow  = "#ad8900",
+    blue    = "#0072d4",
+    magenta = "#ca4898",
+    cyan    = "#009c8f",
+    orange  = "#c25d1e",
+    violet  = "#8762c6",
 }
+
+
+
 
 local defaults = {
     palette = "auto", -- dark, light, or auto (uses vim.o.background)
@@ -44,10 +71,15 @@ local defaults = {
         },
 
         light = {
+            -- selection_bg = "#dfca88",
+            selection_fg = "#6c6c6c",
+
+            selection_bg = util.darken(colors.base3, 0.15),
+            --selection_fg = util.darken(colors.base3, 0.35),
         },
 
         dark = {
-            base0 = "#EDD9A3",
+            base0 = "#edd9a3",
             base1 = colors.base01,
             base2 = colors.base02,
             base3 = colors.base03,
@@ -55,6 +87,9 @@ local defaults = {
             base01  = colors.base1,
             base02  = colors.base2,
             base03  = colors.base3,
+
+            selection_bg = util.lighten(colors.base03, 0.15),
+            selection_fg = util.lighten(colors.base03, 0.35),
         },
     }
 }
@@ -114,6 +149,18 @@ function M.load(opts)
         pattern = table.concat(M.config.sidebars, ","),
         callback = set_whl,
     })
+end
+
+function M.set(mode)
+    M.load({ mode = palette })
+    if mode == "light" then
+        vim.cmd("colorscheme autumn-light")
+    elseif mode == "dark" then
+        vim.cmd("colorscheme autumn-dark")
+    else
+        vim.cmd("colorscheme autumn")
+    end
+
 end
 
 M.setup = M.load
