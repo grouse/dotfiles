@@ -187,6 +187,11 @@ vim.o.listchars = "eol:,trail:·,tab: "
 -- vim.o.foldlevelstart = 99
 -- vim.o.foldenable = true
 
+vim.diagnostic.config({
+    virtual_text = false
+})
+
+
 if vim.g.vscode then
     vim.opt.inccommand="nosplit"
 end
@@ -342,16 +347,9 @@ require("lazy").setup(
         config = function()
             local builtin = require("statuscol.builtin")
             require("statuscol").setup({
+                setopt = true,
                 segments = {
-                    {
-                        text = { builtin.foldfunc },
-                        condition = { builtin.not_empty },
-                        click = "v:lua.ScFa"
-                    },
-                    {
-                        sign = { name = { "Diagnostic" }, maxwidth = 1, auto = true },
-                        click = "v:lua.ScSa"
-                    },
+                    { sign = { namespace = { "diagnostic/signs" }, maxwidth = 1, auto = true } },
                 }
             })
         end
@@ -937,7 +935,7 @@ vim.keymap.set("n", "<M-3>", function() vim.api.nvim_set_current_tabpage(3) end,
 vim.keymap.set("n", "<M-4>", function() vim.api.nvim_set_current_tabpage(4) end, { desc = "Open 4th tab page" })
 
 if vim.g.neovide then
-    vim.o.guifont = "UbuntuMono Nerd Font:h13"
+    vim.o.guifont = "UbuntuMono Nerd Font:h14"
     vim.g.neovide_cursor_animation_length = 0
     vim.g.neovide_cursor_animate_in_insert_mode = false
     vim.g.neovide_cursor_animate_command_line = false
