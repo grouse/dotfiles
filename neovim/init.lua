@@ -651,43 +651,43 @@ require("lazy").setup(
             capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
             capabilities.offsetEncoding =  'utf-16'
 
-            local function on_attach(client, bufnr)
-                if client.name ~= "lua_ls" then
-                    -- disabling this in lua cause it is all sorts of funky in giant require blocks, for example
-                    require("nvim-navic").attach(client, bufnr)
-
-                    require("lualine").setup({
-                        sections = {
-                            lualine_c = {
-                                { 'filename', symbols = icons.filename },
-                                { "navic" },
-                            },
-                        }
-                    })
-                end
-
-                vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
-                vim.bo[bufnr].formatexpr = nil
-
-                vim.keymap.set('n', 'gD', vim.lsp.buf.declaration,                           { desc = "Go to declaration",       buffer = bufnr })
-                vim.keymap.set('n', 'gH', vim.lsp.buf.hover,                                 { desc = "Preview declaration",     buffer = bufnr })
-                vim.keymap.set('n', 'gd', require("telescope.builtin").lsp_definitions,      { desc = "Find definition(s)",      buffer = bufnr })
-                vim.keymap.set('n', 'gt', require("telescope.builtin").lsp_type_definitions, { desc = "Find type definition(s)", buffer = bufnr })
-                vim.keymap.set('n', 'gi', require("telescope.builtin").lsp_implementations,  { desc = "Find implementation(s)",  buffer = bufnr })
-                vim.keymap.set('n', 'gr', require("telescope.builtin").lsp_references,       { desc = "Find references",         buffer = bufnr })
-
-                vim.keymap.set("n", "gC", vim.lsp.buf.code_action, { desc = "Code action",   buffer = bufnr })
-                vim.keymap.set("n", "gR", vim.lsp.buf.rename,      { desc = "Rename symbol", buffer = bufnr })
-
-                vim.keymap.set('n', '<C-f>', require("telescope.builtin").lsp_workspace_symbols, { desc = "Find symbol", buffer = bufnr })
-            end
-
             vim.api.nvim_create_autocmd('LspAttach', {
                 group = vim.api.nvim_create_augroup('UserLspConfig', {}),
                 callback = function(args)
                     local buffer = args.buf
                     local client = vim.lsp.get_client_by_id(args.data.client_id)
-                    on_attach(client, buffer)
+
+                    client.server_capabilities.semanticTokensProvider = nil
+
+                    if client.name ~= "lua_ls" then
+                        -- disabling this in lua cause it is all sorts of funky in giant require blocks, for example
+                        require("nvim-navic").attach(client, buffer)
+
+                        require("lualine").setup({
+                            sections = {
+                                lualine_c = {
+                                    { 'filename', symbols = icons.filename },
+                                    { "navic" },
+                                },
+                            }
+                        })
+                    end
+
+                    vim.bo[buffer].omnifunc = 'v:lua.vim.lsp.omnifunc'
+                    vim.bo[buffer].formatexpr = nil
+
+                    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration,                           { desc = "Go to declaration",       buffer = buffer })
+                    vim.keymap.set('n', 'gH', vim.lsp.buf.hover,                                 { desc = "Preview declaration",     buffer = buffer })
+                    vim.keymap.set('n', 'gd', require("telescope.builtin").lsp_definitions,      { desc = "Find definition(s)",      buffer = buffer })
+                    vim.keymap.set('n', 'gt', require("telescope.builtin").lsp_type_definitions, { desc = "Find type definition(s)", buffer = buffer })
+                    vim.keymap.set('n', 'gi', require("telescope.builtin").lsp_implementations,  { desc = "Find implementation(s)",  buffer = buffer })
+                    vim.keymap.set('n', 'gr', require("telescope.builtin").lsp_references,       { desc = "Find references",         buffer = buffer })
+
+                    vim.keymap.set("n", "gC", vim.lsp.buf.code_action, { desc = "Code action",   buffer = buffer })
+                    vim.keymap.set("n", "gR", vim.lsp.buf.rename,      { desc = "Rename symbol", buffer = buffer })
+
+                    vim.keymap.set('n', '<C-f>', require("telescope.builtin").lsp_workspace_symbols, { desc = "Find symbol", buffer = buffer })
+
                 end,
             })
 
