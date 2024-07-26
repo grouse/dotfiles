@@ -13,7 +13,7 @@ function M.setup(opts, c)
         CurSearch = { fg = c.violet, underline = true },
         IncSearch = { fg = c.violet, standout = true }, -- 'incsearch' highlighting, also for the text replaced
         Substitute = { link = 'IncSearch' }, -- :substitute replacement text highlight
-        Search = { bg = c.orange, fg = c.base2 }, -- Last search pattern highlighting
+        Search = { bg = c.orange }, -- Last search pattern highlighting
 
         ColorColumn = { bg = c.base2 },
         Conceal = { fg = c.blue },
