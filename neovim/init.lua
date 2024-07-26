@@ -6,10 +6,6 @@ vim.g.mapleader = ";"
 vim.g.copilot = false
 vim.g.tabnine = false
 
-if not vim.g.vscode then
-    vim.g.copilot = true
-end
-
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
