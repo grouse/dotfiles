@@ -126,10 +126,15 @@ function M.setup(opts, c)
         DiagnosticSignHint  = { fg = c.cyan,   bg = c.base2 },
         DiagnosticSignInfo  = { fg = c.cyan,   bg = c.base2 },
 
-        DiagnosticVirtualTextError = { fg = c.red },
-        DiagnosticVirtualTextWarn  = { fg = c.yellow },
-        DiagnosticVirtualTextHint  = { fg = c.cyan },
-        DiagnosticVirtualTextInfo  = { fg = c.cyan },
+        DiagnosticError = { fg = c.red },
+        DiagnosticWarn  = { fg = c.yellow },
+        DiagnosticHint  = { fg = c.cyan },
+        DiagnosticInfo  = { fg = c.cyan },
+
+        DiagnosticVirtualTextError = { link = "DiagnosticError" },
+        DiagnosticVirtualTextWarn  = { link = "DiagnosticWarn" },
+        DiagnosticVirtualTextHint  = { link = "DiagnosticHint" },
+        DiagnosticVirtualTextInfo  = { link = "DiagnosticInfo" },
 
 
         --- treesitter highlights
