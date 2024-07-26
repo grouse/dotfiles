@@ -173,6 +173,8 @@ vim.opt.breakindentopt="shift:8"
 
 vim.opt.sessionoptions="curdir,folds,help,tabpages,winsize,terminal"
 
+vim.opt.swapfile=false
+
 vim.o.fillchars = "foldopen:,foldsep: ,foldclose:"
 vim.o.list = true
 vim.o.listchars = "eol:,trail:·,tab: "
