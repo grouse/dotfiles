@@ -589,15 +589,6 @@ require("lazy").setup(
         }
     },
     {
-        "folke/trouble.nvim",
-        enabled = not vim.g.vscode,
-        dependencies = { "nvim-tree/nvim-web-devicons" },
-        opts = { position = "right", },
-        keys = {
-            { "<C-w>d", function() require("trouble").toggle() end, desc = "View diagnostics" },
-        }
-    },
-    {
         "rcarriga/nvim-notify",
         enabled = not vim.g.vscode,
         opts = {
