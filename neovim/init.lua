@@ -232,11 +232,13 @@ require("lazy").setup(
             vim.keymap.set({ "v", "x", "n" }, "ga", ":EasyAlign<CR>", { desc = "align..." })
         end
     },
+
     {
         'numToStr/Comment.nvim',
         opts = {},
         event = "BufEnter",
     },
+
     {
         "echasnovski/mini.move",
         opts = {
@@ -255,6 +257,7 @@ require("lazy").setup(
 
         }
     },
+
     {
         "mcauley-penney/tidy.nvim",
         opts = { filetype_exclude = { "markdown", "diff" } },
@@ -262,6 +265,7 @@ require("lazy").setup(
             vim.keymap.set("n", "<leader>te", require("tidy").toggle, { desc = "Toggle Tidy" })
         end
     },
+
     {
         "echasnovski/mini.starter",
         enabled = not vim.g.vscode,
@@ -289,6 +293,7 @@ require("lazy").setup(
             })
         end
     },
+
     {
         "folke/which-key.nvim",
         enabled = not vim.g.vscode,
@@ -305,6 +310,7 @@ require("lazy").setup(
             },
         }
     },
+
     {
         'echasnovski/mini.sessions',
         enabled = not vim.g.vscode,
@@ -333,12 +339,7 @@ require("lazy").setup(
             end, { nargs = "?", complete = "file", desc = "Create a new session" })
         end
     },
-    {
-        -- disabled due to shit performance on large files
-        'kevinhwang91/nvim-ufo',
-        enabled = false,
-        dependencies = { 'kevinhwang91/promise-async' },
-    },
+
     {
         "luukvbaal/statuscol.nvim",
         enabled = not vim.g.vscode,
@@ -352,6 +353,7 @@ require("lazy").setup(
             })
         end
     },
+
     {
         'tzachar/cmp-tabnine',
         build = cmp_tabnine_build_path(),
@@ -371,6 +373,7 @@ require("lazy").setup(
             })
         end
     },
+
     {
         "zbirenbaum/copilot.lua",
         cmd = "Copilot",
@@ -379,17 +382,10 @@ require("lazy").setup(
             event = "InsertEnter",
             suggestion = { enabled = false },
             panel = { enabled = false },
-            filetypes = {
-                ["*"] = true,
-            }
+            filetypes = { ["*"] = true }
         },
     },
-    {
-        "iamcco/markdown-preview.nvim",
-        cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-        ft = { "markdown" },
-        build = function() vim.fn["mkdp#util#install"]() end,
-    },
+
     {
         "zbirenbaum/copilot-cmp",
         enabled = vim.g.copilot,
@@ -397,10 +393,19 @@ require("lazy").setup(
         event = "InsertEnter",
         opts = {}
     },
+
+    {
+        "iamcco/markdown-preview.nvim",
+        cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+        ft = { "markdown" },
+        build = function() vim.fn["mkdp#util#install"]() end,
+    },
+
     {
         "hrsh7th/nvim-cmp",
         enabled = not vim.g.vscode,
         event = "InsertEnter",
+        branch = "main",
         dependencies = {
             "hrsh7th/cmp-nvim-lsp",
             "hrsh7th/cmp-buffer",
@@ -435,8 +440,8 @@ require("lazy").setup(
             cmp.setup({
                 view = {
                     entries = {
-                        name = 'custom',
-                        selection_order = 'near_cursor',
+                        name = "custom",
+                        selection_order = "near_cursor",
                     }
                 },
                 window = {
@@ -460,7 +465,6 @@ require("lazy").setup(
                         cmp.abort()
                         fallback()
                     end),
-
                     ['<C-e>'] = cmp.mapping.abort(),
                     ["<C-j>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
                     ["<C-k>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
@@ -480,6 +484,8 @@ require("lazy").setup(
                     { name = "nvim_lsp" },
                     { name = "nvim_lsp_signature_help" },
                     { name = "luasnip" },
+                    { name = "path" },
+                }, {
                     { name = "buffer" },
                     { name = "path" },
                 }),
@@ -514,13 +520,16 @@ require("lazy").setup(
             })
         end
     },
+
     {
         "L3MON4D3/LuaSnip",
         enabled = not vim.g.vscode,
         build = "make install_jsregexp",
         lazy = true
     },
+
     { 'echasnovski/mini.starter',  enabled = not vim.g.vscode, },
+
     {
         "akinsho/bufferline.nvim",
         enabled = not vim.g.vscode,
@@ -543,6 +552,7 @@ require("lazy").setup(
             { "]b", function() require("bufferline").cycle(1) end, desc = "Next buffer" },
         }
     },
+
     {
         "nvim-lualine/lualine.nvim",
         enabled = not vim.g.vscode,
@@ -576,6 +586,7 @@ require("lazy").setup(
             }
         }
     },
+
     {
         "nvim-neo-tree/neo-tree.nvim",
         enabled = not vim.g.vscode,
@@ -590,6 +601,7 @@ require("lazy").setup(
             { "<C-w>f", function() require("neo-tree.command").execute({ toggle = true, position = "left" }) end, desc = "File browser" },
         }
     },
+
     {
         "rcarriga/nvim-notify",
         enabled = not vim.g.vscode,
@@ -603,13 +615,16 @@ require("lazy").setup(
             vim.notify = require("notify")
         end
     },
+
     { "stevearc/dressing.nvim", enabled = not vim.g.vscode, opts = {} },
+
     {
         "williamboman/mason.nvim",
         enabled = not vim.g.vscode,
         cmd = "Mason",
         build = ":MasonUpdate",
     },
+
     {
         "neovim/nvim-lspconfig",
         enabled = not vim.g.vscode,
@@ -719,6 +734,7 @@ require("lazy").setup(
             }
         end
     },
+
     {
         "SmiteshP/nvim-navic",
         enabled = not vim.g.vscode,
@@ -738,10 +754,12 @@ require("lazy").setup(
             vim.g.navic_silence = true
         end,
     },
+
     {
         'stevearc/stickybuf.nvim',
         opts = {},
     },
+
     {
         "stevearc/overseer.nvim",
         enabled = not vim.g.vscode,
@@ -778,6 +796,7 @@ require("lazy").setup(
 
         }
     },
+
     {
         "andymass/vim-matchup",
         enabled = not vim.g.vscode,
@@ -785,11 +804,10 @@ require("lazy").setup(
             vim.g.matchup_matchparen_offscreen = { method = "popup", fullwidth = true }
         end
     },
+
     {
         "nvim-treesitter/nvim-treesitter",
-        dependencies = {
-            "andymass/vim-matchup",
-        },
+        dependencies = { "andymass/vim-matchup", },
         enabled = not vim.g.vscode,
         build = ":TSUpdate",
         config = function()
@@ -809,22 +827,14 @@ require("lazy").setup(
             vim.treesitter.query.set("cpp", "indents", "")
         end
     },
-    {
-        -- disabled due to stuttering on large files
-        "nvim-treesitter/nvim-treesitter-context",
-        enabled = false,
-        dependencies = { "nvim-treesitter/nvim-treesitter", },
-        opts = {
-            line_numbers = false,
-            mode = "topline",
-        }
-    },
+
     {
         "nvim-telescope/telescope-fzf-native.nvim",
         build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && " ..
             "cmake --build build --config Release && " ..
             "cmake --install build --prefix build"
     },
+
     {
         "nvim-telescope/telescope.nvim", branch = "0.1.x",
         enabled = not vim.g.vscode,
@@ -940,7 +950,6 @@ vim.keymap.set('n', "<CR>", ":nohlsearch<CR>", { silent = true })
 vim.keymap.set("n", "<C-q>", ":close<CR>", { desc = "Close window", silent = true })
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { silent = true })
 
--- NOTE(jesper): not actually sure if these work. They don't in neovide or nvim-qt, but I think that might be a client limitation, not having implemented the events properly
 vim.keymap.set("n", "<X1Mouse>", "<C-o>", { desc = "Jump next" })
 vim.keymap.set("n", "<X2Mouse>", "<C-i>", { desc = "Jump prev" })
 
