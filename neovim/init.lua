@@ -469,10 +469,12 @@ require("lazy").setup(
                     ["<C-j>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
                     ["<C-k>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
 
-                    ["<C-p>"] = cmp.mapping.confirm({ select = true }),
+                    --["<C-p>"] = cmp.mapping.confirm({ select = true }),
                     ["<Tab>"] = cmp.mapping(function(fallback)
                         if luasnip.expand_or_jumpable() then
                             luasnip.expand_or_jump()
+                        elseif cmp.visible() then
+                            cmp.confirm({ select = true })
                         else
                             fallback()
                         end
