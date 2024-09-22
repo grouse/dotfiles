@@ -93,7 +93,7 @@ function M.setup(opts, c)
         Define     = { fg = util.darken(c.orange, 0.1) },
         Keyword    = { fg = c.orange },
         Comment    = { fg = util.darken(c.cyan , 0.2) },
-        String     = { fg = c.cyan },
+        String     = { fg = c.strings },
         Constant   = { fg = c.cyan },
         Macro      = { fg = c.green },
         Special    = { fg = c.green },

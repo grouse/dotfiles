@@ -5,37 +5,15 @@ M.config = {}
 
 
 local colors = {
+
     base03 = "#0b352e",
     base02 = "#0d3f37",
-
-    --- solarized
-    -- base03 = "#002b36",
-    -- base02 = "#073642",
-
-    --- seleneized
-    -- base03 = "#103c48",
-    -- base02 = "#184956",
-
     base01 = "#586e75", -- fg tone2
     base00 = "#657b83", -- fg tone1
     base0  = "#53676d", -- fg main
     base1  = "#93a1a1", -- fg tone0
-
-    -- base2  = "#ede4c7", -- bg tone0, window accents, sidebars, cursorline, popup/floating background
-    -- base3  = "#fcf2d6", -- bg main
-
     base2  = "#ece3cc", -- bg tone0, window accents, sidebars, cursorline, popup/floating background
     base3  = "#fbf3db",
-
-    --- solarized
-    -- yellow  = "#b58900",
-    -- orange  = "#cb4b16",
-    -- red     = "#dc322f",
-    -- magenta = "#d33682",
-    -- violet  = "#6c71c4",
-    -- blue    = "#268bd2",
-    -- cyan    = "#2aa198",
-    -- green   = "#859900",
 
     --- selenized
     red     = "#d2212d",
@@ -46,6 +24,9 @@ local colors = {
     cyan    = "#009c8f",
     orange  = "#c25d1e",
     violet  = "#8762c6",
+
+    strings = "#489100",
+
 }
 
 
@@ -73,9 +54,7 @@ local defaults = {
         light = {
             -- selection_bg = "#dfca88",
             selection_fg = "#6c6c6c",
-
             selection_bg = util.darken(colors.base3, 0.15),
-            --selection_fg = util.darken(colors.base3, 0.35),
         },
 
         dark = {
