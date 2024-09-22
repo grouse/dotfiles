@@ -404,13 +404,13 @@ require("lazy").setup(
     {
         "hrsh7th/nvim-cmp",
         enabled = not vim.g.vscode,
-        event = "InsertEnter",
         branch = "main",
         dependencies = {
             "hrsh7th/cmp-nvim-lsp",
             "hrsh7th/cmp-buffer",
             "hrsh7th/cmp-path",
             "hrsh7th/cmp-nvim-lsp-signature-help",
+            "hrsh7th/cmp-cmdline",
             "L3MON4D3/LuaSnip",
             "saadparwaiz1/cmp_luasnip",
         },
@@ -520,6 +520,28 @@ require("lazy").setup(
                     end,
                 },
             })
+
+            cmp.setup.cmdline({ '/', '?' }, {
+                mapping = cmp.mapping.preset.cmdline(),
+                sources = {
+                    { name = 'buffer' }
+                }
+            })
+
+            cmp.setup.cmdline(':', {
+                mapping = cmp.mapping.preset.cmdline(),
+                sources = cmp.config.sources({
+                    { name = 'path' }
+                }, {
+                    {
+                        name = 'cmdline',
+                        option = {
+                            ignore_cmds = { 'Man', '!' }
+                        }
+                    }
+                })
+            })
+
         end
     },
 
@@ -532,7 +554,7 @@ require("lazy").setup(
 
     { 'echasnovski/mini.starter',  enabled = not vim.g.vscode, },
 
-    {
+    { -- buffer tabs
         "akinsho/bufferline.nvim",
         enabled = not vim.g.vscode,
         dependencies = "nvim-tree/nvim-web-devicons",
@@ -555,7 +577,7 @@ require("lazy").setup(
         }
     },
 
-    {
+    { -- statusbar
         "nvim-lualine/lualine.nvim",
         enabled = not vim.g.vscode,
         opts = {
