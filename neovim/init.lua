@@ -342,7 +342,7 @@ require("lazy").setup(
 
     {
         "luukvbaal/statuscol.nvim",
-        enabled = not vim.g.vscode,
+        enabled = false,
         config = function()
             local builtin = require("statuscol.builtin")
             require("statuscol").setup({
