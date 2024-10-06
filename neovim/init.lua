@@ -826,6 +826,9 @@ require("lazy").setup(
         enabled = not vim.g.vscode,
         init = function()
             vim.g.matchup_matchparen_offscreen = { method = "popup", fullwidth = true }
+            vim.g.matchup_matchparen_deferred = 1
+            vim.g.matchup_matchparen_insert_timeout = 5
+
         end
     },
 
@@ -843,6 +846,7 @@ require("lazy").setup(
                 matchup = {
                     enable = true,
                     disable_virtual_text = true,
+                    include_match_words = false,
                 },
             })
             require("nvim-treesitter").setup()
@@ -850,6 +854,12 @@ require("lazy").setup(
             vim.treesitter.query.set("c", "indents", "")
             vim.treesitter.query.set("cpp", "indents", "")
         end
+    },
+
+    {
+        "nvim-treesitter/nvim-treesitter-context",
+        dependencies = { "nvim-treesitter/nvim-treesitter" },
+        enabled = not vim.g.vscode,
     },
 
     {
