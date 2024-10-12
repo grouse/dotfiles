@@ -10,10 +10,10 @@ function M.setup(opts, c)
 
         --- core editor highlights
         HighlightYank = { fg = util.lighten(c.cyan, 0.2) },
-        CurSearch = { fg = c.violet, underline = true },
-        IncSearch = { fg = c.violet, standout = true }, -- 'incsearch' highlighting, also for the text replaced
+        CurSearch = { bg = c.selection, underline = true },
+        IncSearch = { bg = c.selection, standout = true }, -- 'incsearch' highlighting, also for the text replaced
         Substitute = { link = 'IncSearch' }, -- :substitute replacement text highlight
-        Search = { bg = c.orange }, -- Last search pattern highlighting
+        Search = { bg = c.selection }, -- Last search pattern highlighting
 
         ColorColumn = { bg = c.base2 },
         Conceal = { fg = c.blue },
@@ -54,7 +54,7 @@ function M.setup(opts, c)
         FloatTitle = { fg = c.orange }, -- Title of float windows.
         NormalNC = { fg = c.base0, bg = util.blend(c.base3, "#000000", 0.95) },
         Pmenu = { fg = c.base0, bg = c.base2 }, -- Popup menu: Normal item
-        PmenuSel = { fg = c.base0, bg = c.selection_bg, bold=true}, -- Popup menu: Selected item
+        PmenuSel = { fg = c.base0, bg = c.selection, bold=true}, -- Popup menu: Selected item
         PmenuKind = { link = 'Pmenu' }, -- Popup menu: Normal item kind
         PmenuKindSel = { link = 'PmenuSel' }, -- Popup menu: Selected item kind
         PmenuExtra = { link = 'Pmenu' }, -- Popup menu: Normal item extra text
@@ -74,7 +74,7 @@ function M.setup(opts, c)
         TabLineFill = { bg = c.base2 }, -- Tab pages line, where there are no labels.
         TabLineSel = { fg = c.green, bg = c.orange, sp = c.base0, underline = true }, -- Tab pages line, active tab page label.
         Title = { fg = c.orange, bold = true }, -- Titles for output from ":set all", ":autocmd" etc.
-        Visual = { link = "CursorLine" }, -- Visual mode selection.
+        Visual = { bg = c.selection }, -- Visual mode selection.
         VisualNOS = { link = 'Visual' }, -- Visual mode selection when vim is "Not Owning the Selection".
         WarningMsg = { fg = c.warning, bold = true }, -- Warning messages.
         WildMenu = { fg = c.base0, bg = c.base2 }, -- Current match in 'wildmenu' completion.
@@ -408,7 +408,7 @@ function M.setup(opts, c)
         TelescopeResultsTitle   = { link = 'TelescopeTitle' },
         TelescopePreviewTitle   = { link = 'TelescopeTitle' },
         TelescopePromptCounter  = { link = 'NonText' },
-        TelescopeMatching       = { fg = c.selection_fg, bold=true },
+        TelescopeMatching       = { fg = c.orange, bold=true },
         TelescopePromptPrefix   = { fg   = c.base0 },
 
         --- nvim-treesitter-context
