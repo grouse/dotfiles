@@ -5,8 +5,8 @@ M.config = {}
 
 
 local colors = {
-    base03 = "#0b352e",
-    base02 = "#0d3f37",
+    base03 = "#0e4437",
+    base02 = "#104c42",
     base01 = "#586e75", -- fg tone2
     base00 = "#657b83", -- fg tone1
     base0  = "#53676d", -- fg main
