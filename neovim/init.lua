@@ -480,15 +480,12 @@ require("lazy").setup(
                     end, { "i", "s" }),
                 },
                 sources = cmp.config.sources({
+                    { name = "path" },
                     { name = "copilot" },
                     { name = "cmp_tabnine" },
                     { name = "nvim_lsp" },
                     { name = "nvim_lsp_signature_help" },
                     { name = "luasnip" },
-                    { name = "path" },
-                }, {
-                    { name = "buffer" },
-                    { name = "path" },
                 }),
                 sorting = {
                     priority_weight = 2,
@@ -506,6 +503,7 @@ require("lazy").setup(
                         end
 
                         item.menu = ({
+                            path          = "[Path]",
                             buffer        = "[Buffer]",
                             nvim_lsp      = "[LSP]",
                             luasnip       = "[LuaSnip]",
