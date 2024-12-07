@@ -443,6 +443,9 @@ require("lazy").setup(
                         selection_order = "near_cursor",
                     }
                 },
+                completion = {
+                    autocomplete = false,
+                },
                 window = {
                     documentation = {
                         winhighlight = 'Normal:CmpDocNormal,FloatBorder:CmpDocBorder,CursorLine:CmpDocSel,Search:None',
