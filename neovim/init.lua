@@ -473,11 +473,8 @@ require("lazy").setup(
                     documentation = {
                         winhighlight = 'Normal:CmpDocNormal,FloatBorder:CmpDocBorder,CursorLine:CmpDocSel,Search:None',
                     },
-                    completion = {
-                        col_offset = 10,
-                        scrollbar = false,
-                    }
                 },
+                completion = { autocomplete = false, },
                 experimental = { ghost_text = { hl_group = "GhostText" } },
                 snippet = {
                     expand = function(args)
