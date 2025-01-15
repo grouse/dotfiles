@@ -401,6 +401,24 @@ require("lazy").setup(
     },
 
     {
+        "gorbit99/codewindow.nvim",
+        enabled = not vim.g.vscode,
+        opts = {
+            auto_enable = true,
+            minimap_width = 10,
+            relative = "editor",
+        },
+        keys = {
+            {
+                "<leader>mm",
+                function() require("codewindow").toggle_minimap() end,
+                { "n" },
+                desc = "Toggle Minimap"
+            },
+        },
+    },
+
+    {
         "hrsh7th/nvim-cmp",
         enabled = not vim.g.vscode,
         branch = "main",
