@@ -3,7 +3,7 @@ vim.g.loaded_netrwPlugin = 1
 
 vim.g.mapleader = ";"
 
-vim.g.copilot = false
+vim.g.copilot = true
 vim.g.tabnine = false
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -466,15 +466,12 @@ require("lazy").setup(
                         selection_order = "near_cursor",
                     }
                 },
-                completion = {
-                    autocomplete = false,
-                },
                 window = {
                     documentation = {
                         winhighlight = 'Normal:CmpDocNormal,FloatBorder:CmpDocBorder,CursorLine:CmpDocSel,Search:None',
                     },
                 },
-                completion = { autocomplete = false, },
+                completion = { autocomplete = false },
                 experimental = { ghost_text = { hl_group = "GhostText" } },
                 snippet = {
                     expand = function(args)
@@ -482,7 +479,8 @@ require("lazy").setup(
                     end,
                 },
                 mapping = {
-                    ['<C-n>'] = cmp.mapping.complete(),
+                    ['<C-n>'] = cmp.mapping.complete({ config = { sources = cmp.config.sources({ { name = "copilot" } }) } }),
+                    ['<C-space>'] = cmp.mapping.complete(),
                     ['<Esc>'] = cmp.mapping(function(fallback)
                         cmp.abort()
                         fallback()
@@ -504,7 +502,6 @@ require("lazy").setup(
                 },
                 sources = cmp.config.sources({
                     { name = "path" },
-                    { name = "copilot" },
                     { name = "cmp_tabnine" },
                     { name = "nvim_lsp" },
                     { name = "nvim_lsp_signature_help" },
