@@ -267,30 +267,25 @@ require("lazy").setup(
     },
 
     {
-        "echasnovski/mini.starter",
+        "goolord/alpha-nvim",
         enabled = not vim.g.vscode,
-        dependencies = { "echasnovski/mini.sessions", },
+        dependencies = { "rmagatti/auto-session" },
         config = function()
-            local starter = require("mini.starter")
-            starter.setup({
-                items = {
-                    starter.sections.sessions(10, true),
-                    starter.sections.recent_files(10, false, true),
-                    {
-                        {
-                            name = "Find file",
-                            section = "Telescope",
-                            action = function(opts) return require("telescope.builtin").find_files(opts) end,
-                        },
-                        {
-                            name = "Help",
-                            section = "Telescope",
-                            action = function(opts) return require("telescope.builtin").help_tags(opts) end,
-                        },
-                    },
-                    starter.sections.builtin_actions(),
-                }
-            })
+            local alpha = require "alpha"
+            local dashboard = require "alpha.themes.dashboard"
+
+            dashboard.section.buttons.val = {
+                dashboard.button("f", "  > Find file",    "<CMD>Telescope find_files<CR>"),
+
+                dashboard.button("n", "  > New File",     "<CMD>ene!<CR>"),
+                dashboard.button("p", "  > Projects ",    "<CMD>SessionSearch<CR>"),
+                dashboard.button("r", "  > Recent files", "<CMD>Telescope oldfiles <CR>"),
+                dashboard.button("t", "󰊄  > Find Text",    "<CMD>Telescope live_grep<CR>"),
+
+                dashboard.button("q", "󰅖  > Quit NVIM",    ":qa<CR>"),
+            }
+
+            alpha.setup(dashboard.opts)
         end
     },
 
@@ -312,32 +307,10 @@ require("lazy").setup(
     },
 
     {
-        'echasnovski/mini.sessions',
+        "rmagatti/auto-session",
+        dependencies = { "nvim-telescope/telescope.nvim" },
         enabled = not vim.g.vscode,
-        opts = {
-            hooks = {
-                pre = {
-                    read = function()
-                        if vim.v.this_session ~= '' then require("mini.sessions").write(nil, { force = true }) end
-                    end
-                }
-            }
-        },
-        init = function()
-            vim.api.nvim_create_user_command("OpenSession", function() require("mini.sessions").select() end, { desc = "Open session" })
-            vim.api.nvim_create_user_command("CreateSession", function(opts)
-                session_name = nil
-                if opts and opts.fargs[1] then
-                    session_name = opts.fargs[1]
-                else
-                    -- use the last part of the cwd as the session name
-                    cwd = vim.fn.getcwd()
-                    session_name = cwd:match("^.+[\\/](.+)$") .. ".vim"
-                end
-
-                require("mini.sessions").write(session_name)
-            end, { nargs = "?", complete = "file", desc = "Create a new session" })
-        end
+        opts = {}
     },
 
     {
@@ -569,8 +542,6 @@ require("lazy").setup(
         lazy = true
     },
 
-    { 'echasnovski/mini.starter',  enabled = not vim.g.vscode, },
-
     { -- buffer tabs
         "akinsho/bufferline.nvim",
         enabled = not vim.g.vscode,
@@ -722,17 +693,14 @@ require("lazy").setup(
                     vim.bo[buffer].omnifunc = 'v:lua.vim.lsp.omnifunc'
                     vim.bo[buffer].formatexpr = nil
 
-                    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration,                           { desc = "Go to declaration",       buffer = buffer })
-                    vim.keymap.set('n', 'gH', vim.lsp.buf.hover,                                 { desc = "Preview declaration",     buffer = buffer })
-                    vim.keymap.set('n', 'gd', require("telescope.builtin").lsp_definitions,      { desc = "Find definition(s)",      buffer = buffer })
-                    vim.keymap.set('n', 'gt', require("telescope.builtin").lsp_type_definitions, { desc = "Find type definition(s)", buffer = buffer })
-                    vim.keymap.set('n', 'gi', require("telescope.builtin").lsp_implementations,  { desc = "Find implementation(s)",  buffer = buffer })
-                    vim.keymap.set('n', 'gr', require("telescope.builtin").lsp_references,       { desc = "Find references",         buffer = buffer })
-
-                    vim.keymap.set("n", "gC", vim.lsp.buf.code_action, { desc = "Code action",   buffer = buffer })
-                    vim.keymap.set("n", "gR", vim.lsp.buf.rename,      { desc = "Rename symbol", buffer = buffer })
-
-                    vim.keymap.set('n', '<C-f>', require("telescope.builtin").lsp_workspace_symbols, { desc = "Find symbol", buffer = buffer })
+                    vim.keymap.set('n', 'gD',    vim.lsp.buf.declaration,                            { desc = "Go to declaration",       buffer = buffer })
+                    vim.keymap.set('n', 'gH',    vim.lsp.buf.hover,                                  { desc = "Preview declaration",     buffer = buffer })
+                    vim.keymap.set('n', 'gd',    require("telescope.builtin").lsp_definitions,       { desc = "Find definition(s)",      buffer = buffer })
+                    vim.keymap.set('n', 'grt',   require("telescope.builtin").lsp_type_definitions,  { desc = "Find type definition(s)", buffer = buffer })
+                    vim.keymap.set('n', 'gri',   require("telescope.builtin").lsp_implementations,   { desc = "Find implementation(s)",  buffer = buffer })
+                    vim.keymap.set('n', 'grr',   require("telescope.builtin").lsp_references,        { desc = "Find references",         buffer = buffer })
+                    vim.keymap.set('n', '<C-f>', require("telescope.builtin").lsp_workspace_symbols, { desc = "Find symbol",             buffer = buffer })
+                    vim.keymap.set('n', 'gra',   vim.lsp.code_action,                                { desc = "Code action...",          buffer = buffer })
 
                 end,
             })
@@ -843,7 +811,7 @@ require("lazy").setup(
 
     {
         "andymass/vim-matchup",
-        enabled = not vim.g.vscode,
+        enabled = false,--not vim.g.vscode,
         init = function()
             vim.g.matchup_matchparen_offscreen = { method = "popup", fullwidth = true }
             vim.g.matchup_matchparen_deferred = 1
@@ -854,7 +822,7 @@ require("lazy").setup(
 
     {
         "nvim-treesitter/nvim-treesitter",
-        dependencies = { "andymass/vim-matchup", },
+        --dependencies = { "andymass/vim-matchup", },
         enabled = not vim.g.vscode,
         build = ":TSUpdate",
         config = function()
@@ -896,12 +864,13 @@ require("lazy").setup(
             "nvim-lua/plenary.nvim",
             "nvim-telescope/telescope-fzf-native.nvim",
             "nvim-telescope/telescope-ui-select.nvim",
-            "nvim-telescope/telescope-file-browser.nvim"
+            "nvim-telescope/telescope-file-browser.nvim",
+            "nvim-telescope/telescope-project.nvim",
         },
         config = function()
             local telescope = require("telescope")
-            local actions = require("telescope.actions")
-            local themes = require("telescope.themes")
+            local actions   = require("telescope.actions")
+            local themes    = require("telescope.themes")
 
             telescope.setup({
                 defaults = {
@@ -994,6 +963,7 @@ if vim.g.neovide then
     vim.g.neovide_cursor_animate_in_insert_mode = false
     vim.g.neovide_cursor_animate_command_line = false
     vim.g.neovide_scroll_animation_length = 0
+    vim.g.neovide_floating_corner_radius = 10.0
 end
 
 vim.keymap.set('v', '<', '<gv', { desc = "Decrease increment", silent = true })
