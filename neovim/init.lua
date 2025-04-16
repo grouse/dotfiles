@@ -1047,7 +1047,9 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     end,
 })
 
-local pipepath = vim.fn.stdpath("cache") .. "/server.pipe"
-if not vim.loop.fs_stat(pipepath) then
-    vim.fn.serverstart(pipepath)
+if not vim.g.win32 then
+    local pipepath = vim.fn.stdpath("cache") .. "/server.pipe"
+    if not vim.loop.fs_stat(pipepath) then
+        vim.fn.serverstart(pipepath)
+    end
 end
