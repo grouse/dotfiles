@@ -700,7 +700,7 @@ require("lazy").setup(
                     vim.keymap.set('n', 'gri',   require("telescope.builtin").lsp_implementations,   { desc = "Find implementation(s)",  buffer = buffer })
                     vim.keymap.set('n', 'grr',   require("telescope.builtin").lsp_references,        { desc = "Find references",         buffer = buffer })
                     vim.keymap.set('n', '<C-f>', require("telescope.builtin").lsp_workspace_symbols, { desc = "Find symbol",             buffer = buffer })
-                    vim.keymap.set('n', 'gra',   vim.lsp.code_action,                                { desc = "Code action...",          buffer = buffer })
+                    vim.keymap.set('n', 'gra',   vim.lsp.buf.code_action,                            { desc = "Code action...",          buffer = buffer })
 
                 end,
             })
