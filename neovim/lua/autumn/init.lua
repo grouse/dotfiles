@@ -5,14 +5,14 @@ M.config = {}
 
 
 local colors = {
-    base03 = "#0d4239",
-    base02 = "#104c42",
+    base03 = "#0b3d2c",
+    base02 = "#0e4734",
     base01 = "#586e75", -- fg tone2
     base00 = "#657b83", -- fg tone1
     base0  = "#53676d", -- fg main
     base1  = "#93a1a1", -- fg tone0
     base2  = "#e5dbbc", -- bg tone0, window accents, sidebars, cursorline, popup/floating background
-    base3  = "#f2e9cd",
+    base3  = "#f2e9cd", -- bg main
 
     --- selenized
     red     = "#d2212d",
@@ -24,7 +24,8 @@ local colors = {
     orange  = "#c25d1e",
     violet  = "#8762c6",
 
-    strings = "#489100",
+    -- custom overrides
+    strings   = "#489100",
     selection = "#cde5ac"
 }
 

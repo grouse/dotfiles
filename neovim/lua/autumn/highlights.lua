@@ -89,7 +89,7 @@ function M.setup(opts, c)
         Function   = { fg = util.blend(c.yellow, c.base0, 0.4) },
         Operator   = { fg = c.base01 },
         Type       = { fg = c.yellow },
-        Delimiter  = { fg = c.base00 },
+        Delimiter  = { fg = c.base01 },
         Define     = { fg = util.darken(c.orange, 0.1) },
         Keyword    = { fg = c.orange },
         Comment    = { fg = util.darken(c.cyan , 0.2) },
