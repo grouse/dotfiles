@@ -39,4 +39,13 @@ if args.configure == "all":
 
 if args.install == "all" or args.install == "deps":
     if platform == "linux":
-        os.system("sudo apt install gcc ripgrep")
+        os.system("sudo apt install clang ninja-build make")
+        os.system("sudo apt install fzf ripgrep")
+        os.system("sudo apt install libx11-dev libxi-dev libglx-dev")
+        os.system("sudo snap install --classic cmake")
+        os.system("sudo snap install --classic node")
+
+if args.install == "all" or args.install == "neovim":
+    if platform == "linux":
+        os.system("sudo snap install --classic nvim")
+        os.system("sudo apt install wl-clipboard xclip")
