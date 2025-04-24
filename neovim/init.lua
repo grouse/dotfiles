@@ -210,22 +210,32 @@ vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
     end
 })
 
-require("autumn").setup()
-
-function toggle_dark_mode()
-    local autumn = require("autumn")
-    if autumn.config.palette == "light" then
-        vim.cmd("colorscheme autumn-dark")
-    else
-        vim.cmd("colorscheme autumn-light")
-    end
-end
-vim.api.nvim_create_user_command("ToggleDarkmode", toggle_dark_mode, { desc = "Switch between light and dark mode" })
-vim.keymap.set("n", "<f10>", function() toggle_dark_mode() end, { desc = "Toggle dark mode" })
-
-
 require("lazy").setup(
 {
+    {
+        "ellisonleao/gruvbox.nvim",
+        priority = 1000 ,
+        config = true,
+        opts = {
+            contrast = "soft",
+            bold = false,
+            italic = {
+                strings = false,
+                emphasis = true,
+                comments = true,
+                operators = false,
+                folds = true,
+            },
+        },
+        init = function() require("gruvbox").setup() end
+
+    },
+
+    {
+        "sainnhe/gruvbox-material",
+        init = function() vim.g.gruvbox_material_background = "soft" end
+    },
+
     {
         "junegunn/vim-easy-align",
         init = function()
@@ -940,6 +950,17 @@ require("lazy").setup(
         fallback =  true,
     }
 })
+
+function toggle_dark_mode()
+    if vim.o.background == "light" then
+        vim.o.background = "dark"
+    else
+        vim.o.background = "light"
+    end
+end
+vim.api.nvim_create_user_command("ToggleDarkmode", toggle_dark_mode, { desc = "Switch between light and dark mode" })
+vim.keymap.set("n", "<f10>", function() toggle_dark_mode() end, { desc = "Toggle dark mode" })
+vim.cmd([[colorscheme gruvbox-material]])
 
 vim.keymap.set("n", "za", "za", { desc = "Toggle fold" })
 vim.keymap.set("n", "zc", "zc", { desc = "Close fold" })
