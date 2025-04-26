@@ -962,6 +962,9 @@ vim.api.nvim_create_user_command("ToggleDarkmode", toggle_dark_mode, { desc = "S
 vim.keymap.set("n", "<f10>", function() toggle_dark_mode() end, { desc = "Toggle dark mode" })
 vim.cmd([[colorscheme gruvbox-material]])
 
+vim.api.nvim_set_hl(0, "HighlightYank", { fg =  "#009c8f" })
+
+
 vim.keymap.set("n", "za", "za", { desc = "Toggle fold" })
 vim.keymap.set("n", "zc", "zc", { desc = "Close fold" })
 vim.keymap.set("n", "zo", "zo", { desc = "Open fold" })
