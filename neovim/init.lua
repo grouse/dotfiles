@@ -951,6 +951,15 @@ require("lazy").setup(
     }
 })
 
+vim.api.nvim_create_autocmd("ColorScheme", {
+    group = vim.api.nvim_create_augroup("hl_colorscheme", {}),
+    desc = "post-colorscheme hooks to tweak highlight groups etc",
+    pattern = "*",
+    callback = function()
+        vim.api.nvim_set_hl(0, "HighlightYank", { fg =  "#009c8f" })
+    end
+})
+
 function toggle_dark_mode()
     if vim.o.background == "light" then
         vim.o.background = "dark"
@@ -961,8 +970,6 @@ end
 vim.api.nvim_create_user_command("ToggleDarkmode", toggle_dark_mode, { desc = "Switch between light and dark mode" })
 vim.keymap.set("n", "<f10>", function() toggle_dark_mode() end, { desc = "Toggle dark mode" })
 vim.cmd([[colorscheme gruvbox-material]])
-
-vim.api.nvim_set_hl(0, "HighlightYank", { fg =  "#009c8f" })
 
 
 vim.keymap.set("n", "za", "za", { desc = "Toggle fold" })
