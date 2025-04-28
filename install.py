@@ -5,7 +5,7 @@ from sys import platform
 
 parser = argparse.ArgumentParser("install.py", description="installs user configuration and environment")
 parser.add_argument("-c", "--configure", choices=["all", "neovim"], help="install configuration files for specified application")
-parser.add_argument("-i", "--install", choices=["all", "deps"], help="install application(s)")
+parser.add_argument("-i", "--install", choices=["all", "apps", "deps"], help="install application(s)")
 args = parser.parse_args();
 
 root = os.path.dirname(os.path.abspath(__file__))
@@ -39,11 +39,17 @@ if args.configure == "all":
 
 if args.install == "all" or args.install == "deps":
     if platform == "linux":
-        os.system("sudo apt install clang ninja-build make")
+        os.system("sudo apt install clang ninja-build meson make")
+        os.system("sudo apt install pkgconf")
         os.system("sudo apt install fzf ripgrep")
-        os.system("sudo apt install libx11-dev libxi-dev libglx-dev")
+        os.system("sudo apt install libpng-dev libx11-dev libxi-dev libglx-dev")
         os.system("sudo snap install --classic cmake")
         os.system("sudo snap install --classic node")
+
+if args.install == "all" or args.install == "apps":
+    if platform == "linux":
+        os.system("sudo apt install steam-devices")
+        os.system("sudo flatpak install steam")
 
 if args.install == "all" or args.install == "neovim":
     if platform == "linux":
