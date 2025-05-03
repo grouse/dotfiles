@@ -177,7 +177,7 @@ vim.opt.swapfile=false
 
 vim.o.fillchars = "foldopen:,foldsep: ,foldclose:"
 vim.o.list = true
-vim.o.listchars = "trail:·,tab: "
+vim.o.listchars = "trail:·,tab:  "
 
 -- disabled due to shit performance on large files, e.g. flecs.c
 -- vim.o.foldcolumn = "auto"
