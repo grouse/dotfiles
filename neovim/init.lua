@@ -718,42 +718,34 @@ require("lazy").setup(
             require("lspconfig").gdscript.setup({
             })
 
-            require("mason-lspconfig").setup_handlers {
-                function(server_name)
-                    require("lspconfig")[server_name].setup{ capabilities = capabilities }
-                end,
-                ["lua_ls"] = function()
-                    require("lspconfig").lua_ls.setup({
-                        log_level = vim.lsp.protocol.MessageType.Error,
-                        capabilities = capabilities,
-                        settings = {
-                            Lua = {
-                                completion = { callSnippet = "Replace" },
-                                diagnostics = { globals = { "vim" }, },
-                                workspace = {
-                                    library = {
-                                        [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-                                        [vim.fn.stdpath("config") .. "/lua"] = true,
-                                    },
-                                    checkThirdParty = false,
-                                },
+            vim.lsp.config("lua_ls", {
+                log_level = vim.lsp.protocol.MessageType.Error,
+                capabilities = capabilities,
+                settings = {
+                    Lua = {
+                        completion = { callSnippet = "Replace" },
+                        diagnostics = { globals = { "vim" }, },
+                        workspace = {
+                            library = {
+                                [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+                                [vim.fn.stdpath("config") .. "/lua"] = true,
                             },
+                            checkThirdParty = false,
+                        },
+                    },
+                }
+            })
+
+            vim.lsp.config("rust_analyzer", {
+                capabilities = capabilities,
+                settings = {
+                    ['rust-analyzer'] = {
+                        diagnostics = {
+                            enable = false
                         }
-                    })
-                end,
-                ["rust_analyzer"] = function()
-                    require("lspconfig").rust_analyzer.setup({
-                        capabilities = capabilities,
-                        settings = {
-                            ['rust-analyzer'] = {
-                                diagnostics = {
-                                    enable = false
-                                }
-                            }
-                        }
-                    })
-                end,
-            }
+                    }
+                }
+            })
         end
     },
 
