@@ -4,7 +4,6 @@ vim.g.loaded_netrwPlugin = 1
 vim.g.mapleader = ";"
 
 vim.g.copilot = true
-vim.g.tabnine = false
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -114,7 +113,6 @@ local icons = {
         Value         = "󰎠 ",
         Variable      = "󰀫 ",
         Copilot       = "",
-        cmp_tabnine   = "",
     },
     diagnostics = {
         Error = "",
@@ -338,31 +336,11 @@ require("lazy").setup(
     },
 
     {
-        'tzachar/cmp-tabnine',
-        build = cmp_tabnine_build_path(),
-        dependencies = { 'hrsh7th/nvim-cmp', },
-        enabled = vim.g.tabnine,
-        config = function()
-            local tabnine = require('cmp_tabnine.config')
-
-            tabnine:setup({
-                max_lines = 1000,
-                max_num_results = 20,
-                sort = true,
-                run_on_every_keystroke = true,
-                snippet_placeholder = '..',
-                ignored_file_types = {},
-                show_prediction_strength = false
-            })
-        end
-    },
-
-    {
         "zbirenbaum/copilot.lua",
         cmd = "Copilot",
         enabled = vim.g.copilot,
+        event = "InsertEnter",
         opts = {
-            event = "InsertEnter",
             suggestion = { enabled = false },
             panel = { enabled = false },
             filetypes = { ["*"] = true }
@@ -378,7 +356,37 @@ require("lazy").setup(
     },
 
     {
+        "olimorris/codecompanion.nvim",
+        enabled = vim.g.copilot,
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "nvim-treesitter/nvim-treesitter",
+            "hrsh7th/nvim-cmp",
+        },
+        opts = {
+            strategies = {
+                chat = { adapter = "copilot" },
+                inline = { adapter = "copilot" },
+                agent = { adapter = "copilot" },
+            },
+            adapters = {
+                copilot = function()
+                    return require("codecompanion.adapters").extend("copilot", {
+                    })
+                end,
+            },
+        },
+        keys = {
+            { "<leader>cc", "<cmd>CodeCompanionChat<cr>", desc = "CodeCompanion Chat", mode = { "n", "v" } },
+            { "<leader>ca", "<cmd>CodeCompanionActions<cr>", desc = "CodeCompanion Actions", mode = { "n", "v" } },
+            { "<leader>ct", "<cmd>CodeCompanionToggle<cr>", desc = "CodeCompanion Toggle", mode = "n" },
+            { "<leader>ce", "<cmd>CodeCompanionChat Add<cr>", desc = "Add to CodeCompanion", mode = "v" },
+        },
+    },
+
+    {
         "MeanderingProgrammer/render-markdown.nvim",
+        enabled = not vim.g.vscode,
         dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
         opts = {
             checkbox = { enabled = false },
@@ -434,12 +442,16 @@ require("lazy").setup(
                 cmp.config.compare.length,
             }
 
-            if vim.g.tabnine then
-                table.insert(comparators, 0, require("cmp_tabnine.compare"))
-            end
-
+            local copilot_sources = {}
             if vim.g.copilot then
                 table.insert(comparators, 0, require("copilot_cmp.comparators").prioritize)
+                copilot_sources = cmp.config.sources({
+                    { name = "copilot" },
+                    { name = "path" },
+                    { name = "nvim_lsp" },
+                    { name = "nvim_lsp_signature_help" },
+                    { name = "luasnip" },
+                })
             end
 
             cmp.setup({
@@ -462,7 +474,7 @@ require("lazy").setup(
                     end,
                 },
                 mapping = {
-                    ['<C-n>'] = cmp.mapping.complete({ config = { sources = cmp.config.sources({ { name = "copilot" } }) } }),
+                    ['<C-n>'] = cmp.mapping.complete({ config = { sources = copilot_sources } }),
                     ['<C-space>'] = cmp.mapping.complete(),
                     ['<Esc>'] = cmp.mapping(function(fallback)
                         cmp.abort()
@@ -485,7 +497,6 @@ require("lazy").setup(
                 },
                 sources = cmp.config.sources({
                     { name = "path" },
-                    { name = "cmp_tabnine" },
                     { name = "nvim_lsp" },
                     { name = "nvim_lsp_signature_help" },
                     { name = "luasnip" },
@@ -513,7 +524,7 @@ require("lazy").setup(
                             nvim_lua      = "[Lua]",
                             latex_symbols = "[LaTeX]",
                             copilot       = "[CoPilot]",
-                            cmp_tabnine   = "[TabNine]",
+                            codecompanion = "[CodeCompanion]",
                         })[entry.source.name]
 
                         return item
