@@ -212,6 +212,7 @@ require("lazy").setup(
 {
     {
         "ellisonleao/gruvbox.nvim",
+        enabled = not vim.g.vscode,
         priority = 1000 ,
         config = true,
         opts = {
@@ -231,6 +232,7 @@ require("lazy").setup(
 
     {
         "sainnhe/gruvbox-material",
+        enabled = not vim.g.vscode,
         init = function() vim.g.gruvbox_material_background = "soft" end
     },
 
