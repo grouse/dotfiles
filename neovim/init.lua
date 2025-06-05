@@ -863,13 +863,16 @@ require("lazy").setup(
         "nvim-treesitter/nvim-treesitter-context",
         dependencies = { "nvim-treesitter/nvim-treesitter" },
         enabled = not vim.g.vscode,
+        opts = {
+            max_lines = 5,
+            multiline_threshold = 1,
+            mode = "topline",
+        }
     },
 
     {
         "nvim-telescope/telescope-fzf-native.nvim",
-        build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && " ..
-            "cmake --build build --config Release && " ..
-            "cmake --install build --prefix build"
+        build = "make",
     },
 
     {
