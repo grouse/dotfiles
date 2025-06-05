@@ -339,7 +339,6 @@ require("lazy").setup(
 
     {
         "zbirenbaum/copilot.lua",
-        cmd = "Copilot",
         enabled = vim.g.copilot,
         event = "InsertEnter",
         opts = {
@@ -355,6 +354,11 @@ require("lazy").setup(
         dependencies = { "zbirenbaum/copilot.lua" },
         event = "InsertEnter",
         opts = {}
+    },
+
+    {
+        "nvim-lua/plenary.nvim",
+        branch = "master",
     },
 
     {
