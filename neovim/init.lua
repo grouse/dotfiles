@@ -1,9 +1,9 @@
 vim.g.loaded_netrw = 1 -- see nvim-tree
 vim.g.loaded_netrwPlugin = 1
-
-vim.g.mapleader = ";"
-
 vim.g.copilot = true
+
+vim.keymap.set("n", "<space>", "<nop>", { silent = true, remap = false })
+vim.g.mapleader = " "
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
