@@ -876,7 +876,7 @@ require("lazy").setup(
         dependencies = { "nvim-treesitter/nvim-treesitter" },
         enabled = not vim.g.vscode,
         opts = {
-            max_lines = 5,
+            max_lines = 10,
             multiline_threshold = 1,
             mode = "topline",
         }
