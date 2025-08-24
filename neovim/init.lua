@@ -773,6 +773,14 @@ require("lazy").setup(
     },
 
     {
+        "hedyhli/outline.nvim",
+        opts = {},
+        keys = {
+            { "<leader>o", function() require("outline").toggle() end, desc = "Toggle outliner" },
+        }
+    },
+
+    {
         "SmiteshP/nvim-navic",
         enabled = not vim.g.vscode,
         lazy = true,
