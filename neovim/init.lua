@@ -763,6 +763,14 @@ require("lazy").setup(
                     }
                 }
             })
+
+            vim.lsp.config("clangd", {
+                settings = {
+                    ['clangd'] = {
+                        cmd = { "clangd", "--header-insertion=never" },
+                    }
+                }
+            })
         end
     },
 
