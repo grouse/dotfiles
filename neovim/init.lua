@@ -637,7 +637,7 @@ require("lazy").setup(
             "MunifTanjim/nui.nvim",
         },
         keys = {
-            { "<C-w>f", function() require("neo-tree.command").execute({ toggle = true, position = "left" }) end, desc = "File browser" },
+            { "<leader>f", function() require("neo-tree.command").execute({ toggle = true, position = "left" }) end, desc = "File browser" },
         }
     },
 
@@ -803,7 +803,7 @@ require("lazy").setup(
         enabled = not vim.g.vscode,
         opts = {},
         keys = {
-            { "<C-w>c", function() require("quicker").toggle() end, desc = "Toggle quickfix window" },
+            { "<leader>q", function() require("quicker").toggle() end, desc = "Toggle quickfix window" },
         }
     },
 
@@ -843,7 +843,7 @@ require("lazy").setup(
                 end
             end, desc = "Build last" },
             { "<M-b>", "<cmd>wa<CR><cmd>OverseerRun<CR>", desc = "Build select" },
-            { "<C-w>b", "<cmd>OverseerToggle bottom<CR>" , desc = "Toggle build output" },
+            { "<leader>b", "<cmd>OverseerToggle bottom<CR>" , desc = "Toggle build output" },
 
         }
     },
@@ -1002,7 +1002,6 @@ end
 vim.api.nvim_create_user_command("ToggleDarkmode", toggle_dark_mode, { desc = "Switch between light and dark mode" })
 vim.keymap.set("n", "<f10>", function() toggle_dark_mode() end, { desc = "Toggle dark mode" })
 vim.cmd([[colorscheme gruvbox-material]])
-
 
 vim.keymap.set("n", "za", "za", { desc = "Toggle fold" })
 vim.keymap.set("n", "zc", "zc", { desc = "Close fold" })
