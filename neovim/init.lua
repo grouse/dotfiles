@@ -655,8 +655,6 @@ require("lazy").setup(
         end
     },
 
-    { "stevearc/dressing.nvim", enabled = not vim.g.vscode, opts = {} },
-
     {
         "williamboman/mason.nvim",
         enabled = not vim.g.vscode,
@@ -799,18 +797,32 @@ require("lazy").setup(
         opts = {},
     },
 
+    { "stevearc/dressing.nvim", enabled = not vim.g.vscode, opts = {} },
+    {
+        "stevearc/quicker.nvim",
+        enabled = not vim.g.vscode,
+        opts = {},
+        keys = {
+            { "<C-w>c", function() require("quicker").toggle() end, desc = "Toggle quickfix window" },
+        }
+    },
+
     {
         "stevearc/overseer.nvim",
+        dependencies = {
+            "stevearc/quicker.nvim",
+        },
         enabled = not vim.g.vscode,
         opts = {
             component_aliases = {
                 default = {
                     { "display_duration", detail_level = 1 },
                     "on_output_summarize",
+                    { "on_result_diagnostics_quickfix", open = true },
+                    { "on_output_quickfix", close = true },
                     "on_exit_set_status",
                     "on_complete_notify",
                     "on_complete_dispose",
-                    "on_result_diagnostics_quickfix",
                 },
                 default_vscode = {
                     "default",
