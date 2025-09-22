@@ -272,9 +272,10 @@ require("lazy").setup(
     {
         "mcauley-penney/tidy.nvim",
         opts = { filetype_exclude = { "markdown", "diff" } },
-        init = function()
-            vim.keymap.set("n", "<leader>te", require("tidy").toggle, { desc = "Toggle Tidy" })
-        end
+        keys = {
+            { "<leader>te", function() require("tidy").toggle() end, desc = "Toggle Tidy" },
+            { "<leader>tt", function() require("tidy").run() end, desc = "Toggle Tidy" },
+        },
     },
 
     {
