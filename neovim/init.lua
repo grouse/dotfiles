@@ -828,7 +828,7 @@ require("lazy").setup(
                 default = {
                     { "display_duration", detail_level = 1 },
                     "on_output_summarize",
-                    { "on_result_diagnostics_quickfix", open = true },
+                    { "on_result_diagnostics_quickfix", open = false },
                     { "on_output_quickfix", close = true },
                     "on_exit_set_status",
                     "on_complete_notify",
