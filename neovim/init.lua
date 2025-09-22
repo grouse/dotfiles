@@ -244,11 +244,7 @@ require("lazy").setup(
         end
     },
 
-    {
-        'numToStr/Comment.nvim',
-        opts = {},
-        event = "BufEnter",
-    },
+    { 'numToStr/Comment.nvim', opts = {}, event = "BufEnter" },
 
     {
         "echasnovski/mini.move",
@@ -358,10 +354,9 @@ require("lazy").setup(
         opts = {}
     },
 
-    {
-        "nvim-lua/plenary.nvim",
-        branch = "master",
-    },
+    { "nvim-lua/plenary.nvim", branch = "master" },
+
+    { "j-hui/fidget.nvim", opts = {} },
 
     {
         "olimorris/codecompanion.nvim",
@@ -395,13 +390,12 @@ require("lazy").setup(
     {
         "MeanderingProgrammer/render-markdown.nvim",
         enabled = not vim.g.vscode,
-        dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
-        opts = {
-            checkbox = { enabled = false },
-            quote = { enabled = false },
-            link = { enabled = false },
-            sign = { enabled = false },
-        }
+        dependencies = {
+            'nvim-treesitter/nvim-treesitter',
+            'nvim-tree/nvim-web-devicons'
+        },
+        ft = { "markdown", "codecompanion" },
+        opts = {}
     },
 
     {
@@ -413,12 +407,7 @@ require("lazy").setup(
             relative = "editor",
         },
         keys = {
-            {
-                "<leader>mm",
-                function() require("codewindow").toggle_minimap() end,
-                { "n" },
-                desc = "Toggle Minimap"
-            },
+            { "<leader>mm", function() require("codewindow").toggle_minimap() end, { "n" }, desc = "Toggle Minimap" },
         },
     },
 
