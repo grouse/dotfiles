@@ -653,7 +653,8 @@ require("lazy").setup(
             stages = "static",
         },
         init = function()
-            vim.notify = require("notify")
+            vim.notify = vim.schedule_wrap(require("notify"))
+            -- vim.notify = require("notify")
         end
     },
 
