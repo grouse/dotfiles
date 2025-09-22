@@ -808,7 +808,6 @@ require("lazy").setup(
         opts = {},
     },
 
-    { "stevearc/dressing.nvim", enabled = not vim.g.vscode, opts = {} },
     {
         "stevearc/quicker.nvim",
         enabled = not vim.g.vscode,
