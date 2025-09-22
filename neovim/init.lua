@@ -3,7 +3,7 @@ vim.g.loaded_netrwPlugin = 1
 vim.g.copilot = true
 
 vim.keymap.set("n", "<space>", "<nop>", { silent = true, remap = false })
-vim.g.mapleader = " "
+vim.g.mapleader = ";"
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
