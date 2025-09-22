@@ -165,6 +165,7 @@ vim.opt.expandtab=true
 vim.opt.shiftwidth=4
 vim.opt.softtabstop=0
 vim.opt.tabstop=4
+vim.o.breakat=" !@*+;:,/?"
 vim.opt.linebreak=true
 vim.opt.breakindent=true
 vim.opt.breakindentopt="shift:8"
