@@ -222,7 +222,7 @@ require("lazy").setup(
             italic = {
                 strings = false,
                 emphasis = true,
-                comments = true,
+                comments = false,
                 operators = false,
                 folds = true,
             },
@@ -234,7 +234,10 @@ require("lazy").setup(
     {
         "sainnhe/gruvbox-material",
         enabled = not vim.g.vscode,
-        init = function() vim.g.gruvbox_material_background = "soft" end
+        init = function() 
+            vim.g.gruvbox_material_background = "soft" 
+            vim.g.gruvbox_material_disable_italic_comment = true
+        end
     },
 
     {
