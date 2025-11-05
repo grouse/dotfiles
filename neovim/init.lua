@@ -569,15 +569,15 @@ require("lazy").setup(
         dependencies = "nvim-tree/nvim-web-devicons",
         branch = "main",
         opts = { options = {
-            right_mouse_command = false,
+            right_mouse_command = function(bufnum) 
+                print("copied: ", vim.api.nvim_buf_get_name(bufnum))
+                vim.fn.setreg("+", vim.api.nvim_buf_get_name(bufnum))
+            end,
+            middle_mouse_command = "bdelete! %d",       
             indicator = { style = "underline" },
+            show_close_icon = false,
             show_buffer_icons = false,
             separator_style = "slant",
-            hover = {
-                enabled = true,
-                delay = 0,
-                reveal = { "close" }
-            },
         }},
         event = "BufEnter",
         keys = {
