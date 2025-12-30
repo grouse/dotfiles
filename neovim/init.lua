@@ -821,8 +821,6 @@ require("lazy").setup(
         opts = {
             component_aliases = {
                 default = {
-                    { "display_duration", detail_level = 1 },
-                    "on_output_summarize",
                     { "on_result_diagnostics_quickfix", open = false },
                     { "on_output_quickfix", close = true },
                     "on_exit_set_status",
@@ -842,7 +840,7 @@ require("lazy").setup(
                 vim.cmd(":wa")
                 local tasks = overseer.list_tasks({ recent_first = true })
                 if vim.tbl_isempty(tasks) then
-                    overseer.run_template()
+                    overseer.run_task()
                 else
                     overseer.run_action(tasks[1], "restart")
                 end
