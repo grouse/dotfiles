@@ -1,6 +1,6 @@
 vim.g.loaded_netrw = 1 -- see nvim-tree
 vim.g.loaded_netrwPlugin = 1
-vim.g.copilot = true
+vim.g.copilot = true and not vim.g.vscode
 
 vim.keymap.set("n", "<space>", "<nop>", { silent = true, remap = false })
 vim.g.mapleader = ";"
@@ -370,16 +370,8 @@ require("lazy").setup(
             "hrsh7th/nvim-cmp",
         },
         opts = {
-            strategies = {
+            interactions = {
                 chat = { adapter = "copilot" },
-                inline = { adapter = "copilot" },
-                agent = { adapter = "copilot" },
-            },
-            adapters = {
-                copilot = function()
-                    return require("codecompanion.adapters").extend("copilot", {
-                    })
-                end,
             },
         },
         keys = {
@@ -432,14 +424,15 @@ require("lazy").setup(
             local luasnip = require("luasnip")
 
             local comparators = {
-                cmp.config.compare.score,
                 cmp.config.compare.offset,
                 cmp.config.compare.exact,
+                cmp.config.compare.score,
                 cmp.config.compare.recently_used,
                 cmp.config.compare.locality,
                 cmp.config.compare.kind,
-                cmp.config.compare.order,
+                cmp.config.compare.sort_text,
                 cmp.config.compare.length,
+                cmp.config.compare.order,
             }
 
             local copilot_sources = {}
@@ -1004,7 +997,10 @@ function toggle_dark_mode()
 end
 vim.api.nvim_create_user_command("ToggleDarkmode", toggle_dark_mode, { desc = "Switch between light and dark mode" })
 vim.keymap.set("n", "<f10>", function() toggle_dark_mode() end, { desc = "Toggle dark mode" })
-vim.cmd([[colorscheme gruvbox-material]])
+
+if not vim.g.vscode then
+    vim.cmd([[colorscheme gruvbox-material]])
+end
 
 vim.keymap.set("n", "za", "za", { desc = "Toggle fold" })
 vim.keymap.set("n", "zc", "zc", { desc = "Close fold" })
