@@ -5,8 +5,6 @@ export CC=/usr/bin/clang
 export EDITOR=nvim
 export SVN_EDITOR=nvim
 
-alias ls="ls      --color=auto"
-alias ll="ls -lh  --color=auto"
-alias la="ls -lha --color=auto"
+alias ls="ls -h --color=auto"
 
 
