@@ -1,2 +1,0 @@
-#!/bin/zsh
-[ -f ~/.config/shell/profile ] && source ~/.config/shell/profile
