@@ -23,6 +23,9 @@ case "$DISTRO" in
     fedora)
         PKG_INSTALL="sudo dnf install"
         ;;
+    ubuntu)
+        PKG_INSTALL="sudo apt install"
+        ;;
     *)
         echo "Unsupported distribution: $DISTRO"
         exit 1
