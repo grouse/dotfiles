@@ -389,7 +389,7 @@ require("lazy").setup(
             'nvim-treesitter/nvim-treesitter',
             'nvim-tree/nvim-web-devicons'
         },
-        ft = { "markdown", "codecompanion" },
+        file_types = { "markdown", "codecompanion" },
         opts = {}
     },
 
