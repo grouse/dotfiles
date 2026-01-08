@@ -1,9 +1,34 @@
 #!/bin/sh
 
 if [ $# -eq 0 ]; then
-    echo "Usage: $0 all | [-p package]..."
+    echo "Usage: $0 all | [package]..."
     exit 1
 fi
+
+DO_INSTALL=1
+DO_CONFIG=1
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --config)
+            DO_INSTALL=0
+            DO_CONFIG=1
+            shift
+            ;;
+        --install)
+            DO_INSTALL=1
+            DO_CONFIG=0
+            shift
+            ;;
+        all|-p|--package)
+            # handled later
+            break
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
 
 ROOT="$(cd "$(dirname "$0")"; pwd)"
 HOME_DIR="${HOME:-$(getent passwd $(whoami) | cut -d: -f6)}"
@@ -57,8 +82,8 @@ else
                 shift 2
                 ;;
             *)
-                echo "Usage: $0 all | [-p package]..."
-                exit 1
+                PACKAGES="$PACKAGES $1"
+                shift 1
                 ;;
         esac
     done
@@ -91,14 +116,6 @@ for PKG in $PACKAGES; do
     case "$PKG" in
         neovim)
             SYS_PACKAGES="$SYS_PACKAGES $PKG wl-clipboard xclip"
-            symlink "$ROOT/neovim" "$CONFIG_DIR/nvim"
-            ;;
-        gdb)
-            SYS_PACKAGES="$SYS_PACKAGES $PKG"
-            symlink "$ROOT/gdbinit" "$HOME_DIR/.gdbinit"
-            ;;
-        profile)
-            symlink "$ROOT/shell/profile" "$HOME_DIR/.profile"
             ;;
         *)
             SYS_PACKAGES="$SYS_PACKAGES $PKG"
@@ -106,5 +123,29 @@ for PKG in $PACKAGES; do
     esac
 done
 
-echo "$PKG_INSTALL $SYS_PACKAGES"
-$PKG_INSTALL $SYS_PACKAGES
+if [ "$DO_INSTALL" -eq 1 ]; then
+    echo "$PKG_INSTALL $SYS_PACKAGES"
+    $PKG_INSTALL $SYS_PACKAGES
+fi
+
+if [ "$DO_CONFIG" -eq 1 ]; then
+    for PKG in $PACKAGES; do
+        case "$PKG" in
+            neovim)
+                symlink "$ROOT/neovim" "$CONFIG_DIR/nvim"
+                ;;
+            gdb)
+                symlink "$ROOT/gdbinit" "$HOME_DIR/.gdbinit"
+                ;;
+            git)
+                git config --global user.email "jesper.stefansson@gmail.com"
+                git config --global user.name "Jesper Stefansson"
+                git config --global merge.tool kdiff3
+                git config --global pull.rebase true
+                ;;
+            profile)
+                symlink "$ROOT/shell/profile" "$HOME_DIR/.profile"
+                ;;
+        esac
+    done
+fi
