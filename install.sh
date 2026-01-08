@@ -76,6 +76,11 @@ symlink() {
     fi
 }
 
+git() {
+    echo "git $@"
+    command git "$@"
+}
+
 mkdir -p "$CONFIG_DIR" "$DATA_DIR" "$CACHE_DIR"
 
 SYS_PACKAGES=""
