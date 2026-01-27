@@ -479,8 +479,8 @@ require("lazy").setup(
 
                     --["<C-p>"] = cmp.mapping.confirm({ select = true }),
                     ["<Tab>"] = cmp.mapping(function(fallback)
-                        if luasnip.expand_or_jumpable() then
-                            luasnip.expand_or_jump()
+                        if luasnip.expandable() then
+                            luasnip.expand()
                         elseif cmp.visible() then
                             cmp.confirm({ select = true })
                         else
@@ -673,13 +673,47 @@ require("lazy").setup(
             end
 
             local capabilities = vim.lsp.protocol.make_client_capabilities()
+            capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
             capabilities.textDocument.foldingRange = {
                 dynamicRegistration = false,
                 lineFoldingOnly = true
             }
+            capabilities.offsetEncoding = { "utf-16" } 
+            capabilities.positionEncodings = { "utf-16" } 
 
-            capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
-            capabilities.offsetEncoding =  'utf-16'
+            vim.lsp.config('*', {
+                capabilities = capabilities,
+            })
+
+            vim.lsp.config("lua_ls", {
+                log_level = vim.lsp.protocol.MessageType.Error,
+                capabilities = capabilities,
+                completion = { callSnippet = "Replace" },
+                diagnostics = { globals = { "vim" }, },
+                workspace = {
+                    library = {
+                        [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+                        [vim.fn.stdpath("config") .. "/lua"] = true,
+                    },
+                    checkThirdParty = false,
+                },
+            })
+
+            vim.lsp.config("rust_analyzer", {
+                capabilities = capabilities,
+                diagnostics = {
+                    enable = false
+                }
+            })
+
+            vim.lsp.config("copilot", {
+                capabilities = capabilities,
+            })
+
+            vim.lsp.config("clangd", {
+                capabilities = capabilities,
+                cmd = { "clangd", "--header-insertion=never" },
+            })
 
             vim.api.nvim_create_autocmd('LspAttach', {
                 group = vim.api.nvim_create_augroup('UserLspConfig', {}),
@@ -721,45 +755,6 @@ require("lazy").setup(
                 end,
             })
 
-            require("lspconfig").gdscript.setup({
-            })
-
-            vim.lsp.config("lua_ls", {
-                log_level = vim.lsp.protocol.MessageType.Error,
-                capabilities = capabilities,
-                settings = {
-                    Lua = {
-                        completion = { callSnippet = "Replace" },
-                        diagnostics = { globals = { "vim" }, },
-                        workspace = {
-                            library = {
-                                [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-                                [vim.fn.stdpath("config") .. "/lua"] = true,
-                            },
-                            checkThirdParty = false,
-                        },
-                    },
-                }
-            })
-
-            vim.lsp.config("rust_analyzer", {
-                capabilities = capabilities,
-                settings = {
-                    ['rust-analyzer'] = {
-                        diagnostics = {
-                            enable = false
-                        }
-                    }
-                }
-            })
-
-            vim.lsp.config("clangd", {
-                settings = {
-                    ['clangd'] = {
-                        cmd = { "clangd", "--header-insertion=never" },
-                    }
-                }
-            })
         end
     },
 
