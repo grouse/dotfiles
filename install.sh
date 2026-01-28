@@ -43,13 +43,15 @@ else
     echo "Cannot determine Linux distribution."
     exit 1
 fi
+echo "Detected distribution: $DISTRO"
 
+FLAT_INSTALL="flatpak install"
 case "$DISTRO" in
     fedora)
-        PKG_INSTALL="sudo dnf install"
+        SYS_INSTALL="sudo dnf install"
         ;;
     ubuntu)
-        PKG_INSTALL="sudo apt install"
+        SYS_INSTALL="sudo apt install"
         ;;
     *)
         echo "Unsupported distribution: $DISTRO"
@@ -57,24 +59,14 @@ case "$DISTRO" in
         ;;
 esac
 
-
-echo "Detected distribution: $DISTRO"
-
-APP_PACKAGES=""
-DEV_PACKAGES="gdb git neovim clang ninja-build meson make pkgconfig cmake"
-LIB_PACKAGES=""
-
-case "$DISTRO" in
-    fedora)
-        LIB_PACKAGES="libX11-devel"
-        ;;
-esac
-
-PACKAGES=""
+PACKAGES="gdb git neovim code clang unity bitwarden"
+PACKAGES="$PACKAGES cmake make ninja-build meson pkgconfig"
+LIBS="libX11-devel"
 if [ "$1" = "all" ]; then
-    PACKAGES="profile $DEV_PACKAGES $LIB_PACKAGES $APP_PACKAGES"
+    PACKAGES="$LIBS $PACKAGES"
     shift
 else
+    PACKAGES=""
     while [ $# -gt 0 ]; do
         case "$1" in
             -p|--package)
@@ -90,15 +82,8 @@ else
 fi
 
 symlink() {
-    TARGET="$1"
-    LINK="$2"
-
-    if [ -e "$LINK" ] || [ -L "$LINK" ]; then
-        echo "skipping $LINK (already exists)"
-    else
-        echo "symlink $LINK -> $TARGET"
-        ln -s "$TARGET" "$LINK"
-    fi
+    echo "ln -f -s $@"
+    ln -f -s $@
 }
 
 git() {
@@ -108,27 +93,56 @@ git() {
 
 mkdir -p "$CONFIG_DIR" "$DATA_DIR" "$CACHE_DIR"
 
-SYS_PACKAGES=""
-FLAT_PACKAGES=""
-SNAP_PACKAGES=""
+case "$DISTRO" in
+    fedora)
+        sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+        echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\nautorefresh=1\ntype=rpm-md\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
 
-for PKG in $PACKAGES; do
-    case "$PKG" in
-        neovim)
-            SYS_PACKAGES="$SYS_PACKAGES $PKG wl-clipboard xclip"
-            ;;
-        *)
-            SYS_PACKAGES="$SYS_PACKAGES $PKG"
-            ;;
-    esac
-done
+        sudo sh -c 'echo -e "[unityhub]\nname=Unity Hub\nbaseurl=https://hub.unity3d.com/linux/repos/rpm/stable\nenabled=1\ngpgcheck=1\ngpgkey=https://hub.unity3d.com/linux/repos/rpm/stable/repodata/repomd.xml.key\nrepo_gpgcheck=1" > /etc/yum.repos.d/unityhub.repo'
+
+        sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
+        sudo dnf install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+        ;;
+esac
 
 if [ "$DO_INSTALL" -eq 1 ]; then
-    echo "$PKG_INSTALL $SYS_PACKAGES"
-    $PKG_INSTALL $SYS_PACKAGES
+    SYS_PACKAGES=""
+    FLAT_PACKAGES=""
+
+    for PKG in $PACKAGES; do
+        case "$PKG" in
+            neovim)
+                SYS_PACKAGES="$SYS_PACKAGES $PKG wl-clipboard xclip"
+                ;;
+            unity)
+                SYS_PACKAGES="$SYS_PACKAGES unityhub dotnet-runtime-10.0 dotnet-sdk-10.0"
+                ;;
+            bitwarden)
+                FLAT_PACKAGES="$FLAT_PACKAGES com.bitwarden.desktop"
+                ;;
+            *)
+                SYS_PACKAGES="$SYS_PACKAGES $PKG"
+                ;;
+        esac
+    done
+
+    if [ ! -z "$SYS_PACKAGES" ]; then
+        echo "$SYS_INSTALL $SYS_PACKAGES"
+        $SYS_INSTALL $SYS_PACKAGES
+    fi
+
+    sudo dnf swap ffmpeg-free ffmpeg --allowerasing
+
+    if [ ! -z "$FLAT_PACKAGES" ]; then
+        echo "$FLAT_INSTALL $FLAT_PACKAGES"
+        $FLAT_INSTALL $FLAT_PACKAGES
+    fi
 fi
 
+
 if [ "$DO_CONFIG" -eq 1 ]; then
+    symlink "$ROOT/shell/profile" "$HOME_DIR/.profile"
+
     for PKG in $PACKAGES; do
         case "$PKG" in
             neovim)
@@ -143,9 +157,6 @@ if [ "$DO_CONFIG" -eq 1 ]; then
                 git config --global merge.tool kdiff3
                 git config --global pull.rebase true
                 git config --global init.defaultBranch "main"
-                ;;
-            profile)
-                symlink "$ROOT/shell/profile" "$HOME_DIR/.profile"
                 ;;
         esac
     done
