@@ -1,6 +1,6 @@
 set breakpoint pending on
 set disassembly-flavor intel
-set debuginfod enabled on
+set debuginfod enabled off
 
 set print pretty on
 set print vtbl on
