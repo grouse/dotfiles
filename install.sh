@@ -61,7 +61,7 @@ esac
 
 PACKAGES="gdb git neovim code clang unity godot bitwarden meld"
 PACKAGES="$PACKAGES cmake make ninja-build meson pkgconfig"
-LIBS="libX11-devel"
+LIBS="libX11-devel libXi-devel"
 if [ "$1" = "all" ]; then
     PACKAGES="$LIBS $PACKAGES"
     shift
