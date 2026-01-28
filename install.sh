@@ -142,6 +142,7 @@ if [ "$DO_CONFIG" -eq 1 ]; then
                 git config --global user.name "Jesper Stefansson"
                 git config --global merge.tool kdiff3
                 git config --global pull.rebase true
+                git config --global init.defaultBranch "main"
                 ;;
             profile)
                 symlink "$ROOT/shell/profile" "$HOME_DIR/.profile"
