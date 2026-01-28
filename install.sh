@@ -117,6 +117,9 @@ if [ "$DO_INSTALL" -eq 1 ]; then
             unity)
                 SYS_PACKAGES="$SYS_PACKAGES unityhub dotnet-runtime-10.0 dotnet-sdk-10.0"
                 ;;
+            git)
+                SYS_PACKAGES="$SYS_PACKAGES git git-lfs"
+                ;;
             bitwarden)
                 FLAT_PACKAGES="$FLAT_PACKAGES com.bitwarden.desktop"
                 ;;
