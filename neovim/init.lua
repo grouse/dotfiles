@@ -411,17 +411,19 @@ require("lazy").setup(
         enabled = not vim.g.vscode,
         branch = "main",
         dependencies = {
-            "hrsh7th/cmp-nvim-lsp",
-            "hrsh7th/cmp-buffer",
-            "hrsh7th/cmp-path",
-            "hrsh7th/cmp-nvim-lsp-signature-help",
-            "hrsh7th/cmp-cmdline",
             "L3MON4D3/LuaSnip",
+            "hrsh7th/cmp-buffer",
+            "hrsh7th/cmp-cmdline",
+            "hrsh7th/cmp-nvim-lsp",
+            "hrsh7th/cmp-nvim-lsp-signature-help",
+            "hrsh7th/cmp-path",
+            "onsails/lspkind.nvim",
             "saadparwaiz1/cmp_luasnip",
         },
         config = function()
             local cmp = require("cmp")
             local luasnip = require("luasnip")
+            local lspkind = require("lspkind")
 
             local comparators = {
                 cmp.config.compare.offset,
@@ -435,16 +437,21 @@ require("lazy").setup(
                 cmp.config.compare.order,
             }
 
+            local sources = cmp.config.sources({
+                { name = "path" },
+                { name = "nvim_lsp" },
+                { name = "nvim_lsp_signature_help" },
+                { name = "luasnip" },
+                { name = "buffer" },
+            })
+
             local copilot_sources = {}
             if vim.g.copilot then
                 table.insert(comparators, 0, require("copilot_cmp.comparators").prioritize)
-                copilot_sources = cmp.config.sources({
-                    { name = "copilot" },
-                    { name = "path" },
-                    { name = "nvim_lsp" },
-                    { name = "nvim_lsp_signature_help" },
-                    { name = "luasnip" },
-                })
+                copilot_sources = vim.tbl_extend("force", 
+                    { { name = "copilot", group_index = 2 } },
+                    sources
+                )
             end
 
             cmp.setup({
@@ -455,73 +462,64 @@ require("lazy").setup(
                     }
                 },
                 window = {
-                    documentation = {
-                        winhighlight = 'Normal:CmpDocNormal,FloatBorder:CmpDocBorder,CursorLine:CmpDocSel,Search:None',
-                    },
+                    documentation = { max_height = 15 },
+                    completion    = { max_height = 5 },
                 },
-                completion = { autocomplete = false },
                 experimental = { ghost_text = { hl_group = "GhostText" } },
                 snippet = {
                     expand = function(args)
                         luasnip.lsp_expand(args.body)
                     end,
                 },
+                enabled = function() return vim.g.autocomplete end,
                 mapping = {
                     ['<C-n>'] = cmp.mapping.complete({ config = { sources = copilot_sources } }),
                     ['<C-space>'] = cmp.mapping.complete(),
-                    ['<Esc>'] = cmp.mapping(function(fallback)
-                        cmp.abort()
-                        fallback()
-                    end),
                     ['<C-e>'] = cmp.mapping.abort(),
-                    ["<C-j>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
-                    ["<C-k>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+                    ["<C-j>"] = cmp.mapping.select_next_item(),
+                    ["<C-k>"] = cmp.mapping.select_prev_item(),
 
-                    --["<C-p>"] = cmp.mapping.confirm({ select = true }),
+                    ['<Up>'] = cmp.mapping.scroll_docs(-2),
+                    ['<Down>'] = cmp.mapping.scroll_docs(2),
+
                     ["<Tab>"] = cmp.mapping(function(fallback)
-                        if luasnip.expandable() then
-                            luasnip.expand()
+                        if luasnip.locally_jumpable(1) then
+                            luasnip.jump(1)
                         elseif cmp.visible() then
-                            cmp.confirm({ select = true })
+                            if luasnip.expandable() then
+                                luasnip.expand()
+                            else
+                                cmp.confirm({ select = true })
+                            end
                         else
                             fallback()
                         end
                     end, { "i", "s" }),
+
+                    ["<S-Tab>"] = cmp.mapping(function(fallback)
+                        if luasnip.locally_jumpable(-1) then
+                            luasnip.jump(-1)
+                        else
+                            fallback()
+                        end
+                    end, { "i", "s" }),
+
                 },
-                sources = cmp.config.sources({
-                    { name = "path" },
-                    { name = "nvim_lsp" },
-                    { name = "nvim_lsp_signature_help" },
-                    { name = "luasnip" },
-                }),
+                sources = sources,
                 sorting = {
                     priority_weight = 2,
                     comparators = comparators,
                 },
                 formatting = {
-                    fields = { "kind", "abbr", "menu" },
-                    format = function(entry, item)
-                        local icon, hl_group = require('nvim-web-devicons').get_icon(entry:get_completion_item().label)
-                        if icon then
-                            item.kind = icon
-                            item.kind_hl_group = hl_group
-                        elseif icons.kinds[item.kind] then
-                            item.kind = icons.kinds[item.kind]
-                        end
-
-                        item.menu = ({
-                            path          = "[Path]",
-                            buffer        = "[Buffer]",
-                            nvim_lsp      = "[LSP]",
-                            luasnip       = "[LuaSnip]",
-                            nvim_lua      = "[Lua]",
-                            latex_symbols = "[LaTeX]",
-                            copilot       = "[CoPilot]",
-                            codecompanion = "[CodeCompanion]",
-                        })[entry.source.name]
-
-                        return item
-                    end,
+                    fields = { 'icon', 'abbr', 'menu' },
+                    format = lspkind.cmp_format({
+                        maxwidth = {
+                            menu = 30, 
+                            abbr = 50, 
+                        },
+                        ellipsis_char = '...', 
+                        show_labelDetails = true, 
+                    })
                 },
             })
 
@@ -545,7 +543,6 @@ require("lazy").setup(
                     }
                 })
             })
-
         end
     },
 
@@ -620,7 +617,7 @@ require("lazy").setup(
         lazy = true,
         dependencies = {
             "nvim-lua/plenary.nvim",
-            "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+            "nvim-tree/nvim-web-devicons", 
             "MunifTanjim/nui.nvim",
         },
         keys = {
@@ -745,7 +742,8 @@ require("lazy").setup(
                     vim.bo[buffer].formatexpr = nil
 
                     vim.keymap.set('n', 'gD',    vim.lsp.buf.declaration,                            { desc = "Go to declaration",       buffer = buffer })
-                    vim.keymap.set('n', 'gH',    vim.lsp.buf.hover,                                  { desc = "Preview declaration",     buffer = buffer })
+                    vim.keymap.set('n', 'gh',    vim.lsp.buf.hover,                                  { desc = "Preview declaration",     buffer = buffer })
+                    vim.keymap.set('n', 'gk',    vim.lsp.buf.signature_help,                         { desc = "See signature help",      buffer = buffer })
                     vim.keymap.set('n', 'gd',    require("telescope.builtin").lsp_definitions,       { desc = "Find definition(s)",      buffer = buffer })
                     vim.keymap.set('n', 'grt',   require("telescope.builtin").lsp_type_definitions,  { desc = "Find type definition(s)", buffer = buffer })
                     vim.keymap.set('n', 'gri',   require("telescope.builtin").lsp_implementations,   { desc = "Find implementation(s)",  buffer = buffer })
@@ -992,6 +990,13 @@ function toggle_dark_mode()
 end
 vim.api.nvim_create_user_command("ToggleDarkmode", toggle_dark_mode, { desc = "Switch between light and dark mode" })
 vim.keymap.set("n", "<f10>", function() toggle_dark_mode() end, { desc = "Toggle dark mode" })
+
+vim.g.autocomplete = true
+function toggle_autocomplete()
+    vim.g.autocomplete = not vim.g.autocomplete
+end
+vim.api.nvim_create_user_command("ToggleAutocomplete", toggle_autocomplete, { desc = "Toggle cmp autocompletion" })
+vim.keymap.set("n", "<leader>ac", toggle_autocomplete, { desc = "Toggle autocompletion" })
 
 if not vim.g.vscode then
     vim.cmd([[colorscheme gruvbox-material]])
