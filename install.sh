@@ -59,7 +59,7 @@ case "$DISTRO" in
         ;;
 esac
 
-PACKAGES="gdb git neovim code clang unity bitwarden"
+PACKAGES="gdb git neovim code clang unity godot bitwarden"
 PACKAGES="$PACKAGES cmake make ninja-build meson pkgconfig"
 LIBS="libX11-devel"
 if [ "$1" = "all" ]; then
@@ -108,6 +108,7 @@ esac
 if [ "$DO_INSTALL" -eq 1 ]; then
     SYS_PACKAGES=""
     FLAT_PACKAGES=""
+    PIP_PACKAGES=""
 
     for PKG in $PACKAGES; do
         case "$PKG" in
@@ -119,6 +120,10 @@ if [ "$DO_INSTALL" -eq 1 ]; then
                 ;;
             git)
                 SYS_PACKAGES="$SYS_PACKAGES git git-lfs"
+                ;;
+            godot)
+                SYS_PACKAGES="$SYS_PACKAGES scons pkgconfig gcc-c++ libstdc++-static wayland-devel"
+                PIP_PACKAGES="$PIP_PACKAGES compiledb"
                 ;;
             bitwarden)
                 FLAT_PACKAGES="$FLAT_PACKAGES com.bitwarden.desktop"
@@ -139,6 +144,11 @@ if [ "$DO_INSTALL" -eq 1 ]; then
     if [ ! -z "$FLAT_PACKAGES" ]; then
         echo "$FLAT_INSTALL $FLAT_PACKAGES"
         $FLAT_INSTALL $FLAT_PACKAGES
+    fi
+
+    if [ -z "$PIP_PACKAGES" ]; then
+        echo "pip install $PIP_PACKAGES"
+        pip install $PIP_PACKAGES
     fi
 fi
 
