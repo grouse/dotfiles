@@ -59,7 +59,7 @@ case "$DISTRO" in
         ;;
 esac
 
-PACKAGES="gdb git neovim code clang unity godot bitwarden meld"
+PACKAGES="gdb git neovim code clang unity godot bitwarden meld python3-pip"
 PACKAGES="$PACKAGES cmake make ninja-build meson pkgconfig"
 LIBS="libX11-devel libXi-devel"
 if [ "$1" = "all" ]; then
