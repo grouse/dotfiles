@@ -59,7 +59,7 @@ case "$DISTRO" in
         ;;
 esac
 
-PACKAGES="gdb git neovim code clang unity godot bitwarden"
+PACKAGES="gdb git neovim code clang unity godot bitwarden meld"
 PACKAGES="$PACKAGES cmake make ninja-build meson pkgconfig"
 LIBS="libX11-devel"
 if [ "$1" = "all" ]; then
@@ -165,11 +165,10 @@ if [ "$DO_CONFIG" -eq 1 ]; then
                 symlink "$ROOT/gdbinit" "$HOME_DIR/.gdbinit"
                 ;;
             git)
-                git config --global user.email "jesper.stefansson@gmail.com"
-                git config --global user.name "Jesper Stefansson"
-                git config --global merge.tool kdiff3
+                git config --global merge.tool meld
                 git config --global pull.rebase true
                 git config --global init.defaultBranch "main"
+                git config --global url."ssh://git@".insteadOf https://
                 ;;
         esac
     done
