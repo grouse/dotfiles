@@ -114,6 +114,15 @@ local icons = {
         Variable      = "󰀫 ",
         Copilot       = "",
     },
+    sources = {
+        nvim_lsp = "λ",
+        buffer   = "Ω",
+        path     = "🖫",
+        luasnip  = "⋗",
+        copilot  = "",
+        nvim_lua = "Π",
+        cmdline  = "⌘",
+    },
     diagnostics = {
         Error = "",
         Warn = "",
@@ -512,14 +521,17 @@ require("lazy").setup(
                 },
                 formatting = {
                     fields = { 'icon', 'abbr', 'menu' },
-                    format = lspkind.cmp_format({
-                        maxwidth = {
-                            menu = 30, 
-                            abbr = 50, 
-                        },
-                        ellipsis_char = '...', 
-                        show_labelDetails = true, 
-                    })
+                    format = function(entry, vim_item)
+                        vim_item = lspkind.cmp_format({
+                            maxwidth = { menu = 30, abbr = 50 },
+                            ellipsis_char = '...',
+                            show_labelDetails = true,
+                        })(entry, vim_item)
+
+                        local source_icon = icons.sources[entry.source.name] or ""
+                        vim_item.menu = (vim_item.menu or "") .. " " .. source_icon
+                        return vim_item
+                    end,
                 },
             })
 
