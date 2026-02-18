@@ -454,16 +454,20 @@ require("lazy").setup(
                 { name = "nvim_lsp" },
                 { name = "nvim_lsp_signature_help" },
                 { name = "luasnip" },
-                { name = "buffer" },
             })
 
-            local copilot_sources = {}
+            local copilot_sources = sources;
             if vim.g.copilot then
                 table.insert(comparators, 0, require("copilot_cmp.comparators").prioritize)
-                copilot_sources = vim.tbl_extend("force", 
-                    { { name = "copilot", group_index = 2 } },
-                    sources
-                )
+
+                copilot_sources = cmp.config.sources({
+                    { name = "copilot" },
+                    { name = "path" },
+                    { name = "nvim_lsp" },
+                    { name = "nvim_lsp_signature_help" },
+                    { name = "luasnip" },
+                })
+
             end
 
             cmp.setup({
