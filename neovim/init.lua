@@ -399,7 +399,10 @@ require("lazy").setup(
             'nvim-tree/nvim-web-devicons'
         },
         file_types = { "markdown", "codecompanion" },
-        opts = {}
+        init = function() require("render-markdown").setup() end,
+        keys = {
+            { "<leader>md", function() require("render-markdown").toggle() end, { "n" }, desc = "Toggle Markdown Rendering" }
+        }
     },
 
     {
