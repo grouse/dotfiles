@@ -498,15 +498,6 @@ require("lazy").setup(
                     ['<Up>'] = cmp.mapping.scroll_docs(-2),
                     ['<Down>'] = cmp.mapping.scroll_docs(2),
 
-                    ["<Esc>"] = cmp.mapping(function(fallback)
-                        if cmp.visible() then
-                            cmp.abort()
-                        else
-                            fallback()
-                        end
-                    end, { "i" }),
-
-
 
                     ["<Tab>"] = cmp.mapping(function(fallback)
                         if luasnip.locally_jumpable(1) then
