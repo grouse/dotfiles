@@ -168,7 +168,7 @@ if [ "$DO_CONFIG" -eq 1 ]; then
                 git config --global merge.tool meld
                 git config --global pull.rebase true
                 git config --global init.defaultBranch "main"
-                git config --global url."ssh://git@".insteadOf https://
+                git config --global url.ssh://git@github.com/.insteadOf https://github.com/
                 ;;
         esac
     done
