@@ -4,6 +4,7 @@ export CC=/usr/bin/clang
 
 export EDITOR=nvim
 export SVN_EDITOR=nvim
+export CLAUDE_CONFIG_DIR="$HOME/.claude"
 
 alias ls="ls -h --color=auto"
 
