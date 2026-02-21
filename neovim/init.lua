@@ -210,14 +210,6 @@ local function cmp_tabnine_build_path()
     end
 end
 
-vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
-    callback = function()
-        if vim.bo.filetype == "gdscript" then
-            vim.bo.expandtab=false
-        end
-    end
-})
-
 require("lazy").setup(
 {
     {
@@ -358,14 +350,6 @@ require("lazy").setup(
         },
     },
 
-    {
-        "zbirenbaum/copilot-cmp",
-        enabled = vim.g.copilot,
-        dependencies = { "zbirenbaum/copilot.lua" },
-        event = "InsertEnter",
-        opts = {}
-    },
-
     { "nvim-lua/plenary.nvim", branch = "master" },
 
     { "j-hui/fidget.nvim", opts = {} },
@@ -376,7 +360,6 @@ require("lazy").setup(
         dependencies = {
             "nvim-lua/plenary.nvim",
             "nvim-treesitter/nvim-treesitter",
-            "hrsh7th/nvim-cmp",
         },
         opts = {
             interactions = {
@@ -417,16 +400,113 @@ require("lazy").setup(
             { "<leader>mm", function() require("codewindow").toggle_minimap() end, { "n" }, desc = "Toggle Minimap" },
         },
     },
+    
+    {
+        "saghen/blink.cmp",
+        dependencies = { 
+            "rafamadriz/friendly-snippets",
+            "giuxtaposition/blink-cmp-copilot",
+        },
+        opts = {
+            sources = { 
+                default = { "lsp", "path", "snippets", "buffer" },
+                providers = {
+                    copilot = {
+                        name = "copilot",
+                        module = "blink-cmp-copilot",
+                        score_offset = 100,
+                        async = true,
+                    },
+                },
+            },
+            keymap = { 
+                ["<C-p>"]     = { "select_prev", "fallback" },
+                ["<C-n>"]     = { "show", "select_next", "fallback" },
+                ['<C-space>'] = { function(cmp) cmp.show({ providers = { "copilot" } }) end },
+
+                ["<C-k>"]     = { "show_signature", "hide_signature", "fallback" },
+                ["<C-h>"]     = { "scroll_signature_up", "fallback" },
+                ["<C-l>"]     = { "scroll_signature_down", "fallback" },
+
+                ["<C-f>"]     = { "show_documentation", "hide_documentation", "fallback" },
+                ["<Up>"]      = { "scroll_documentation_up", "fallback" },
+                ["<Down>"]    = { "scroll_documentation_down", "fallback" },
+
+                ["<Tab>"]     = { "select_and_accept", "fallback" },
+
+            },
+            signature = { enabled = true },
+            completion = { 
+                menu = {
+                    auto_show = function() return vim.g.autocomplete end,
+                    draw = { padding = { 0, 0 } },
+                },
+                documentation = { 
+                    auto_show = false,
+                    window = {
+                        max_width = 60,
+                        max_height = 20,
+                    }
+                },
+                ghost_text = { 
+                    enabled = true,
+                    show_without_selection = true,
+                }
+            },
+            cmdline = {
+                keymap = { preset = "inherit" },
+                completion = { menu = { auto_show = true } },
+            },
+            appearance = {
+                kind_icons = {
+                    Copilot       = "",
+                    Text          = '󰉿',
+                    Method        = '󰊕',
+                    Function      = '󰊕',
+                    Constructor   = '󰒓',
+
+                    Field         = '󰜢',
+                    Variable      = '󰆦',
+                    Property      = '󰖷',
+
+                    Class         = '󱡠',
+                    Interface     = '󱡠',
+                    Struct        = '󱡠',
+                    Module        = '󰅩',
+
+                    Unit          = '󰪚',
+                    Value         = '󰦨',
+                    Enum          = '󰦨',
+                    EnumMember    = '󰦨',
+
+                    Keyword       = '󰻾',
+                    Constant      = '󰏿',
+
+                    Snippet       = '󱄽',
+                    Color         = '󰏘',
+                    File          = '󰈔',
+                    Reference     = '󰬲',
+                    Folder        = '󰉋',
+                    Event         = '󱐋',
+                    Operator      = '󰪚',
+                    TypeParameter = '󰬛',
+                },
+            },
+
+        },
+        opts_extend = { "sources.default" }
+    },
 
     {
         "hrsh7th/nvim-cmp",
-        enabled = not vim.g.vscode,
+        enabled = not vim.g.vscode and false,
         branch = "main",
         dependencies = {
             "L3MON4D3/LuaSnip",
             "hrsh7th/cmp-buffer",
             "hrsh7th/cmp-cmdline",
             "hrsh7th/cmp-nvim-lsp",
+            "zbirenbaum/copilot-cmp",
             "hrsh7th/cmp-nvim-lsp-signature-help",
             "hrsh7th/cmp-path",
             "onsails/lspkind.nvim",
@@ -479,9 +559,13 @@ require("lazy").setup(
                 },
                 window = {
                     documentation = { max_height = 15 },
-                    completion    = { max_height = 5 },
+                    completion    = { 
+                        col_offset = 10,
+                        side_padding = 1,
+                        max_height = 5 
+                    },
                 },
-                experimental = { ghost_text = { hl_group = "GhostText" } },
+                experimental = { ghost_text = false },
                 snippet = {
                     expand = function(args)
                         luasnip.lsp_expand(args.body)
@@ -676,6 +760,7 @@ require("lazy").setup(
             "folke/neodev.nvim",
         },
         config = function()
+            local lspconfig = require("lspconfig")
             require("mason").setup()
             require("mason-lspconfig").setup({
                 ensure_installed = { "clangd" },
@@ -690,7 +775,7 @@ require("lazy").setup(
             end
 
             local capabilities = vim.lsp.protocol.make_client_capabilities()
-            capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
+            -- capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
             capabilities.textDocument.foldingRange = {
                 dynamicRegistration = false,
                 lineFoldingOnly = true
@@ -731,6 +816,8 @@ require("lazy").setup(
                 capabilities = capabilities,
                 cmd = { "clangd", "--header-insertion=never" },
             })
+
+            lspconfig.gdscript.setup({ capabilities = capabilities })
 
             vim.api.nvim_create_autocmd('LspAttach', {
                 group = vim.api.nvim_create_augroup('UserLspConfig', {}),
