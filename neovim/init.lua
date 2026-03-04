@@ -270,6 +270,13 @@ require("lazy").setup(
     },
 
     {
+        'windwp/nvim-autopairs',
+        enabled = not vim.g.vscode,
+        event = "InsertEnter",
+        config = true
+    },
+
+    {
         "mcauley-penney/tidy.nvim",
         opts = { filetype_exclude = { "markdown", "diff" } },
         keys = {
