@@ -710,6 +710,7 @@ require("lazy").setup(
 
     {
         "hedyhli/outline.nvim",
+        enabled = not vim.g.vscode,
         opts = {},
         keys = {
             { "<leader>o", function() require("outline").toggle() end, desc = "Toggle outliner" },
@@ -837,6 +838,7 @@ require("lazy").setup(
 
     {
         "nvim-telescope/telescope-fzf-native.nvim",
+        enabled = not vim.g.vscode,
         build = "make",
     },
 
@@ -1036,3 +1038,4 @@ if not vim.g.win32 then
         vim.fn.serverstart(pipepath)
     end
 end
+
