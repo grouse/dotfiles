@@ -945,7 +945,7 @@ end
 vim.api.nvim_create_user_command("ToggleDarkmode", toggle_dark_mode, { desc = "Switch between light and dark mode" })
 vim.keymap.set("n", "<f10>", function() toggle_dark_mode() end, { desc = "Toggle dark mode" })
 
-vim.g.autocomplete = true
+vim.g.autocomplete = false
 function toggle_autocomplete()
     vim.g.autocomplete = not vim.g.autocomplete
 end
