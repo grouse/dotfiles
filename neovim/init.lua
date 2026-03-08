@@ -228,9 +228,10 @@ require("lazy").setup(
         "neanias/everforest-nvim", 
         enabled = not vim.g.vscode,
         priority = 1000,
-        opts = {},
         config = function() 
-            require("everforest").setup() 
+            require("everforest").setup({
+                background = "medium",
+            })
             vim.api.nvim_set_hl(0, "BlinkCmpGhostText", { fg = "#859289" })
         end
     },
