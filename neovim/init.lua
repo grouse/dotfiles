@@ -207,7 +207,7 @@ require("lazy").setup(
     {
         "ellisonleao/gruvbox.nvim",
         enabled = not vim.g.vscode,
-        priority = 1000 ,
+        priority = 1000,
         config = true,
         opts = {
             contrast = "soft",
@@ -220,13 +220,25 @@ require("lazy").setup(
                 folds = true,
             },
         },
-        init = function() require("gruvbox").setup() end
+        config = function() require("gruvbox").setup() end
 
+    },
+
+    { 
+        "neanias/everforest-nvim", 
+        enabled = not vim.g.vscode,
+        priority = 1000,
+        opts = {},
+        config = function() 
+            require("everforest").setup() 
+            vim.api.nvim_set_hl(0, "BlinkCmpGhostText", { fg = "#859289" })
+        end
     },
 
     {
         "sainnhe/gruvbox-material",
         enabled = not vim.g.vscode,
+        priority = 1000,
         init = function()
             vim.g.gruvbox_material_background = "soft"
             vim.g.gruvbox_material_disable_italic_comment = true
@@ -402,7 +414,8 @@ require("lazy").setup(
 
     {
         "saghen/blink.cmp",
-        dependencies = {
+        enabled = not vim.g.vscode,
+        dependencies = { 
             "rafamadriz/friendly-snippets",
             "giuxtaposition/blink-cmp-copilot",
         },
@@ -415,6 +428,11 @@ require("lazy").setup(
                         module = "blink-cmp-copilot",
                         score_offset = 100,
                         async = true,
+                    },
+                    path = {
+                        opts = {
+                            get_cwd = function(_) return vim.fn.getcwd() end,
+                        },
                     },
                 },
             },
@@ -926,6 +944,11 @@ require("lazy").setup(
     }
 })
 
+if not vim.g.vscode then
+    vim.cmd.colorscheme "everforest"
+end
+
+
 vim.api.nvim_create_autocmd("ColorScheme", {
     group = vim.api.nvim_create_augroup("hl_colorscheme", {}),
     desc = "post-colorscheme hooks to tweak highlight groups etc",
@@ -951,10 +974,6 @@ function toggle_autocomplete()
 end
 vim.api.nvim_create_user_command("ToggleAutocomplete", toggle_autocomplete, { desc = "Toggle autocompletion" })
 vim.keymap.set("n", "<leader>ac", toggle_autocomplete, { desc = "Toggle autocompletion" })
-
-if not vim.g.vscode then
-    vim.cmd([[colorscheme gruvbox-material]])
-end
 
 vim.keymap.set("n", "za", "za", { desc = "Toggle fold" })
 vim.keymap.set("n", "zc", "zc", { desc = "Close fold" })
