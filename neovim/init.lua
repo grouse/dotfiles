@@ -625,7 +625,6 @@ require("lazy").setup(
             "folke/neodev.nvim",
         },
         config = function()
-            local lspconfig = require("lspconfig")
             require("mason").setup()
             require("mason-lspconfig").setup({
                 ensure_installed = { "clangd" },
@@ -652,7 +651,6 @@ require("lazy").setup(
             })
 
             vim.lsp.config("lua_ls", {
-                log_level = vim.lsp.protocol.MessageType.Error,
                 capabilities = capabilities,
                 completion = { callSnippet = "Replace" },
                 diagnostics = { globals = { "vim" }, },
@@ -667,21 +665,19 @@ require("lazy").setup(
 
             vim.lsp.config("rust_analyzer", {
                 capabilities = capabilities,
-                diagnostics = {
-                    enable = false
-                }
+                diagnostics = { enable = false }
             })
 
-            vim.lsp.config("copilot", {
+            vim.lsp.config("copilot", { capabilities = capabilities })
+            vim.lsp.config("gdscript", { 
                 capabilities = capabilities,
+                filetypes = { "gdscript" }
             })
 
             vim.lsp.config("clangd", {
                 capabilities = capabilities,
                 cmd = { "clangd", "--header-insertion=never" },
             })
-
-            lspconfig.gdscript.setup({ capabilities = capabilities })
 
             vim.api.nvim_create_autocmd('LspAttach', {
                 group = vim.api.nvim_create_augroup('UserLspConfig', {}),
