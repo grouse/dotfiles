@@ -12,7 +12,6 @@ set print static-members on
 
 set print symbol-filename on
 set print address on
-set print frame-arguments all
 
 set confirm off
 set auto-load python-scripts on
