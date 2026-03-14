@@ -15,6 +15,7 @@ set print address on
 
 set confirm off
 set auto-load python-scripts on
+set auto-load safe-path /
 
 python 
 import gdb.printing

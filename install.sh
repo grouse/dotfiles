@@ -164,6 +164,9 @@ if [ "$DO_CONFIG" -eq 1 ]; then
             gdb)
                 symlink "$ROOT/gdbinit" "$HOME_DIR/.gdbinit"
                 ;;
+            lldb)
+                symlink "$ROOT/lldbinit" "$HOME_DIR/.lldbinit"
+                ;;
             git)
                 git config --global merge.tool meld
                 git config --global pull.rebase true
