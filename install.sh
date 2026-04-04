@@ -168,9 +168,10 @@ if [ "$DO_CONFIG" -eq 1 ]; then
                 symlink "$ROOT/lldbinit" "$HOME_DIR/.lldbinit"
                 ;;
             git)
+                git config --global init.defaultBranch "main"
                 git config --global merge.tool meld
                 git config --global pull.rebase true
-                git config --global init.defaultBranch "main"
+                git config --global rebase.autoStash true
                 git config --global url.ssh://git@github.com/.insteadOf https://github.com/
                 ;;
         esac
