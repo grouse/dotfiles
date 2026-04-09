@@ -367,33 +367,13 @@ require("lazy").setup(
     { "j-hui/fidget.nvim", opts = {} },
 
     {
-        "olimorris/codecompanion.nvim",
-        enabled = vim.g.copilot,
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-            "nvim-treesitter/nvim-treesitter",
-        },
-        opts = {
-            interactions = {
-                chat = { adapter = "copilot" },
-            },
-        },
-        keys = {
-            { "<leader>cc", "<cmd>CodeCompanionChat<cr>", desc = "CodeCompanion Chat", mode = { "n", "v" } },
-            { "<leader>ca", "<cmd>CodeCompanionActions<cr>", desc = "CodeCompanion Actions", mode = { "n", "v" } },
-            { "<leader>ct", "<cmd>CodeCompanionToggle<cr>", desc = "CodeCompanion Toggle", mode = "n" },
-            { "<leader>ce", "<cmd>CodeCompanionChat Add<cr>", desc = "Add to CodeCompanion", mode = "v" },
-        },
-    },
-
-    {
         "MeanderingProgrammer/render-markdown.nvim",
         enabled = not vim.g.vscode,
         dependencies = {
             'nvim-treesitter/nvim-treesitter',
             'nvim-tree/nvim-web-devicons'
         },
-        file_types = { "markdown", "codecompanion" },
+        file_types = { "markdown" },
         init = function() require("render-markdown").setup() end,
         keys = {
             { "<leader>md", function() require("render-markdown").toggle() end, { "n" }, desc = "Toggle Markdown Rendering" }
