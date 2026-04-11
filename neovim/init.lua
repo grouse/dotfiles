@@ -285,8 +285,8 @@ require("lazy").setup(
         "mcauley-penney/tidy.nvim",
         opts = { filetype_exclude = { "markdown", "diff" } },
         keys = {
-            { "<leader>te", function() require("tidy").toggle() end, desc = "Toggle Tidy" },
-            { "<leader>tt", function() require("tidy").run() end, desc = "Toggle Tidy" },
+            { "<leader>T", function() require("tidy").toggle() end, desc = "Toggle Tidy" },
+            { "<leader>t", function() require("tidy").run() end, desc = "Tidy" },
         },
     },
 
@@ -389,7 +389,7 @@ require("lazy").setup(
             relative = "editor",
         },
         keys = {
-            { "<leader>mm", function() require("codewindow").toggle_minimap() end, { "n" }, desc = "Toggle Minimap" },
+            { "<leader>m", function() require("codewindow").toggle_minimap() end, { "n" }, desc = "Toggle Minimap" },
         },
     },
 
@@ -570,7 +570,7 @@ require("lazy").setup(
             "MunifTanjim/nui.nvim",
         },
         keys = {
-            { "<leader>f", function() require("neo-tree.command").execute({ toggle = true, position = "left" }) end, desc = "File browser" },
+            { "<leader>wf", function() require("neo-tree.command").execute({ toggle = true, position = "left" }) end, desc = "File browser" },
         }
     },
 
@@ -708,7 +708,7 @@ require("lazy").setup(
         enabled = not vim.g.vscode,
         opts = {},
         keys = {
-            { "<leader>o", function() require("outline").toggle() end, desc = "Toggle outliner" },
+            { "<leader>wo", function() require("outline").toggle() end, desc = "Toggle outliner" },
         }
     },
 
@@ -742,7 +742,7 @@ require("lazy").setup(
         enabled = not vim.g.vscode,
         opts = {},
         keys = {
-            { "<leader>q", function() require("quicker").toggle() end, desc = "Toggle quickfix window" },
+            { "<leader>wq", function() require("quicker").toggle() end, desc = "Toggle quickfix window" },
         }
     },
 
@@ -769,7 +769,7 @@ require("lazy").setup(
             }
         },
         keys = {
-            { "<C-b>", function()
+            { "<leader>b", function()
                 local overseer = require("overseer")
                 vim.cmd(":wa")
                 local tasks = overseer.list_tasks({ recent_first = true })
@@ -779,8 +779,8 @@ require("lazy").setup(
                     overseer.run_action(tasks[1], "restart")
                 end
             end, desc = "Build last" },
-            { "<M-b>", "<cmd>wa<CR><cmd>OverseerRun<CR>", desc = "Build select" },
-            { "<leader>b", "<cmd>OverseerToggle bottom<CR>" , desc = "Toggle build output" },
+            { "<leader>B", "<cmd>wa<CR><cmd>OverseerRun<CR>", desc = "Build select" },
+            { "<leader>wb", "<cmd>OverseerToggle bottom<CR>" , desc = "Toggle build output" },
 
         }
     },
@@ -950,7 +950,7 @@ function toggle_autocomplete()
     vim.g.autocomplete = not vim.g.autocomplete
 end
 vim.api.nvim_create_user_command("ToggleAutocomplete", toggle_autocomplete, { desc = "Toggle autocompletion" })
-vim.keymap.set("n", "<leader>ac", toggle_autocomplete, { desc = "Toggle autocompletion" })
+vim.keymap.set("n", "<leader>c", toggle_autocomplete, { desc = "Toggle autocompletion" })
 
 vim.keymap.set("n", "za", "za", { desc = "Toggle fold" })
 vim.keymap.set("n", "zc", "zc", { desc = "Close fold" })
@@ -989,7 +989,7 @@ vim.keymap.set("n", "<X1Mouse>", "<C-o>", { desc = "Jump next" })
 vim.keymap.set("n", "<X2Mouse>", "<C-i>", { desc = "Jump prev" })
 
 if not vim.g.vscode then
-    vim.keymap.set("n", '<leader>d', vim.diagnostic.open_float, { desc = "Open diagnostic" })
+    vim.keymap.set("n", '<leader>wd', vim.diagnostic.open_float, { desc = "Open diagnostic" })
     vim.keymap.set('n', '<C-j>',
         function()
             local size = #vim.fn.getqflist()
