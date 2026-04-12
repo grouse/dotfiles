@@ -59,7 +59,7 @@ case "$DISTRO" in
         ;;
 esac
 
-PACKAGES="gdb git neovim code clang unity godot bitwarden meld python3-pip"
+PACKAGES="gdb git tmux neovim code clang unity godot bitwarden meld python3-pip"
 PACKAGES="$PACKAGES cmake make ninja-build meson pkgconfig"
 LIBS="libX11-devel libXi-devel"
 if [ "$1" = "all" ]; then
@@ -163,6 +163,9 @@ if [ "$DO_CONFIG" -eq 1 ]; then
                 ;;
             gdb)
                 symlink "$ROOT/gdbinit" "$HOME_DIR/.gdbinit"
+                ;;
+            tmux)
+                symlink "$ROOT/tmux.conf" "$HOME_DIR/.tmux.conf"
                 ;;
             lldb)
                 symlink "$ROOT/lldbinit" "$HOME_DIR/.lldbinit"
