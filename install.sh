@@ -166,6 +166,7 @@ if [ "$DO_CONFIG" -eq 1 ]; then
                 ;;
             tmux)
                 symlink "$ROOT/tmux.conf" "$HOME_DIR/.tmux.conf"
+                git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
                 ;;
             lldb)
                 symlink "$ROOT/lldbinit" "$HOME_DIR/.lldbinit"
