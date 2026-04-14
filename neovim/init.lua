@@ -989,7 +989,7 @@ vim.keymap.set("n", "<X1Mouse>", "<C-o>", { desc = "Jump next" })
 vim.keymap.set("n", "<X2Mouse>", "<C-i>", { desc = "Jump prev" })
 
 if not vim.g.vscode then
-    vim.keymap.set("n", '<leader>wd', vim.diagnostic.open_float, { desc = "Open diagnostic" })
+    vim.keymap.set("n", '<leader>d', vim.diagnostic.open_float, { desc = "Open diagnostic" })
     vim.keymap.set('n', '<C-j>',
         function()
             local size = #vim.fn.getqflist()
