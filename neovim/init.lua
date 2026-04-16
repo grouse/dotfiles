@@ -798,15 +798,39 @@ require("lazy").setup(
 
     {
         "nvim-treesitter/nvim-treesitter",
-        --dependencies = { "andymass/vim-matchup", },
+        dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
         enabled = not vim.g.vscode,
         build = ":TSUpdate",
+        keys = {
+            { "]m", function() require("nvim-treesitter-textobjects.move").goto_next_start("@function.outer", "textobjects") end, desc = "Next function", mode = { "n", "x", "o" } },
+            { "[m", function() require("nvim-treesitter-textobjects.move").goto_previous_start("@function.outer", "textobjects") end, desc = "Previous function", mode = { "n", "x", "o" } },
+            { "]c", function() require("nvim-treesitter-textobjects.move").goto_next_start("@case.outer", "textobjects") end, desc = "Next case", mode = { "n", "x", "o" } },
+            { "[c", function() require("nvim-treesitter-textobjects.move").goto_previous_start("@case.outer", "textobjects") end, desc = "Previous case", mode = { "n", "x", "o" } },
+            { "]r", function() require("nvim-treesitter-textobjects.move").goto_next_start("@block.outer", "textobjects") end, desc = "Next block", mode = { "n", "x", "o" } },
+            { "[r", function() require("nvim-treesitter-textobjects.move").goto_previous_start("@block.outer", "textobjects") end, desc = "Previous block", mode = { "n", "x", "o" } },
+            { "am", function() require("nvim-treesitter-textobjects.select").select_textobject("@function.outer", "textobjects") end, desc = "Around function", mode = { "x", "o" } },
+            { "im", function() require("nvim-treesitter-textobjects.select").select_textobject("@function.inner", "textobjects") end, desc = "Inside function", mode = { "x", "o" } },
+            { "ac", function() require("nvim-treesitter-textobjects.select").select_textobject("@case.outer", "textobjects") end, desc = "Around case", mode = { "x", "o" } },
+            { "ic", function() require("nvim-treesitter-textobjects.select").select_textobject("@case.inner", "textobjects") end, desc = "Inside case", mode = { "x", "o" } },
+            { "ab", function() require("nvim-treesitter-textobjects.select").select_textobject("@block.outer", "textobjects") end, desc = "Around block", mode = { "x", "o" } },
+            { "ib", function() require("nvim-treesitter-textobjects.select").select_textobject("@block.inner", "textobjects") end, desc = "Inside block", mode = { "x", "o" } },
+        },
         config = function()
             require("nvim-treesitter.install").prefer_git = false
             require("nvim-treesitter.configs").setup({
                 ensure_installed = { "comment", "c", "cpp", "bash", "vim", "lua" },
                 auto_install = true,
                 highlight = { enable = true },
+                textobjects = {
+                    select = {
+                        enable = true,
+                        lookahead = true,
+                    },
+                    move = {
+                        enable = true,
+                        set_jumps = true,
+                    },
+                },
                 matchup = {
                     enable = true,
                     disable_virtual_text = true,
@@ -1034,4 +1058,3 @@ if not vim.g.win32 then
         vim.fn.serverstart(pipepath)
     end
 end
-
