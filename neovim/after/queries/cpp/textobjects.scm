@@ -1,5 +1,11 @@
 ; extends
 
+(compound_statement
+  .
+  "{"
+  _+ @block.inner
+  "}")
+
 (case_statement
   .
   _

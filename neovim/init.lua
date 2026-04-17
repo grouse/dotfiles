@@ -802,20 +802,27 @@ require("lazy").setup(
         enabled = not vim.g.vscode,
         build = ":TSUpdate",
         keys = {
-            { "]m", function() require("nvim-treesitter-textobjects.move").goto_next_start("@function.outer", "textobjects") end, desc = "Next function", mode = { "n", "x", "o" } },
-            { "[m", function() require("nvim-treesitter-textobjects.move").goto_previous_start("@function.outer", "textobjects") end, desc = "Previous function", mode = { "n", "x", "o" } },
-            { "]c", function() require("nvim-treesitter-textobjects.move").goto_next_start("@case.outer", "textobjects") end, desc = "Next case", mode = { "n", "x", "o" } },
-            { "[c", function() require("nvim-treesitter-textobjects.move").goto_previous_start("@case.outer", "textobjects") end, desc = "Previous case", mode = { "n", "x", "o" } },
-            { "]r", function() require("nvim-treesitter-textobjects.move").goto_next_start("@block.outer", "textobjects") end, desc = "Next block", mode = { "n", "x", "o" } },
-            { "[r", function() require("nvim-treesitter-textobjects.move").goto_previous_start("@block.outer", "textobjects") end, desc = "Previous block", mode = { "n", "x", "o" } },
-            { "am", function() require("nvim-treesitter-textobjects.select").select_textobject("@function.outer", "textobjects") end, desc = "Around function", mode = { "x", "o" } },
-            { "im", function() require("nvim-treesitter-textobjects.select").select_textobject("@function.inner", "textobjects") end, desc = "Inside function", mode = { "x", "o" } },
-            { "ac", function() require("nvim-treesitter-textobjects.select").select_textobject("@case.outer", "textobjects") end, desc = "Around case", mode = { "x", "o" } },
-            { "ic", function() require("nvim-treesitter-textobjects.select").select_textobject("@case.inner", "textobjects") end, desc = "Inside case", mode = { "x", "o" } },
-            { "ab", function() require("nvim-treesitter-textobjects.select").select_textobject("@block.outer", "textobjects") end, desc = "Around block", mode = { "x", "o" } },
-            { "ib", function() require("nvim-treesitter-textobjects.select").select_textobject("@block.inner", "textobjects") end, desc = "Inside block", mode = { "x", "o" } },
+            { "]a", desc = "Next parameter", mode = { "n", "x", "o" } },
+            { "[a", desc = "Previous parameter", mode = { "n", "x", "o" } },
+            { "]m", desc = "Next function", mode = { "n", "x", "o" } },
+            { "[m", desc = "Previous function", mode = { "n", "x", "o" } },
+            { "]c", desc = "Next case", mode = { "n", "x", "o" } },
+            { "[c", desc = "Previous case", mode = { "n", "x", "o" } },
+            { "]r", desc = "Next block", mode = { "n", "x", "o" } },
+            { "[r", desc = "Previous block", mode = { "n", "x", "o" } },
+            { "aa", desc = "Around parameter", mode = { "x", "o" } },
+            { "ia", desc = "Inside parameter", mode = { "x", "o" } },
+            { "am", desc = "Around function", mode = { "x", "o" } },
+            { "im", desc = "Inside function", mode = { "x", "o" } },
+            { "ac", desc = "Around case", mode = { "x", "o" } },
+            { "ic", desc = "Inside case", mode = { "x", "o" } },
+            { "ar", desc = "Around block", mode = { "x", "o" } },
+            { "ir", desc = "Inside block", mode = { "x", "o" } },
         },
         config = function()
+            local move = require("nvim-treesitter-textobjects.move")
+            local select = require("nvim-treesitter-textobjects.select")
+
             require("nvim-treesitter.install").prefer_git = false
             require("nvim-treesitter.configs").setup({
                 ensure_installed = { "comment", "c", "cpp", "bash", "vim", "lua" },
@@ -837,6 +844,24 @@ require("lazy").setup(
                     include_match_words = false,
                 },
             })
+
+            vim.keymap.set({ "n", "x", "o" }, "]a", function() move.goto_next_start("@parameter.inner", "textobjects") end, { desc = "Next parameter" })
+            vim.keymap.set({ "n", "x", "o" }, "[a", function() move.goto_previous_start("@parameter.inner", "textobjects") end, { desc = "Previous parameter" })
+            vim.keymap.set({ "n", "x", "o" }, "]m", function() move.goto_next_start("@function.outer", "textobjects") end, { desc = "Next function" })
+            vim.keymap.set({ "n", "x", "o" }, "[m", function() move.goto_previous_start("@function.outer", "textobjects") end, { desc = "Previous function" })
+            vim.keymap.set({ "n", "x", "o" }, "]c", function() move.goto_next_start("@case.outer", "textobjects") end, { desc = "Next case" })
+            vim.keymap.set({ "n", "x", "o" }, "[c", function() move.goto_previous_start("@case.outer", "textobjects") end, { desc = "Previous case" })
+            vim.keymap.set({ "n", "x", "o" }, "]r", function() move.goto_next_start("@block.outer", "textobjects") end, { desc = "Next block" })
+            vim.keymap.set({ "n", "x", "o" }, "[r", function() move.goto_previous_start("@block.outer", "textobjects") end, { desc = "Previous block" })
+            vim.keymap.set({ "x", "o" }, "aa", function() select.select_textobject("@parameter.outer", "textobjects") end, { desc = "Around parameter" })
+            vim.keymap.set({ "x", "o" }, "ia", function() select.select_textobject("@parameter.inner", "textobjects") end, { desc = "Inside parameter" })
+            vim.keymap.set({ "x", "o" }, "am", function() select.select_textobject("@function.outer", "textobjects") end, { desc = "Around function" })
+            vim.keymap.set({ "x", "o" }, "im", function() select.select_textobject("@function.inner", "textobjects") end, { desc = "Inside function" })
+            vim.keymap.set({ "x", "o" }, "ac", function() select.select_textobject("@case.outer", "textobjects") end, { desc = "Around case" })
+            vim.keymap.set({ "x", "o" }, "ic", function() select.select_textobject("@case.inner", "textobjects") end, { desc = "Inside case" })
+            vim.keymap.set({ "x", "o" }, "ar", function() select.select_textobject("@block.outer", "textobjects") end, { desc = "Around block" })
+            vim.keymap.set({ "x", "o" }, "ir", function() select.select_textobject("@block.inner", "textobjects") end, { desc = "Inside block" })
+
             require("nvim-treesitter").setup()
 
             vim.treesitter.query.set("c", "indents", "")
