@@ -142,6 +142,15 @@ local icons = {
     }
 }
 
+local function lualine_navic()
+    local ok, navic = pcall(require, "nvim-navic")
+    if not ok or not navic.is_available() then
+        return ""
+    end
+
+    return navic.get_location()
+end
+
 -- Annoyingly this is mostly for neovim's luas throwing me tons of warnings and "tips" that I haven't figured out how to disable and I cba
 vim.lsp.handlers["textDocument/publishDiagnostics"] = nil
 
@@ -528,35 +537,36 @@ require("lazy").setup(
     { -- statusbar
         "nvim-lualine/lualine.nvim",
         enabled = not vim.g.vscode,
-        opts = {
-            theme = "auto",
-            sections = {
-                lualine_a = {'mode'},
-                lualine_b = {'diagnostics'},
-                lualine_c = {
-                    { 'filename', symbols = icons.filename },
+        opts = function()
+            return {
+                theme = "auto",
+                sections = {
+                    lualine_a = {'mode'},
+                    lualine_b = {'diagnostics'},
+                    lualine_c = {
+                        { 'filename', symbols = icons.filename },
+                        lualine_navic,
+                    },
+                    lualine_x = {
+                        { 'fileformat', symbols = icons.fileformat },
+                        'filetype'
+                    },
+                    lualine_y = {},
+                    lualine_z = {'location'}
                 },
-                lualine_x = {
-                    'encoding',
-                    { 'fileformat', symbols = icons.fileformat },
-                    'filetype'
-                },
-                lualine_y = {},
-                lualine_z = {'location'}
-            },
-            inactive_sections = {
-                lualine_a = {},
-                lualine_b = {'diagnostics'},
-                lualine_c = { { 'filename', symbols = icons.filename } },
-                lualine_x = {
-                    'encoding',
-                    { 'fileformat', symbols = icons.fileformat },
-                    'filetype',
-                },
-                lualine_y = {},
-                lualine_z = {'location'}
+                inactive_sections = {
+                    lualine_a = {},
+                    lualine_b = {'diagnostics'},
+                    lualine_c = { { 'filename', symbols = icons.filename } },
+                    lualine_x = {
+                        { 'fileformat', symbols = icons.fileformat },
+                        'filetype',
+                    },
+                    lualine_y = {},
+                    lualine_z = {'location'}
+                }
             }
-        }
+        end
     },
 
     {
@@ -670,15 +680,6 @@ require("lazy").setup(
                     if client.name ~= "lua_ls" then
                         -- disabling this in lua cause it is all sorts of funky in giant require blocks, for example
                         require("nvim-navic").attach(client, buffer)
-
-                        require("lualine").setup({
-                            sections = {
-                                lualine_c = {
-                                    { 'filename', symbols = icons.filename },
-                                    { "navic" },
-                                },
-                            }
-                        })
                     end
 
                     if client.name == "clangd" then
