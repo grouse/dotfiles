@@ -411,7 +411,7 @@ require("lazy").setup(
         },
         opts = {
             sources = {
-                default = { "lsp", "path", "snippets", "buffer" },
+                default = { "lsp", "path", "buffer" },
                 providers = {
                     copilot = {
                         name = "copilot",
