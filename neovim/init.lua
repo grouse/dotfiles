@@ -172,7 +172,7 @@ vim.opt.copyindent = true
 vim.opt.cindent = true
 vim.opt.cinoptions = ">s,(0,u0,Us,w1,Ws,m1,j1,J1,:0,l1,Ls,is,g0,E-s"
 
-vim.o.guifont = "UbuntuMono Nerd Font:h14"
+vim.o.guifont = "FiraCode Nerd Font:h14"
 vim.opt.cursorline=true
 vim.opt.showmode=false
 vim.opt.pumheight=2
@@ -1019,7 +1019,7 @@ vim.keymap.set("n", "<M-3>", function() vim.api.nvim_set_current_tabpage(3) end,
 vim.keymap.set("n", "<M-4>", function() vim.api.nvim_set_current_tabpage(4) end, { desc = "Open 4th tab page" })
 
 if vim.g.neovide then
-    vim.o.guifont = "UbuntuMono Nerd Font:h14"
+    vim.o.guifont = "FiraCode Nerd Font:h13"
     vim.g.neovide_cursor_animation_length = 0
     vim.g.neovide_cursor_animate_in_insert_mode = false
     vim.g.neovide_cursor_animate_command_line = false
