@@ -504,13 +504,6 @@ require("lazy").setup(
         opts_extend = { "sources.default" }
     },
 
-    {
-        "L3MON4D3/LuaSnip",
-        enabled = not vim.g.vscode,
-        build = "make install_jsregexp",
-        lazy = true
-    },
-
     { -- buffer tabs
         "akinsho/bufferline.nvim",
         enabled = not vim.g.vscode,
