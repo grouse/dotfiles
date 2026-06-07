@@ -423,6 +423,36 @@ require("lazy").setup(
                         opts = {
                             get_cwd = function(_) return vim.fn.getcwd() end,
                         },
+                        override = {
+                            get_completions = function(source, context, callback)
+                                local line_before_cursor = context.line:sub(1, context.cursor[2])
+                                local fragment = line_before_cursor:match("['\"]([^'\"]*[/\\][^'\"]*)$")
+                                if not fragment then
+                                    return source:get_completions(context, callback)
+                                end
+
+                                local dirname = fragment:match("^.*[/\\]") or ""
+                                local basename = fragment:sub(#dirname + 1)
+                                local include_hidden = source.opts.show_hidden_files_by_default or basename:sub(1, 1) == "."
+                                local scan_dir = vim.fn.resolve(source.opts.get_cwd(context) .. '/' .. dirname)
+                                local scanner = vim.uv.fs_scandir(scan_dir)
+                                if not scanner then return source:get_completions(context, callback) end
+
+                                local lib = require('blink.cmp.sources.path.lib')
+                                local ranges = lib.get_text_edit_ranges(context)
+                                local items = {}
+                                while true do
+                                    local name, kind = vim.uv.fs_scandir_next(scanner)
+                                    if not name then break end
+                                    if include_hidden or name:sub(1, 1) ~= '.' then
+                                        local range = kind == 'directory' and ranges.directory or ranges.file
+                                        items[#items + 1] = lib.entry_to_completion_item({ name = name, type = kind }, scan_dir, range, source.opts)
+                                    end
+                                end
+
+                                callback({ is_incomplete_forward = false, is_incomplete_backward = false, items = items })
+                            end,
+                        },
                     },
                 },
             },
