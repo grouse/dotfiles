@@ -154,7 +154,10 @@ end
 -- Annoyingly this is mostly for neovim's luas throwing me tons of warnings and "tips" that I haven't figured out how to disable and I cba
 vim.lsp.handlers["textDocument/publishDiagnostics"] = nil
 
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { focusable = false })
+vim.lsp.handlers["textDocument/hover"] = function(err, result, ctx, config)
+    config = vim.tbl_deep_extend("force", config or {}, { focusable = false })
+    return vim.lsp.handlers.hover(err, result, ctx, config)
+end
 vim.lsp.handlers["textDocument/documentHighlight"] = nil
 
 vim.opt.clipboard:append{ 'unnamedplus' }
@@ -822,9 +825,10 @@ require("lazy").setup(
 
     {
         "nvim-treesitter/nvim-treesitter",
+        branch = "main",
         dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
         enabled = not vim.g.vscode,
-        build = ":TSUpdate",
+        lazy = false,
         keys = {
             { "]a", desc = "Next parameter", mode = { "n", "x", "o" } },
             { "[a", desc = "Previous parameter", mode = { "n", "x", "o" } },
@@ -847,26 +851,18 @@ require("lazy").setup(
             local move = require("nvim-treesitter-textobjects.move")
             local select = require("nvim-treesitter-textobjects.select")
 
-            require("nvim-treesitter.install").prefer_git = false
-            require("nvim-treesitter.configs").setup({
-                ensure_installed = { "comment", "c", "cpp", "bash", "vim", "lua" },
-                auto_install = true,
-                highlight = { enable = true },
-                textobjects = {
-                    select = {
-                        enable = true,
-                        lookahead = true,
-                    },
-                    move = {
-                        enable = true,
-                        set_jumps = true,
-                    },
-                },
-                matchup = {
-                    enable = true,
-                    disable_virtual_text = true,
-                    include_match_words = false,
-                },
+            require("nvim-treesitter").setup()
+            require("nvim-treesitter-textobjects").setup({
+                select = { lookahead = true },
+                move = { set_jumps = true },
+            })
+
+            vim.api.nvim_create_autocmd("FileType", {
+                group = vim.api.nvim_create_augroup("dotfiles-treesitter", { clear = true }),
+                pattern = { "bash", "c", "cpp", "lua", "markdown", "vim" },
+                callback = function(args)
+                    pcall(vim.treesitter.start, args.buf)
+                end,
             })
 
             vim.keymap.set({ "n", "x", "o" }, "]a", function() move.goto_next_start("@parameter.inner", "textobjects") end, { desc = "Next parameter" })
@@ -885,8 +881,6 @@ require("lazy").setup(
             vim.keymap.set({ "x", "o" }, "ic", function() select.select_textobject("@case.inner", "textobjects") end, { desc = "Inside case" })
             vim.keymap.set({ "x", "o" }, "ar", function() select.select_textobject("@block.outer", "textobjects") end, { desc = "Around block" })
             vim.keymap.set({ "x", "o" }, "ir", function() select.select_textobject("@block.inner", "textobjects") end, { desc = "Inside block" })
-
-            require("nvim-treesitter").setup()
 
             vim.treesitter.query.set("c", "indents", "")
             vim.treesitter.query.set("cpp", "indents", "")
@@ -1107,4 +1101,3 @@ if not vim.g.win32 then
         vim.fn.serverstart(pipepath)
     end
 end
-
