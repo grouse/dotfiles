@@ -59,7 +59,7 @@ case "$DISTRO" in
         ;;
 esac
 
-PACKAGES="gdb git tmux neovim code clang unity godot bitwarden meld python3-pip"
+PACKAGES="gdb git tmux neovim ghostty code clang unity godot bitwarden meld python3-pip"
 PACKAGES="$PACKAGES cmake make ninja-build meson pkgconfig"
 LIBS="libX11-devel libXi-devel"
 if [ "$1" = "all" ]; then
@@ -115,6 +115,12 @@ if [ "$DO_INSTALL" -eq 1 ]; then
             neovim)
                 SYS_PACKAGES="$SYS_PACKAGES $PKG wl-clipboard xclip"
                 ;;
+            ghostty)
+                if [ "$DISTRO" = "fedora" ]; then
+                    sudo dnf copr enable scottames/ghostty -y
+                fi
+                SYS_PACKAGES="$SYS_PACKAGES $PKG"
+                ;;
             unity)
                 SYS_PACKAGES="$SYS_PACKAGES unityhub dotnet-runtime-10.0 dotnet-sdk-10.0"
                 ;;
@@ -160,6 +166,9 @@ if [ "$DO_CONFIG" -eq 1 ]; then
         case "$PKG" in
             neovim)
                 symlink "$ROOT/neovim" "$CONFIG_DIR/nvim"
+                ;;
+            ghostty)
+                symlink "$ROOT/ghostty" "$CONFIG_DIR/ghostty"
                 ;;
             gdb)
                 symlink "$ROOT/gdbinit" "$HOME_DIR/.gdbinit"
