@@ -828,6 +828,9 @@ require("lazy").setup(
         branch = "main",
         dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
         enabled = not vim.g.vscode,
+        build = function()
+            require("nvim-treesitter").install({ "bash", "c", "cpp", "lua", "markdown", "markdown_inline", "vim" }):wait(300000)
+        end,
         lazy = false,
         keys = {
             { "]a", desc = "Next parameter", mode = { "n", "x", "o" } },
