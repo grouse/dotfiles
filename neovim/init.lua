@@ -685,10 +685,7 @@ require("lazy").setup(
             })
 
             vim.lsp.config("copilot", { capabilities = capabilities })
-            vim.lsp.config("gdscript", { 
-                capabilities = capabilities,
-                filetypes = { "gdscript" }
-            })
+            vim.lsp.enable("gdscript")
 
             vim.lsp.config("clangd", {
                 capabilities = capabilities,
