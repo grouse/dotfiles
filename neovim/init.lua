@@ -372,8 +372,6 @@ require("lazy").setup(
         },
     },
 
-    { "nvim-lua/plenary.nvim", branch = "master" },
-
     { "j-hui/fidget.nvim", opts = {} },
 
     {
