@@ -389,19 +389,6 @@ require("lazy").setup(
     },
 
     {
-        "gorbit99/codewindow.nvim",
-        enabled = not vim.g.vscode,
-        opts = {
-            auto_enable = true,
-            minimap_width = 10,
-            relative = "editor",
-        },
-        keys = {
-            { "<leader>m", function() require("codewindow").toggle_minimap() end, { "n" }, desc = "Toggle Minimap" },
-        },
-    },
-
-    {
         "saghen/blink.cmp",
         enabled = not vim.g.vscode,
         dependencies = { 
@@ -806,17 +793,6 @@ require("lazy").setup(
     },
 
     {
-        "andymass/vim-matchup",
-        enabled = false,--not vim.g.vscode,
-        init = function()
-            vim.g.matchup_matchparen_offscreen = { method = "popup", fullwidth = true }
-            vim.g.matchup_matchparen_deferred = 1
-            vim.g.matchup_matchparen_insert_timeout = 5
-
-        end
-    },
-
-    {
         "nvim-treesitter/nvim-treesitter",
         branch = "main",
         dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
@@ -887,11 +863,7 @@ require("lazy").setup(
         "nvim-treesitter/nvim-treesitter-context",
         dependencies = { "nvim-treesitter/nvim-treesitter" },
         enabled = not vim.g.vscode,
-        opts = {
-            max_lines = 10,
-            multiline_threshold = 1,
-            mode = "topline",
-        }
+        opts = { mode = "topline" }
     },
 
     {
