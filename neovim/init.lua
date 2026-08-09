@@ -243,6 +243,10 @@ require("lazy").setup(
         config = function() 
             require("everforest").setup({
                 background = "medium",
+                on_highlights = function(highlights)
+                    highlights["@property"] = { link = "@variable" }
+                    highlights["@variable.member"] = { link = "@variable" }
+                end,
             })
             vim.api.nvim_set_hl(0, "BlinkCmpGhostText", { fg = "#859289" })
         end
