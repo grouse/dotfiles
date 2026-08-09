@@ -246,6 +246,9 @@ require("lazy").setup(
                 on_highlights = function(highlights)
                     highlights["@property"] = { link = "@variable" }
                     highlights["@variable.member"] = { link = "@variable" }
+                    highlights["@lsp.type.enumMember"] = { link = "@constant" }
+                    highlights["@lsp.type.variable"] = {}
+                    highlights["@lsp.typemod.variable.readonly"] = { link = "@constant" }
                 end,
             })
             vim.api.nvim_set_hl(0, "BlinkCmpGhostText", { fg = "#859289" })
@@ -685,7 +688,7 @@ require("lazy").setup(
                     local buffer = args.buf
                     local client = vim.lsp.get_client_by_id(args.data.client_id)
 
-                    client.server_capabilities.semanticTokensProvider = nil
+                    -- client.server_capabilities.semanticTokensProvider = nil
 
                     if client.name ~= "lua_ls" then
                         -- disabling this in lua cause it is all sorts of funky in giant require blocks, for example
