@@ -1,3 +1,5 @@
 font-family = FiraMono Nerd Font
 font-size = 13
+keybind = ctrl++=increase_font_size:1
+keybind = ctrl+-=decrease_font_size:1
 theme = light:Everforest Light Med,dark:Everforest Dark Hard
