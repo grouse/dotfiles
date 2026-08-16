@@ -870,7 +870,10 @@ require("lazy").setup(
         "nvim-treesitter/nvim-treesitter-context",
         dependencies = { "nvim-treesitter/nvim-treesitter" },
         enabled = not vim.g.vscode,
-        opts = { mode = "topline" }
+        opts = { 
+            mode = "topline",
+            max_lines = 10,
+        }
     },
 
     {
