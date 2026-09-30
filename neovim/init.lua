@@ -679,7 +679,11 @@ require("lazy").setup(
 
             vim.lsp.config("clangd", {
                 capabilities = capabilities,
-                cmd = { "clangd", "--header-insertion=never" },
+                cmd = {
+                    "clangd",
+                    "--background-index",
+                    "--header-insertion=never",
+                },
             })
 
             vim.api.nvim_create_autocmd('LspAttach', {
