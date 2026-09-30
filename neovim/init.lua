@@ -6,7 +6,7 @@ vim.keymap.set("n", "<space>", "<nop>", { silent = true, remap = false })
 vim.g.mapleader = ";"
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   vim.fn.system({
     "git",
     "clone",
@@ -59,12 +59,12 @@ end
 vim.cmd("command! Reload lua ReloadConfig()")
 
 local has_words_before = function()
-  if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
+  if vim.bo.buftype == "prompt" then return false end
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
   return col ~= 0 and vim.api.nvim_buf_get_text(0, line-1, 0, line-1, col, {})[1]:match("^%s*$") == nil
 end
 
-if vim.loop.os_uname().sysname == "Windows_NT" then
+if vim.uv.os_uname().sysname == "Windows_NT" then
     vim.g.win32 = true
 end
 
@@ -1060,8 +1060,12 @@ if not vim.g.vscode then
         end,
         { desc = "Prev diagnostic" })
 
-    vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" });
-    vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next diagnostic" });
+    vim.keymap.set("n", "[d", function()
+        vim.diagnostic.jump({ count = -1 })
+    end, { desc = "Previous diagnostic" })
+    vim.keymap.set("n", "]d", function()
+        vim.diagnostic.jump({ count = 1 })
+    end, { desc = "Next diagnostic" })
 end
 
 vim.api.nvim_create_autocmd('TextYankPost', {
@@ -1075,7 +1079,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 if not vim.g.win32 then
     local pipepath = vim.fn.stdpath("cache") .. "/server.pipe"
-    if not vim.loop.fs_stat(pipepath) then
+    if not vim.uv.fs_stat(pipepath) then
         vim.fn.serverstart(pipepath)
     end
 end
