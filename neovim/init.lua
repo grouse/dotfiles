@@ -1072,6 +1072,32 @@ if not vim.g.vscode then
     end, { desc = "Next diagnostic" })
 end
 
+vim.api.nvim_create_autocmd("FileChangedRO", {
+    group = vim.api.nvim_create_augroup("p4-auto-checkout", { clear = true }),
+    desc = "Open read-only files for edit in Perforce",
+    callback = function(args)
+        if vim.fn.executable("p4") ~= 1 then
+            return
+        end
+
+        local path = vim.api.nvim_buf_get_name(args.buf)
+        if path == "" or vim.bo[args.buf].buftype ~= "" then
+            return
+        end
+
+        local result = vim.system({ "p4", "edit", path }, { text = true }):wait()
+        if result.code ~= 0 then
+            return
+        end
+
+        vim.bo[args.buf].readonly = false
+        vim.notify(
+            "Checked out " .. vim.fn.fnamemodify(path, ":."),
+            vim.log.levels.INFO
+        )
+    end,
+})
+
 vim.api.nvim_create_autocmd('TextYankPost', {
     group = vim.api.nvim_create_augroup('highlight_yank', {}),
     desc = 'Hightlight selection on yank',
