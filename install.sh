@@ -60,7 +60,7 @@ case "$DISTRO" in
 esac
 
 PACKAGES="gdb git tmux neovim ghostty code clang unity godot bitwarden meld python3-pip"
-PACKAGES="$PACKAGES cmake make ninja-build meson pkgconfig"
+PACKAGES="$PACKAGES cmake make ninja-build meson pkgconfig add-to-menu"
 LIBS="libX11-devel libXi-devel"
 if [ "$1" = "all" ]; then
     PACKAGES="$LIBS $PACKAGES"
@@ -93,8 +93,8 @@ git() {
 
 mkdir -p "$CONFIG_DIR" "$DATA_DIR" "$CACHE_DIR"
 
-case "$DISTRO" in
-    fedora)
+case "$DO_INSTALL:$DISTRO" in
+    1:fedora)
         sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
         echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\nautorefresh=1\ntype=rpm-md\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
 
@@ -112,6 +112,9 @@ if [ "$DO_INSTALL" -eq 1 ]; then
 
     for PKG in $PACKAGES; do
         case "$PKG" in
+            add-to-menu)
+                SYS_PACKAGES="$SYS_PACKAGES python3 kdialog"
+                ;;
             neovim)
                 SYS_PACKAGES="$SYS_PACKAGES $PKG wl-clipboard xclip"
                 ;;
@@ -164,6 +167,9 @@ if [ "$DO_CONFIG" -eq 1 ]; then
 
     for PKG in $PACKAGES; do
         case "$PKG" in
+            add-to-menu)
+                python3 "$ROOT/kde/add-to-menu.py" --install || exit 1
+                ;;
             neovim)
                 symlink "$ROOT/neovim" "$CONFIG_DIR/nvim"
                 ;;
